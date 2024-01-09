@@ -1,2 +1,2 @@
 # KAO_E-Commerce
-This repo is strictly forkao ecommerce
+This repo is strictly for kao ecommerce only
