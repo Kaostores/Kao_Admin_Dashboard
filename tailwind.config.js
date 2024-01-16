@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+
 module.exports = {
   darkMode: ["class"],
   content: [
@@ -16,7 +17,25 @@ module.exports = {
         "2xl": "1400px",
       },
     },
+    //background image for signup
     extend: {
+      backgroundImage:{
+        "bb":"url('./src/assets/Ic.png')"
+      },
+      screens:{
+          'sm':'320px',
+          //@media (max-width:640px){......}
+          'smm':'375px',
+          //@media (max-width:640px){......}
+          'smx':'425px',
+          //@media (max-width:640px){......}
+          'md':'768px',
+          //@media (max-width:640px){......}
+          'lg':'1024px',
+          //@media (max-width:640px){......}
+          'xl':'1280px',
+          //@media (max-width:640px){......}
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
