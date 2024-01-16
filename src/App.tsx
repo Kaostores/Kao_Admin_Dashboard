@@ -6,7 +6,7 @@ import SignIn from "./pages/AdminSignUp/SignIn";
 import SignUp from "./pages/AdminSignUp/SignUp";
 
 function App() {
-	const [count, setCount] = useLocalStorage<number>("count", 0);
+	const [count, setCount] = useLocalStorage<number>("count", 0); 
 
 	return (
 		<div>
