@@ -6,7 +6,7 @@ import {FiUnlock} from "react-icons/fi"
 
 const SignUp=()=>{
     return(
-        <div className="w-[100%] h-[100vh] flex justify-center items-center ">
+        <div className="w-[100%] h-[100vh] flex justify-center  lg:overflow-hidden items-center ">
             <div className="w-[100%] h-[100%] flex justify-center items-center">
               <div className="w-[50%] h-[100vh] hidden relative lg:block">
                  <div className="w-[100%] h-[100%] bg-cover bg-right-top bg-bb absolute right-[40px]"/>
