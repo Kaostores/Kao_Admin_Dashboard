@@ -1,17 +1,18 @@
 import { Provider } from "react-redux";
 import "./App.css";
-import useLocalStorage from "./helpers";
+// import useLocalStorage from "./helpers";
 import { store } from "./services/store";
-import SignIn from "./pages/AdminSignUp/SignIn";
-import SignUp from "./pages/AdminSignUp/SignUp";
+
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import PublicRoute from "./routes/PublicRoute";
 
 function App() {
-	const [count, setCount] = useLocalStorage<number>("count", 0); 
+	// const [count, setCount] = useLocalStorage<number>("count", 0);
 
 	return (
 		<div>
 			<Provider store={store}>
-				<SignIn/>
+				<RouterProvider router={createBrowserRouter([...PublicRoute()])} />
 			</Provider>
 		</div>
 	);
