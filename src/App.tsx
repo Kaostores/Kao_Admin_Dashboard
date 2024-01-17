@@ -15,7 +15,7 @@ function App() {
 				<RouterProvider router={createBrowserRouter([...PublicRoute()])} />
 			</Provider>
 		</div>
-	);
+	); 
 }
 
 export default App;
