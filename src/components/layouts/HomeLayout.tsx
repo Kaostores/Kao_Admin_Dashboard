@@ -7,8 +7,9 @@ const HomeLayout:React.FC = () => {
 	return (
 		<div>
 			<Header />
+			<div className="flex justify-end items-end h-[100vh]">
 			<Outlet />
-			<Footer />
+			</div>
 		</div>
 	);
 };
