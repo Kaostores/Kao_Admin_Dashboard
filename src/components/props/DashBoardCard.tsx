@@ -14,7 +14,7 @@ interface Props{
 
 const Card:React.FC<Props>=({tit,fig,increment,Ic,Cl})=>{
     return(
-       <div className="w-[200px] h-[150px] rounded-[5px] bg-[#fff] flex justify-center items-center px-[15px] shadow-2xl">
+       <div className="flex-1 h-[150px]  rounded-[5px] bg-[#fff] flex justify-center items-center px-[15px] shadow-xl">
           <div className="w-[98%] h-[100%] flex flex-col justify-around">
           <div className="text-[13px]">{tit}</div>
             <div className="text-[22px] font-medium">{fig}</div>

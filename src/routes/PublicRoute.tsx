@@ -6,7 +6,7 @@ import Home from "@/pages/Home";
 const PublicRoute = () => {
 	return [
 		{
-			path: "/",
+			path: "/app/admin",
 			element: <HomeLayout />,
 			children: [
 				{
@@ -17,7 +17,7 @@ const PublicRoute = () => {
 		},
 
 		{
-			path: "signup",
+			path: "/",
 			element: <SignUp />,
 		},
 		 {
