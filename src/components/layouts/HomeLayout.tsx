@@ -7,7 +7,7 @@ const HomeLayout:React.FC = () => {
 	return (
 		<div>
 			<Header />
-			<div className="flex justify-end items-end h-[100vh]">
+			<div className="flex justify-end items-end min-h-[100%]">
 			<Outlet />
 			</div>
 		</div>
