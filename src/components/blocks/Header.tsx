@@ -39,7 +39,7 @@ const Header = () => {
 	};
 
 	return (
-		<div className='w-[100%] flex fixed'>
+		<div className='w-[100%] flex fixed z-10'>
 			<div className='w-[100%] h-[100%] flex bg-red '>
 				{
 					show3 ? (
@@ -321,7 +321,7 @@ cursor-pointer ${
 				</div>
 					)
 				}
-				<div className='w-[100%] h-[70px]   flex bg-[#fff] justify-end items-center shadow-md z-10'>
+				<div  className='w-[100%] h-[70px]   flex bg-[#fff] justify-end items-center shadow-md z-[50] relative'>
 					<div className='w-[100%] h-[40px] flex  justify-center items-center'>
 						<div className=' w-[90%] h-[100%] flex justify-between items-start'>
 						<div className="xl:hidden xl:text-[16px] smx:text-[20px] sm:block smx:h-[100%] sm:mr-[10px] sm:cursor-pointer " onClick={toggle3}>

@@ -8,7 +8,7 @@ const Home = () => {
 	return (
 		<div className='xl:w-[calc(100%-250px)] xl:min-h-[calc(100%-70px)] sm:w-[100%] bg-[#fff] pl-[20px] pt-[20px] justify-center items-center pb-[30px] mt-[70px]'>
 			<div className='xl:w-[100%] xl:h-[100%] flex  items-center flex-col'>
-				<div className='xl:w-[95%]  sm:w-[100%]  bg-[#fff]  shadow-lg flex-col justify-between p-[15px]'>
+				<div className='xl:w-[95%]  sm:w-[100%]  bg-none  shadow-lg flex-col justify-between p-[15px]'>
 					<div className='w-[100%] flex justify-between items-center flex-wrap'>
 						<div>Total Sales</div>
 						<div className='flex justify-center items-center'>
@@ -38,6 +38,7 @@ const Home = () => {
 					<div className='text-[14px] my-[10px] text-[#8b8c8d]'>
 						Sales over time
 					</div>
+
 					<div className='w-[100%]'>
 						<LineChartOverView />
 					</div>

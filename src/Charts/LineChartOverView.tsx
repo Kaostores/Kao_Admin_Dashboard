@@ -69,6 +69,7 @@ const LineChartOverView = () => {
 					left: 20,
 					bottom: 5,
 				}} 
+			
 				>
 				<CartesianGrid strokeDasharray='3 3' />
 				<XAxis dataKey='name' />
@@ -81,7 +82,7 @@ const LineChartOverView = () => {
 					stroke='#0333ae'
 					activeDot={{ r: 8 }}
 				/>
-				<Line type='monotone' dataKey='uv' stroke='#CED6DE' />
+				<Line type='monotone' dataKey='uv' stroke='#CED6DE' className="-z-10" />
 			</LineChart>
 			{/* </ResponsiveContainer> */}
 		</div>
@@ -89,3 +90,11 @@ const LineChartOverView = () => {
 };
 
 export default LineChartOverView;
+
+
+
+
+
+
+ 
+

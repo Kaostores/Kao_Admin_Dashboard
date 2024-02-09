@@ -73,6 +73,7 @@
 @layer base {
 	* {
 		@apply border-border;
+		/* z-index: -1; */
 	}
 	body {
 		@apply bg-background text-foreground;

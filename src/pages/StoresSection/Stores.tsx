@@ -60,7 +60,7 @@ const Store=()=>{
                     show3 ? (
 
                 <div className="w-[100%] h-[100%] flex justify-center items-center flex-col">
-                    <StoreWithdrawal name="jaji yusuf" agentName="Zoro Romanus" storeId="23546487" amount='400,000' lastWithdraw="11:29 AM 20-02-2024" approve="Approve"/>
+                    <StoreWithdrawal name="jaji yusuf" agentName="Zoro Romanus" storeId="23546487" amount='400,000' lastWithdraw="11:29 AM 20-02-2024" approve="Approve all"/>
                 </div>
                     ) : (
 
