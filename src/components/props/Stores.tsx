@@ -1,163 +1,154 @@
-import React from "react"
-import { IoStorefrontOutline} from "react-icons/io5";
-import StoreEdit from "../store/EditStore";
+// import { useEffect, useState } from "react";
+// import { IoStorefrontOutline } from "react-icons/io5";
+// import StoreEdit from "../store/EditStore";
+// import { GetStoresByStatus } from "@/utils/ApiCalls";
 
-interface data{
-    name:string,
-    add:string,
-    order:string,
-    pnumb:string,
-    lastWithdrawal:string
-}
+// const Stores = () => {
+//     const [show, setShow] = useState(false);
+//     const [stores, setStores] = useState<any[]>([]);
+//     const [loading, setLoading] = useState(true);
+//     const [selectedStoreUuid, setSelectedStoreUuid] = useState<string | null>(null);
+//     const [activeStatusButton, setActiveStatusButton] = useState<string | null>(null); // For tracking active status button popup
+
+//     const toggleBtn = () => {
+//         setShow(!show);
+//     };
+
+//     const handleEditClick = (storeUuid: string) => {
+//         setSelectedStoreUuid(storeUuid);
+//         toggleBtn();
+//     };
+
+//     const updateStoreInList = (updatedStore: any) => {
+//         setStores((prevStores) =>
+//             prevStores.map((store) =>
+//                 store.id === updatedStore.id ? updatedStore : store
+//             )
+//         );
+//     };
+
+//     const toggleStatusPopup = (storeUuid: string) => {
+//         setActiveStatusButton(activeStatusButton === storeUuid ? null : storeUuid);
+//     };
+
+//     const handleStatusChange = (storeUuid: string, newStatus: string) => {
+//         setStores((prevStores) =>
+//             prevStores.map((store) =>
+//                 store.id === storeUuid ? { ...store, status: newStatus } : store
+//             )
+//         );
+//         setActiveStatusButton(null);
+//     };
+
+//     useEffect(() => {
+//         const fetchStores = async () => {
+//             try {
+//                 const response = await GetStoresByStatus("approved");
+//                 setStores(response.data);
+//             } catch (error) {
+//                 console.error("Error fetching stores:", error);
+//             } finally {
+//                 setLoading(false);
+//             }
+//         };
+
+//         fetchStores();
+//     }, []);
+
+//     return (
+//         <div className='relative overflow-hidden w-[100%] h-[100%]'>
+//             <div className='relative overflow-x-auto shadow-md sm:rounded-lg'>
+//                 {loading ? (
+//                     <div>Loading</div>
+//                 ) : (
+//                     <table className='w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'>
+//                         <thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400'>
+//                             <tr>
+//                                 <th scope='col' className='px-[5px] py-[5px]'>Store Name</th>
+//                                 <th scope='col' className='px-[5px] py-[5px]'>Email</th>
+//                                 <th scope='col' className='px-6 py-3'>Address</th>
+//                                 <th scope='col' className='px-6 py-3'>Phone No</th>
+//                                 <th scope='col' className='px-6 py-3'>Last Withdrawal</th>
+//                                 <th scope='col' className='px-6 py-3'>Category</th>
+//                                 <th scope='col' className='px-6 py-3'>Status</th>
+//                                 <th scope='col' className='px-6 py-3'>Agent Name</th>
+//                                 <th scope='col' className='px-6 py-3'></th>
+//                             </tr>
+//                         </thead>
+//                         <tbody>
+//                             {stores.map((store) => (
+//                                 <tr key={store.id} className='bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600'>
+//                                     <td className='px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white'>{store.name}</td>
+//                                     <td className='px-6 py-4'>{store.email}</td>
+//                                     <td className='px-6 py-4'>{store.address}</td>
+//                                     <td className='px-6 py-4'>{store.phone}</td>
+//                                     <td className='px-6 py-4'>{store.LastWithdrawal}</td>
+//                                     <td className='px-6 py-4'>{store.category}</td>
+//                                     <td className='px-6 py-4'>
+//                                         <button
+//                                             onClick={() => toggleStatusPopup(store.id)}
+//                                             className={`px-4 py-2 rounded-md ${
+//                                                 store.status === 'verified' ? 'bg-blue-500 text-white' :
+//                                                 store.status === 'suspended' ? 'bg-red-500 text-white' : 'bg-red-300 text-white'
+//                                             }`}
+//                                         >
+//                                             {store.status === 'verified' ? 'Verified' :
+//                                             store.status === 'suspended' ? 'Suspended' : 'Not Verified'}
+//                                         </button>
+                                    
+//                                         {activeStatusButton === store.id && (
+//                                             <div className='absolute z-10 w-40 bg-white border border-gray-300 shadow-lg rounded-md transform -translate-y-full -mt-[20px]'>
+//                                                 <button
+//                                                     className='block w-full px-4 py-2 text-left hover:bg-blue-50'
+//                                                     onClick={() => handleStatusChange(store.id, 'verified')}
+//                                                 >
+//                                                     Approve
+//                                                 </button>
+//                                                 <button
+//                                                     className='block w-full px-4 py-2 text-left hover:bg-red-50'
+//                                                     onClick={() => handleStatusChange(store.id, 'suspended')}
+//                                                 >
+//                                                     Suspend
+//                                                 </button>
+//                                             </div>
+//                                         )}
+//                                     </td>
+//                                     <td className='px-[10px]'>
+//                                         <div className='flex justify-around items-center'>
+//                                             <div className='min-w-[120px] h-[30px] flex justify-center items-center text-[#000]'>
+//                                                 {store.name}
+//                                             </div>
+//                                         </div>
+//                                     </td>
+//                                     <td className='px-[10px]'>
+//                                         <div
+//                                             className='text-[20px] h-[100%] flex justify-center items-center text-[#0333ae] cursor-pointer'
+//                                             onClick={() => handleEditClick(store.id)}
+//                                         >
+//                                             <IoStorefrontOutline />
+//                                         </div>
+//                                     </td>
+//                                 </tr>
+//                             ))}
+// 							<h2>this is body</h2>
+//                         </tbody>
+//                     </table>
+					
+//                 )}
+//             </div>
+//             {show && selectedStoreUuid ? (
+//                 <div>
+//                     <StoreEdit
+//                         togleBtn={toggleBtn}
+//                         storeUuid={selectedStoreUuid}
+//                         updateStoreInList={updateStoreInList}
+//                     />
+//                 </div>
+//             ) : null}
+//         </div>
+//     );
+// };
+
+// export default Stores;
 
 
-const Stores:React.FC<data>=(
-    {name,add,order,pnumb,lastWithdrawal}
-    )=>{
-        const[show,setShow]=React.useState(false)
-
-        const togleBtn=()=>{
-            setShow(!show)
-        }
-
-    return (
-			<div className='relative overflow-hidden w-[100%] h-[100%]'>
-				<div className='relative overflow-x-auto shadow-md sm:rounded-lg'>
-					<table className='w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'>
-						<thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400'>
-							<tr>
-								<th scope='col' className='p-4'>
-									#
-								</th>
-								<th scope='col' className='px-6 py-3'>
-									Store ID
-								</th>
-								<th scope='col' className='px-[5px] py-[5px]'>
-									Store Name
-								</th>
-								<th scope='col' className='px-6 py-3'>
-									Address
-								</th>
-								<th scope='col' className='px-6 py-3'>
-									Phone No
-								</th>
-								<th scope='col' className='px-6 py-3'>
-									Last Withdrawal
-								</th>
-								<th scope='col' className='px-6 py-3'>
-									Active
-								</th>
-								<th scope='col' className='px-6 py-3'>
-									Agent Name
-								</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr className='bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600'>
-								<td className='w-4 p-4'>1</td>
-								<th
-									scope='row'
-									className='px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white'>
-									{order}
-								</th>
-								<td className='px-[5px] py-[5px]  min-w-[100px]'>{name}</td>
-								<td className='px-6 py-4'>{add}</td>
-								<td className='px-6 py-4'>{pnumb}</td>
-								<td className='px-6 py-4'>{lastWithdrawal}</td>
-								<td className=''>
-									<div className='px-3 py-2  flex justify-center items-center bg-[#0333ae62] rounded-[5px]'>
-										<div className='text-[#0333ae]'>Verified</div>
-									</div>
-								</td>
-								<td className='px-[10px]'>
-									<div className=' flex justify-around items-center'>
-										<div className='min-w-[120px] h-[30px] flex justify-center items-center text-[#000]'>
-											{name}
-										</div>
-										<div
-											className='text-[20px] h-[100%] flex justify-center items-center text-[#0333ae] cursor-pointer'
-											onClick={togleBtn}>
-											<IoStorefrontOutline />
-										</div>
-									</div>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-					<nav
-						className='flex items-center flex-column w-[65%] flex-wrap md:flex-row justify-between pt-4'
-						aria-label='Table navigation'>
-						<span className='text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto'>
-							Showing{" "}
-							<span className='font-semibold text-gray-900 dark:text-white'>
-								1-10
-							</span>{" "}
-							of{" "}
-							<span className='font-semibold text-gray-900 dark:text-white'>
-								1000
-							</span>
-						</span>
-						<ul className='inline-flex -space-x-px rtl:space-x-reverse gap-2 text-sm h-8'>
-							<li>
-								<a
-									href='#'
-									className='flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white'>
-									Previous
-								</a>
-							</li>
-							<li>
-								<a
-									href='#'
-									className='flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white'>
-									1
-								</a>
-							</li>
-							<li>
-								<a
-									href='#'
-									className='flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white'>
-									2
-								</a>
-							</li>
-							<li>
-								<a
-									href='#'
-									aria-current='page'
-									className='flex items-center justify-center px-3 h-8 text-white border border-gray-300 bg-[#0333ae] hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white'>
-									3
-								</a>
-							</li>
-							<li>
-								<a
-									href='#'
-									className='flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white'>
-									4
-								</a>
-							</li>
-							<li>
-								<a
-									href='#'
-									className='flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white'>
-									5
-								</a>
-							</li>
-							<li>
-								<a
-									href='#'
-									className='flex items-center justify-center px-3 h-8 leading-tight text-white bg-[#0333ae] border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white'>
-									Next
-								</a>
-							</li>
-						</ul>
-					</nav>
-				</div>
-				{show ? (
-					<div>
-						<StoreEdit togleBtn={togleBtn} />
-					</div>
-				) : null}
-			</div>
-		);
-}
-
-export default Stores;

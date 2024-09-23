@@ -4,6 +4,7 @@ import "./App.css";
 import { store } from "./services/store";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import PublicRoute from "./routes/PublicRoute";
 
 function App() {
@@ -11,6 +12,7 @@ function App() {
 
 	return (
 		<div>
+			<ToastContainer />
 			<Provider store={store}>
 				<RouterProvider router={createBrowserRouter([...PublicRoute()])} />
 			</Provider>

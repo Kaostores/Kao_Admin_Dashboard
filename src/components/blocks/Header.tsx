@@ -1,341 +1,61 @@
-import  { useState } from "react";
-import pc from "../../assets/ellipse.png";
-import { BiHome } from "react-icons/bi";
-import { IoPeopleOutline } from "react-icons/io5";
-import { IoStorefrontOutline } from "react-icons/io5";
-import { IoWalletOutline } from "react-icons/io5";
-import { IoBriefcaseOutline } from "react-icons/io5";
-import { ImAngry } from "react-icons/im";
-import { GoChevronUp } from "react-icons/go";
-import { GoChevronDown } from "react-icons/go";
+import { useRef, useEffect, useState } from "react";
 import { BiSearch } from "react-icons/bi";
 import { SlCalender } from "react-icons/sl";
 import { BiPrinter } from "react-icons/bi";
 import { HiOutlineFolderDownload } from "react-icons/hi";
 import { CiSettings } from "react-icons/ci";
 import { BiBell } from "react-icons/bi";
-import {  useLocation, useNavigate } from "react-router-dom";
+import {  useLocation } from "react-router-dom";
 import { CiMenuBurger } from "react-icons/ci";
-import {VscChromeClose  } from 'react-icons/vsc';
 import Last7DaysDropdown from "./DropDown";
+import 'react-toastify/dist/ReactToastify.css';
 
 const Header = () => {
-	const [show, setShow] = useState(true);
-	// const [show2, setShow2] = useState(true);
+
 	const [show3, setShow3] = useState(true);
 	const location = useLocation();
-	const navigate = useNavigate();
 	const active = location?.pathname;
 	console.log("active", active);
 
-	const toggle = () => {
-		setShow(!show);
-	};
-	// const toggle2 = () => {
-		// setShow2(!show2);
-	// };
-	const toggle3 = () => {
-		setShow3(!show3);
-	};
+   const toggle3 = () => {
+    setShow3(!show3);
+   };
+
+
+
+
+	const [activeIndex] = useState<number | null>(null);
+	const contentHeight1 = useRef<any>(null);
+	const contentHeight2 = useRef<any>(null);
+	const contentHeight3 = useRef<any>(null);
+	const contentHeight4 = useRef<any>(null);
+
+	useEffect(() => {
+    if (contentHeight1.current) {
+      contentHeight1.current.style.height =
+        activeIndex === 1 ? `${contentHeight1.current.scrollHeight}px` : "0px";
+    }
+    if (contentHeight2.current) {
+      contentHeight2.current.style.height =
+        activeIndex === 2 ? `${contentHeight2.current.scrollHeight}px` : "0px";
+    }
+    if (contentHeight3.current) {
+      contentHeight3.current.style.height =
+        activeIndex === 3 ? `${contentHeight3.current.scrollHeight}px` : "0px";
+    }
+    if (contentHeight4.current) {
+      contentHeight4.current.style.height =
+        activeIndex === 4 ? `${contentHeight4.current.scrollHeight}px` : "0px";
+    }
+	}, [activeIndex]);
+	
+
 
 	return (
 		<div className='w-[100%] '>
 			<div className='w-[100%] h-[100%] flex bg-red '>
-				{show3 ? (
-					<div className='min-w-[280px] h-[100vh]  bg-[#0333ae] hidden items-center justify-start flex-col py-[20px] xl:flex fixed'>
-						<div className='mb-[15px] '>
-							<img src={pc} alt='' className='w-[60%]' />
-						</div>
-						<div
-							onClick={() => {
-								navigate("/app/admin");
-							}}
-							className={`
-             w-full min-h-[55px] flex justify-start  items-center pl-[40px] mb-[5px] cursor-pointer 
-             ${
-								active === "/app/admin"
-									? "bg-white text-[#0333ae]"
-									: "text-white"
-							}
-             }
-             `}>
-							<div className='text-[20px]  font-bold'>
-								<BiHome />
-							</div>
-							<div className='font-medium  text-[18px] ml-[30px] '>Home</div>
-						</div>
-						<div className='w-[100%] min-h-[55px] flex justify-start items-center pl-[40px] mb-[5px] cursor-pointer'>
-							<div className='text-[20px] text-[#0333ae] text-white font-bold'>
-								<IoPeopleOutline />
-							</div>
-							<div className='font-medium text-[#0333ae] text-white text-[18px] ml-[30px] mr-[40px] '>
-								Users
-							</div>
-							<div
-								className='text-[20px] text-[#0333ae] text-white font-bold cursor-pointer'
-								onClick={toggle}>
-								{show ? <GoChevronDown /> : <GoChevronUp />}
-							</div>
-						</div>
-						{show ? null : (
-							<div className='w-[100%] flex flex-col justify-center items-center mb-[5px]'>
-								<div
-									onClick={() => {
-										navigate("/app/admin/customers");
-									}}
-									className={`w-full h-[40px] flex justify-start items-center pl-[90px] mb-[10px] font-medium cursor-pointer text-[18px] ${
-										active === "/app/admin/customers"
-											? "bg-white text-[#0333ae]"
-											: "text-white"
-									}
-      `}>
-									Customers
-								</div>
 
-								<div
-									onClick={() => {
-										navigate("/app/admin/agents");
-									}}
-									className={`w-full h-[40px] flex justify-start items-center pl-[90px] mb-[10px] font-medium cursor-pointer text-[18px] ${
-										active === "/app/admin/agents"
-											? "bg-white text-[#0333ae]"
-											: "text-white"
-									}
-                `}>
-									Agents
-								</div>
-							</div>
-						)}
-
-						<div
-							onClick={() => {
-								navigate("/app/admin/stores");
-							}}
-							className={`
-     w-full min-h-[55px] flex justify-start  items-center pl-[40px] mb-[5px] cursor-pointer 
-     ${
-				active === "/app/admin/stores"
-					? "bg-white text-[#0333ae]"
-					: "text-white"
-			}
-     
-     `}>
-							<div className='text-[20px]  font-bold'>
-								<IoStorefrontOutline />
-							</div>
-							<div className='font-medium  text-[18px] ml-[30px] '>Stores</div>
-						</div>
-
-						<div
-							onClick={() => {
-								navigate("/app/admin/orders");
-							}}
-							className={` w-full min-h-[55px] flex justify-start  items-center pl-[40px] mb-[5px] cursor-pointer ${
-								active === "/app/admin/orders"
-									? "bg-white text-[#0333ae]"
-									: "text-white"
-							}`}>
-							<div className='text-[20px]  font-bold'>
-								<IoBriefcaseOutline />
-							</div>
-							<div className='font-medium  text-[18px] ml-[30px] '>Orders</div>
-						</div>
-
-						<div
-							onClick={() => {
-								navigate("/app/admin/wallet");
-							}}
-							className={` w-full min-h-[55px] flex justify-start  items-center pl-[40px] mb-[5px] cursor-pointer ${
-								active === "/app/admin/wallet"
-									? "bg-white text-[#0333ae]"
-									: "text-white"
-							}`}>
-							<div className='text-[20px]  font-bold'>
-								<IoWalletOutline />
-							</div>
-							<div className='font-medium  text-[18px] ml-[30px] '>Wallet</div>
-						</div>
-
-						<div
-							onClick={() => {
-								navigate("/app/admin/complaints");
-							}}
-							className={` w-full min-h-[55px] flex justify-start  items-center pl-[40px] mb-[5px]
-cursor-pointer ${
-								active === "/app/admin/complaints"
-									? "bg-white text-[#0333ae]"
-									: "text-white"
-							}`}>
-							<div className='text-[20px]  font-bold'>
-								<ImAngry />
-							</div>
-							<div className='font-medium  text-[18px] ml-[30px] '>
-								Complaints
-							</div>
-						</div>
-
-						<div className='flex w-[100%] min-h-[55px] justify-center items-center bg-[#7e7c7c] cursor-pointer absolute bottom-0'>
-							<div className='text-white'>Logout</div>
-						</div>
-					</div>
-				) : (
-					<div className='xl:min-w-[280px] sm:min-w-[200px] min-h-[100vh]  z-50 xl:relative sm:fixed bg-[#0333ae] xl:items-center xl:justify-start flex-col sm:py-[20px] xl:py-[20px] xl:flex '>
-						<div className='mb-[15px] '>
-							<img
-								src={pc}
-								alt=''
-								className='xl:w-[60%] sm:w-[30%] sm:ml-[15%]'
-							/>
-						</div>
-						<div
-							className='absolute top-[10px] right-[20px] text-[white] text-[17px] cursor-pointer'
-							onClick={toggle3}>
-							<VscChromeClose />
-						</div>
-						<div
-							onClick={() => {
-								navigate("/app/admin");
-							}}
-							className={`
-             w-full xl:min-h-[55px] sm:min-h-[38px] flex justify-start  items-center pl-[40px] xl:mb-[5px] sm:mb-[2px] cursor-pointer 
-             ${
-								active === "/app/admin"
-									? "bg-white text-[#0333ae]"
-									: "text-white"
-							}
-             }
-             `}>
-							<div className='xl:text-[20px] sm:text-[15px]  font-bold'>
-								<BiHome />
-							</div>
-							<div className='font-medium  xl:text-[18px] sm:text-[15px] ml-[30px] '>
-								Home
-							</div>
-						</div>
-						<div className='w-[100%] min-h-[55px] flex justify-start items-center pl-[40px] mb-[5px] cursor-pointer'>
-							<div className='xl:text-[20px] sm:text-[14px] text-[#0333ae] text-white font-bold'>
-								<IoPeopleOutline />
-							</div>
-							<div className='font-medium sm:text-[14px] text-[#0333ae] text-white xl:text-[18px] ml-[30px] mr-[40px] '>
-								Users
-							</div>
-							<div
-								className='text-[20px] text-[#0333ae] text-white font-bold cursor-pointer'
-								onClick={toggle}>
-								{show ? <GoChevronDown /> : <GoChevronUp />}
-							</div>
-						</div>
-						{show ? null : (
-							<div className='w-[100%] flex flex-col justify-center items-center xl:mb-[5px] sm:mb-[2px]'>
-								<div
-									onClick={() => {
-										navigate("/app/admin/customers");
-									}}
-									className={`  w-full xl:min-h-[55px] sm:min-h-[20px] flex justify-start  items-center pl-[90px] xl:mb-[5px] sm:mb-[2px] cursor-pointer sm:text-[12px] xl:text-[16px] ${
-										active === "/app/admin/customers"
-											? "bg-white text-[#0333ae]"
-											: "text-white"
-									}
-      `}>
-									Customers
-								</div>
-
-								<div
-									onClick={() => {
-										navigate("/app/admin/agents");
-									}}
-									className={`w-full xl:min-h-[55px] sm:min-h-[20px] flex justify-start  items-center pl-[90px] xl:mb-[5px] sm:mb-[2px] cursor-pointer sm:text-[12px] xl:text-[16px] ${
-										active === "/app/admin/agents"
-											? "bg-white text-[#0333ae]"
-											: "text-white"
-									}
-                `}>
-									Agents
-								</div>
-							</div>
-						)}
-
-						<div
-							onClick={() => {
-								navigate("/app/admin/stores");
-							}}
-							className={`
-     w-full xl:min-h-[55px] sm:min-h-[40px] flex justify-start  items-center pl-[40px] xl:mb-[5px] sm:mb-[2px] cursor-pointer 
-     ${
-				active === "/app/admin/stores"
-					? "bg-white text-[#0333ae]"
-					: "text-white"
-			}
-     
-     `}>
-							<div className='xl:text-[20px] sm:text-[14px]  font-bold'>
-								<IoStorefrontOutline />
-							</div>
-							<div className='font-medium  xl:text-[18px] sm:text-[14px] ml-[30px] '>
-								Stores
-							</div>
-						</div>
-
-						<div
-							onClick={() => {
-								navigate("/app/admin/orders");
-							}}
-							className={` w-full xl:min-h-[55px] sm:min-h-[40px] flex justify-start  items-center pl-[40px] xl:mb-[5px] sm:mb-[5px] cursor-pointer ${
-								active === "/app/admin/orders"
-									? "bg-white text-[#0333ae]"
-									: "text-white"
-							}`}>
-							<div className='xl:text-[20px] sm:text-[14px]  font-bold'>
-								<IoBriefcaseOutline />
-							</div>
-							<div className='font-medium  xl:text-[18px] sm:text-[14px] ml-[30px] '>
-								Orders
-							</div>
-						</div>
-
-						<div
-							onClick={() => {
-								navigate("/app/admin/wallet");
-							}}
-							className={` w-full xl:min-h-[55px] sm:min-h-[40px] flex justify-start  items-center pl-[40px] xl:mb-[5px] sm:mb-[2px] cursor-pointer ${
-								active === "/app/admin/wallet"
-									? "bg-white text-[#0333ae]"
-									: "text-white"
-							}`}>
-							<div className='xl:text-[20px] sm:text-[14px]  font-bold'>
-								<IoWalletOutline />
-							</div>
-							<div className='font-medium  xl:text-[18px] sm:text-[14px] ml-[30px] '>
-								Wallet
-							</div>
-						</div>
-
-						<div
-							onClick={() => {
-								navigate("/app/admin/complaints");
-							}}
-							className={` w-full xl:min-h-[55px] sm:min-h-[40px] flex justify-start  items-center pl-[40px] xl:mb-[5px] sm:mb-[2px] cursor-pointer 
-                ${
-									active === "/app/admin/complaints"
-										? "bg-white text-[#0333ae]"
-										: "text-white"
-								}`}>
-							<div className='xl:text-[20px] sm:text-[14px] font-bold'>
-								<ImAngry />
-							</div>
-							<div className='font-medium  xl:text-[18px] sm:text-[14px] ml-[30px] '>
-								Complaints
-							</div>
-						</div>
-
-						<div className='flex w-[100%] xl:min-h-[55px] sm:min-h-[40px] justify-center items-center bg-[#C7C7C7] cursor-pointer absolute top-0'>
-							<div className='text-white xl:text-[16px] sm:text-[14px] fixed bottom-0'>
-								Logout
-							</div>
-						</div>
-					</div>
-				)}
-				<div className='xl:w-[calc(100%-280px)] xl:ml-[280px]  h-[70px]    flex bg-[#fff] justify-end items-center shadow-md z-[50] fixed'>
+				<div className='xl:w-full h-[70px] flex bg-[#fff] justify-end items-center z-[10] '>
 					<div className='w-[100%] h-[40px] flex  justify-center items-center'>
 						<div className=' w-[90%] h-[100%] flex justify-between items-start'>
 							<div
@@ -402,3 +122,8 @@ cursor-pointer ${
 };
 
 export default Header;
+
+
+
+
+
