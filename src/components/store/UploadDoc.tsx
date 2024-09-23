@@ -1,168 +1,119 @@
-import React from "react";
-import { VscChromeClose } from "react-icons/vsc";
-
-import { VscFileSymlinkFile } from "react-icons/vsc";
+import React, { useState, useEffect } from "react";
+import { VscChromeClose, VscFileSymlinkFile } from "react-icons/vsc";
 
 type Iprops = {
-	togleBtn: any;
+  togleBtn: () => void;
+  onFileChange: (files: {
+    cacDocument?: File;
+    kycDocument?: File;
+    businessDocument?: File;
+    utilityBill?: File;
+  }) => void;
+  onSubmit: () => void;
+  storeDetails: {
+    cacDocument?: string;
+    kycDocument?: string;
+    businessDocument?: string;
+    utilityBill?: string;
+  };
 };
 
-const Upload: React.FC<Iprops> = ({ togleBtn }) => {
-	const [fileName, setFileName] = React.useState(
-		"Upload the title document here",
-	);
-	const [fileName2, setFileName2] = React.useState(
-		"Upload the title document here",
-	);
-	const [fileName3, setFileName3] = React.useState(
-		"Upload the title document here",
-	);
-	const [fileName4, setFileName4] = React.useState(
-		"Upload the title document here",
-	);
+const Upload: React.FC<Iprops> = ({ togleBtn, onFileChange, onSubmit, storeDetails }) => {
+  const [cacDocument, setCacDocument] = useState<File | null>(null);
+  const [kycDocument, setKycDocument] = useState<File | null>(null);
+  const [businessDocument, setBusinessDocument] = useState<File | null>(null);
+  const [utilityBill, setUtilityBill] = useState<File | null>(null);
 
-	const handleFileChange = (e: any) => {
-		const fileInput = e.target;
-		if (fileInput?.files.length > 0) {
-			setFileName(fileInput?.files[0].name);
-		} else {
-			setFileName("Upload the title document here");
-		}
-	};
-	const handleFileChange2 = (e: any) => {
-		const fileInput2 = e.target;
-		if (fileInput2?.files.length > 0) {
-			setFileName2(fileInput2?.files[0].name);
-		} else {
-			setFileName2("Upload the title document here");
-		}
-	};
-	const handleFileChange3 = (e: any) => {
-		const fileInput = e.target;
-		if (fileInput?.files.length > 0) {
-			setFileName3(fileInput?.files[0].name);
-		} else {
-			setFileName3("Upload the title document here");
-		}
-	};
-	const handleFileChange4 = (e: any) => {
-		const fileInput = e.target;
-		if (fileInput?.files.length > 0) {
-			setFileName4(fileInput?.files[0].name);
-		} else {
-			setFileName4("Upload the title document here");
-		}
-	};
+  useEffect(() => {
+    // Prepopulate form with store details (URLs or file names)
+    if (storeDetails) {
+      if (storeDetails.cacDocument) setCacDocument(storeDetails.cacDocument as unknown as File);
+      if (storeDetails.kycDocument) setKycDocument(storeDetails.kycDocument as unknown as File);
+      if (storeDetails.businessDocument) setBusinessDocument(storeDetails.businessDocument as unknown as File);
+      if (storeDetails.utilityBill) setUtilityBill(storeDetails.utilityBill as unknown as File);
+    }
+  }, [storeDetails]);
 
-	return (
-		<div
-			className='w-screen h-[100vh] z-20 flex justify-end bg-[#ffffff1f] fixed left-0 top-0 
-backdrop-blur-sm'>
-			<div
-				className='w-[calc(100%-280px)] h-[calc(100%-70px)] pl-[20px] pt-[20px] flex justify-center 
-items-start pb-[30px] mt-[50px]'>
-				<div
-					className='w-[56%] py-[30px] bg-[#f8f7f7] rounded-[10px] flex justify-center 
-items-center border-[1px] border-[#0000ff] border-solid flex-col p-[20px] '>
-					<div className='w-[100%] flex justify-between items-center'>
-						<div className='text-[18px]'>Upload Document</div>
-						<div className='text-[red] cursor-pointer' onClick={togleBtn}>
-							<VscChromeClose />
-						</div>
-					</div>
-					<div className='w-[100%] flex justify-start flex-col mt-[10px]'>
-						<div className='text-[14px]'>Revolutionary Army</div>
-						<div className='text-[14px] font-semibold text-[#0000ff]'>
-							Store ID - 0002930
-						</div>
-					</div>
-					<div className='w-[100%] mt-[50px]'>
-						<form className='w-[100%] flex flex-col justify-center items-center'>
-							<div className='w-[100%] flex justify-between items-center flex-wrap'>
-								<div className='flex flex-col mb-[20px]'>
-									<input
-										type='file'
-										id='fileInput'
-										accept='.pdf,.doc'
-										onChange={handleFileChange}
-										className='hidden'
-									/>
-									<label
-										htmlFor='fileInput'
-										className='cursor-pointer text-[14px] mb-[5px]'>
-										CAC DOCUMENT (select a file)
-									</label>
-									<p className='w-[553px] py-[5px] px-[6px] outline-[0px] border-[1px] border-solid border-[#868484] rounded-[5px] text-[13px] bg-white'>
-										{fileName}
-									</p>
-								</div>
-								<div className='flex flex-col mb-[20px]'>
-									<input
-										type='file'
-										id='fileInput2'
-										accept='.pdf,.doc'
-										onChange={handleFileChange2}
-										className='hidden'
-									/>
-									<label
-										htmlFor='fileInput2'
-										className='cursor-pointer text-[14px] mb-[5px]'>
-										KYC (select a file)
-									</label>
-									<p className='w-[553px] py-[5px] px-[6px] outline-[0px] border-[1px] border-solid border-[#868484] rounded-[5px] text-[13px] bg-white'>
-										{fileName2}
-									</p>
-								</div>
-								<div className='flex flex-col mb-[20px]'>
-									<input
-										type='file'
-										id='fileInput3'
-										accept='.pdf,.doc'
-										onChange={handleFileChange3}
-										className='hidden'
-									/>
-									<label
-										htmlFor='fileInput3'
-										className='cursor-pointer text-[14px] mb-[5px]'>
-										Business Certificate (select a file)
-									</label>
-									<p className='w-[553px] py-[5px] px-[6px] outline-[0px] border-[1px] border-solid border-[#868484] rounded-[5px] text-[13px] bg-white'>
-										{fileName3}
-									</p>
-								</div>
-								<div className='flex flex-col mb-[20px]'>
-									<input
-										type='file'
-										id='fileInput4'
-										accept='.pdf,.doc'
-										onChange={handleFileChange4}
-										className='hidden'
-									/>
-									<label
-										htmlFor='fileInput4'
-										className='cursor-pointer text-[14px] mb-[5px]'>
-										Utility Bill (select a file)
-									</label>
-									<p className='w-[553px] py-[5px] px-[6px] outline-[0px] border-[1px] border-solid border-[#868484] rounded-[5px] text-[13px] bg-white'>
-										{fileName4}
-									</p>
-								</div>
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, docType: string) => {
+    const file = e.target.files?.[0];
+    onFileChange({ [docType]: file });
 
-								<div className='w-[100%] flex justify-end mt-[5px]'>
-									<button className='bg-[#0000ff] text-white px-[25px] py-[5px] rounded-[5px] flex justify-center items-center'>
-										<div className='mr-[5px]'>
-											<VscFileSymlinkFile />
-										</div>
-										<div>Upload</div>
-									</button>
-								</div>
-							</div>
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
-	);
+    // Update local state using if-else
+    if (docType === "cacDocument") {
+      setCacDocument(file || null);
+    } else if (docType === "kycDocument") {
+      setKycDocument(file || null);
+    } else if (docType === "businessDocument") {
+      setBusinessDocument(file || null);
+    } else if (docType === "utilityBill") {
+      setUtilityBill(file || null);
+    }
+  };
+
+  return (
+    <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center bg-[#ffffffd9]">
+      <div className="bg-white w-[70%] h-[70%] flex flex-col p-[20px] border border-[#0000ff]">
+        <div className="flex justify-between items-center mb-[20px]">
+          <h2>Upload Documents</h2>
+          <button onClick={togleBtn} className="text-red-500">
+            <VscChromeClose />
+          </button>
+        </div>
+
+        <div className="mb-[10px]">
+          <label htmlFor="cacDocument" className="block mb-[5px]">CAC Document</label>
+          <input
+            type="file"
+            id="cacDocument"
+            className="border border-gray-300 p-[5px] w-full"
+            onChange={(e) => handleFileChange(e, "cacDocument")}
+          />
+          {cacDocument && <p>Current file: {storeDetails.cacDocument}</p>}
+        </div>
+
+        <div className="mb-[10px]">
+          <label htmlFor="kycDocument" className="block mb-[5px]">KYC Document</label>
+          <input
+            type="file"
+            id="kycDocument"
+            className="border border-gray-300 p-[5px] w-full"
+            onChange={(e) => handleFileChange(e, "kycDocument")}
+          />
+          {kycDocument && <p>Current file: {storeDetails.kycDocument}</p>}
+        </div>
+
+        <div className="mb-[10px]">
+          <label htmlFor="businessDocument" className="block mb-[5px]">Business Document</label>
+          <input
+            type="file"
+            id="businessDocument"
+            className="border border-gray-300 p-[5px] w-full"
+            onChange={(e) => handleFileChange(e, "businessDocument")}
+          />
+          {businessDocument && <p>Current file: {storeDetails.businessDocument}</p>}
+        </div>
+
+        <div className="mb-[10px]">
+          <label htmlFor="utilityBill" className="block mb-[5px]">Utility Bill</label>
+          <input
+            type="file"
+            id="utilityBill"
+            className="border border-gray-300 p-[5px] w-full"
+            onChange={(e) => handleFileChange(e, "utilityBill")}
+          />
+          {utilityBill && <p>Current file: {storeDetails.utilityBill}</p>}
+        </div>
+
+        <button
+          type="button"
+          className="bg-blue-500 text-white px-[25px] py-[5px] rounded-[5px] flex justify-center items-center"
+          onClick={onSubmit}
+        >
+          <VscFileSymlinkFile className="mr-[5px]" /> Upload
+        </button>
+      </div>
+    </div>
+  );
 };
 
 export default Upload;

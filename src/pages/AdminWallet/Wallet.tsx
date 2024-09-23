@@ -2,11 +2,38 @@ import { BsWallet } from "react-icons/bs";
 import { GoChevronDown } from "react-icons/go";
 import { PiArrowUpLight } from "react-icons/pi";
 import LineChartOverViewWallet from "@/Charts/WalletChart";
+import { useState, useEffect } from 'react';
+import { getTransactionHistory } from '@/utils/ApiCalls';
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Wallet = () => {
+
+	const [transactions, setTransactions] = useState([]);
+  	const [loading, setLoading] = useState(true);
+  	const [error] = useState(null);
+
+	useEffect(() => {
+    const fetchTransactions = async () => {
+      try {
+        const data = await getTransactionHistory();
+        setTransactions(data.data); // Adjust this based on the response structure
+        setLoading(false);
+      } catch (error) {
+        toast.error('Failed to fetch transactions');
+        setLoading(false);
+      }
+    };
+
+    fetchTransactions();
+  }, []);
+
+	if (loading) return <div>Loading...</div>;
+  	if (error) return <div>{error}</div>;	
+
 	return (
-		<div className='w-[calc(100%-250px)] h-[calc(100%-70px)] bg-[#fff] pl-[20px] pt-[20px] flex justify-center items-center pb-[30px] mt-[70px]'>
-			<div className='w-[93%] min-h-[100%] flex justify-between items-start'>
+		<div className='w-[95%] bg-[#fff] h-[100%] pt-[20px] flex justify-center items-center pb-[30px] mt-[70px]'>
+			<div className='w-[100%] min-h-[100%] flex justify-between items-start'>
 				<div className='w-[40%] h-[100%] flex flex-col justify-center items-center'>
 					<div className='w-[100%] h-[200px] bg-white mb-[25px] flex justify-center items-center rounded-[10px] shadow-xl'>
 						<div className='w-[95%] h-[92%] flex flex-col justify-between'>
@@ -112,7 +139,7 @@ const Wallet = () => {
 							</div>
 						</div>
 					</div>
-					<div className='w-[100%] h-[600px] overflow-y-scroll '>
+					<div className='w-[100%] h-[500px] overflow-y-scroll '>
 						<table className='h-[600px]  w-[100%] text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'>
 							<thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400'>
 								<tr>
@@ -124,258 +151,17 @@ const Wallet = () => {
 								</tr>
 							</thead>
 							<tbody>
-								<tr className='odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700'>
-									<td className='px-[10px] py-[15px]'>Buyer</td>
-									<td className='px-[10px] py-[15px]'>0984399</td>
-									<td className='px-[10px] py-[15px]'>Deposit</td>
-									<td className='px-[10px] py-[15px]'>22-02-23</td>
-									<td className='px-[10px] py-[15px] text-[#ff0000] font-semibold'>
-										KAO 5000
+								{transactions.map((transaction: any) => (
+									<tr key={transaction.id} className='odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700'>
+										<td className='px-[6px] py-[3px]'>{`${transaction.user.firstname} ${transaction.user.lastname}`}</td>
+									<td className='px-[6px] py-[3px]'>0984399</td>
+									<td className='px-[6px] py-[3px]'>{transaction.type}t</td>
+									<td className='px-[6px] py-[3px]'>{new Date(transaction.date).toLocaleString()}</td>
+									<td className='px-[6px] py-[3px] text-[#ff0000] font-semibold'>
+										{transaction.amount}
 									</td>
 								</tr>
-								<tr className='odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700'>
-									<td className='px-[10px] py-[15px]'>Buyer</td>
-									<td className='px-[10px] py-[15px]'>0984399</td>
-									<td className='px-[10px] py-[15px]'>Deposit</td>
-									<td className='px-[10px] py-[15px]'>22-02-23</td>
-									<td className='px-[10px] py-[15px] text-[#ff0000] font-semibold'>
-										KAO 5000
-									</td>
-								</tr>
-								<tr className='odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700'>
-									<td className='px-[10px] py-[15px]'>Buyer</td>
-									<td className='px-[10px] py-[15px]'>0984399</td>
-									<td className='px-[10px] py-[15px]'>Deposit</td>
-									<td className='px-[10px] py-[15px]'>22-02-23</td>
-									<td className='px-[10px] py-[15px] text-[#ff0000] font-semibold'>
-										KAO 5000
-									</td>
-								</tr>
-								<tr className='odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700'>
-									<td className='px-[10px] py-[15px]'>Buyer</td>
-									<td className='px-[10px] py-[15px]'>0984399</td>
-									<td className='px-[10px] py-[15px]'>Deposit</td>
-									<td className='px-[10px] py-[15px]'>22-02-23</td>
-									<td className='px-[10px] py-[15px] text-[#ff0000] font-semibold'>
-										KAO 5000
-									</td>
-								</tr>
-								<tr className='odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700'>
-									<td className='px-[10px] py-[15px]'>Buyer</td>
-									<td className='px-[10px] py-[15px]'>0984399</td>
-									<td className='px-[10px] py-[15px]'>Deposit</td>
-									<td className='px-[10px] py-[15px]'>22-02-23</td>
-									<td className='px-[10px] py-[15px] text-[#ff0000] font-semibold'>
-										KAO 5000
-									</td>
-								</tr>
-								<tr className='odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700'>
-									<td className='px-[10px] py-[15px]'>Buyer</td>
-									<td className='px-[10px] py-[15px]'>0984399</td>
-									<td className='px-[10px] py-[15px]'>Deposit</td>
-									<td className='px-[10px] py-[15px]'>22-02-23</td>
-									<td className='px-[10px] py-[15px] text-[#ff0000] font-semibold'>
-										KAO 5000
-									</td>
-								</tr>
-								<tr className='odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700'>
-									<td className='px-[10px] py-[15px]'>Buyer</td>
-									<td className='px-[10px] py-[15px]'>0984399</td>
-									<td className='px-[10px] py-[15px]'>Deposit</td>
-									<td className='px-[10px] py-[15px]'>22-02-23</td>
-									<td className='px-[10px] py-[15px] text-[#ff0000] font-semibold'>
-										KAO 5000
-									</td>
-								</tr>
-								<tr className='odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700'>
-									<td className='px-[10px] py-[15px]'>Buyer</td>
-									<td className='px-[10px] py-[15px]'>0984399</td>
-									<td className='px-[10px] py-[15px]'>Deposit</td>
-									<td className='px-[10px] py-[15px]'>22-02-23</td>
-									<td className='px-[10px] py-[15px] text-[#ff0000] font-semibold'>
-										KAO 5000
-									</td>
-								</tr>
-								<tr className='odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700'>
-									<td className='px-[10px] py-[15px]'>Buyer</td>
-									<td className='px-[10px] py-[15px]'>0984399</td>
-									<td className='px-[10px] py-[15px]'>Deposit</td>
-									<td className='px-[10px] py-[15px]'>22-02-23</td>
-									<td className='px-[10px] py-[15px] text-[#ff0000] font-semibold'>
-										KAO 5000
-									</td>
-								</tr>
-								<tr className='odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700'>
-									<td className='px-[10px] py-[15px]'>Buyer</td>
-									<td className='px-[10px] py-[15px]'>0984399</td>
-									<td className='px-[10px] py-[15px]'>Deposit</td>
-									<td className='px-[10px] py-[15px]'>22-02-23</td>
-									<td className='px-[10px] py-[15px] text-[#ff0000] font-semibold'>
-										KAO 5000
-									</td>
-								</tr>
-								<tr className='odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700'>
-									<td className='px-[10px] py-[15px]'>Buyer</td>
-									<td className='px-[10px] py-[15px]'>0984399</td>
-									<td className='px-[10px] py-[15px]'>Deposit</td>
-									<td className='px-[10px] py-[15px]'>22-02-23</td>
-									<td className='px-[10px] py-[15px] text-[#ff0000] font-semibold'>
-										KAO 5000
-									</td>
-								</tr>
-								<tr className='odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700'>
-									<td className='px-[10px] py-[15px]'>Buyer</td>
-									<td className='px-[10px] py-[15px]'>0984399</td>
-									<td className='px-[10px] py-[15px]'>Deposit</td>
-									<td className='px-[10px] py-[15px]'>22-02-23</td>
-									<td className='px-[10px] py-[15px] text-[#ff0000] font-semibold'>
-										KAO 5000
-									</td>
-								</tr>
-								<tr className='odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700'>
-									<td className='px-[10px] py-[15px]'>Buyer</td>
-									<td className='px-[10px] py-[15px]'>0984399</td>
-									<td className='px-[10px] py-[15px]'>Deposit</td>
-									<td className='px-[10px] py-[15px]'>22-02-23</td>
-									<td className='px-[10px] py-[15px] text-[#ff0000] font-semibold'>
-										KAO 5000
-									</td>
-								</tr>
-								<tr className='odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700'>
-									<td className='px-[10px] py-[15px]'>Buyer</td>
-									<td className='px-[10px] py-[15px]'>0984399</td>
-									<td className='px-[10px] py-[15px]'>Deposit</td>
-									<td className='px-[10px] py-[15px]'>22-02-23</td>
-									<td className='px-[10px] py-[15px] text-[#ff0000] font-semibold'>
-										KAO 5000
-									</td>
-								</tr>
-								<tr className='odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700'>
-									<td className='px-[10px] py-[15px]'>Buyer</td>
-									<td className='px-[10px] py-[15px]'>0984399</td>
-									<td className='px-[10px] py-[15px]'>Deposit</td>
-									<td className='px-[10px] py-[15px]'>22-02-23</td>
-									<td className='px-[10px] py-[15px] text-[#ff0000] font-semibold'>
-										KAO 5000
-									</td>
-								</tr>
-								<tr className='odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700'>
-									<td className='px-[10px] py-[15px]'>Buyer</td>
-									<td className='px-[10px] py-[15px]'>0984399</td>
-									<td className='px-[10px] py-[15px]'>Deposit</td>
-									<td className='px-[10px] py-[15px]'>22-02-23</td>
-									<td className='px-[10px] py-[15px] text-[#ff0000] font-semibold'>
-										KAO 5000
-									</td>
-								</tr>
-								<tr className='odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700'>
-									<td className='px-[10px] py-[15px]'>Buyer</td>
-									<td className='px-[10px] py-[15px]'>0984399</td>
-									<td className='px-[10px] py-[15px]'>Deposit</td>
-									<td className='px-[10px] py-[15px]'>22-02-23</td>
-									<td className='px-[10px] py-[15px] text-[#ff0000] font-semibold'>
-										KAO 5000
-									</td>
-								</tr>
-								<tr className='odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700'>
-									<td className='px-[10px] py-[15px]'>Buyer</td>
-									<td className='px-[10px] py-[15px]'>0984399</td>
-									<td className='px-[10px] py-[15px]'>Deposit</td>
-									<td className='px-[10px] py-[15px]'>22-02-23</td>
-									<td className='px-[10px] py-[15px] text-[#ff0000] font-semibold'>
-										KAO 5000
-									</td>
-								</tr>
-								<tr className='odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700'>
-									<td className='px-[10px] py-[15px]'>Buyer</td>
-									<td className='px-[10px] py-[15px]'>0984399</td>
-									<td className='px-[10px] py-[15px]'>Deposit</td>
-									<td className='px-[10px] py-[15px]'>22-02-23</td>
-									<td className='px-[10px] py-[15px] text-[#ff0000] font-semibold'>
-										KAO 5000
-									</td>
-								</tr>
-								<tr className='odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700'>
-									<td className='px-[10px] py-[15px]'>Buyer</td>
-									<td className='px-[10px] py-[15px]'>0984399</td>
-									<td className='px-[10px] py-[15px]'>Deposit</td>
-									<td className='px-[10px] py-[15px]'>22-02-23</td>
-									<td className='px-[10px] py-[15px] text-[#ff0000] font-semibold'>
-										KAO 5000
-									</td>
-								</tr>
-								<tr className='odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700'>
-									<td className='px-[10px] py-[15px]'>Buyer</td>
-									<td className='px-[10px] py-[15px]'>0984399</td>
-									<td className='px-[10px] py-[15px]'>Deposit</td>
-									<td className='px-[10px] py-[15px]'>22-02-23</td>
-									<td className='px-[10px] py-[15px] text-[#ff0000] font-semibold'>
-										KAO 5000
-									</td>
-								</tr>
-								<tr className='odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700'>
-									<td className='px-[10px] py-[15px]'>Buyer</td>
-									<td className='px-[10px] py-[15px]'>0984399</td>
-									<td className='px-[10px] py-[15px]'>Deposit</td>
-									<td className='px-[10px] py-[15px]'>22-02-23</td>
-									<td className='px-[10px] py-[15px] text-[#ff0000] font-semibold'>
-										KAO 5000
-									</td>
-								</tr>
-								<tr className='odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700'>
-									<td className='px-[10px] py-[15px]'>Buyer</td>
-									<td className='px-[10px] py-[15px]'>0984399</td>
-									<td className='px-[10px] py-[15px]'>Deposit</td>
-									<td className='px-[10px] py-[15px]'>22-02-23</td>
-									<td className='px-[10px] py-[15px] text-[#ff0000] font-semibold'>
-										KAO 5000
-									</td>
-								</tr>
-								<tr className='odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700'>
-									<td className='px-[10px] py-[15px]'>Buyer</td>
-									<td className='px-[10px] py-[15px]'>0984399</td>
-									<td className='px-[10px] py-[15px]'>Deposit</td>
-									<td className='px-[10px] py-[15px]'>22-02-23</td>
-									<td className='px-[10px] py-[15px] text-[#ff0000] font-semibold'>
-										KAO 5000
-									</td>
-								</tr>
-								<tr className='odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700'>
-									<td className='px-[10px] py-[15px]'>Buyer</td>
-									<td className='px-[10px] py-[15px]'>0984399</td>
-									<td className='px-[10px] py-[15px]'>Deposit</td>
-									<td className='px-[10px] py-[15px]'>22-02-23</td>
-									<td className='px-[10px] py-[15px] text-[#ff0000] font-semibold'>
-										KAO 5000
-									</td>
-								</tr>
-								<tr className='odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700'>
-									<td className='px-[10px] py-[15px]'>Buyer</td>
-									<td className='px-[10px] py-[15px]'>0984399</td>
-									<td className='px-[10px] py-[15px]'>Deposit</td>
-									<td className='px-[10px] py-[15px]'>22-02-23</td>
-									<td className='px-[10px] py-[15px] text-[#ff0000] font-semibold'>
-										KAO 5000
-									</td>
-								</tr>
-								<tr className='odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700'>
-									<td className='px-[10px] py-[15px]'>Buyer</td>
-									<td className='px-[10px] py-[15px]'>0984399</td>
-									<td className='px-[10px] py-[15px]'>Deposit</td>
-									<td className='px-[10px] py-[15px]'>22-02-23</td>
-									<td className='px-[10px] py-[15px] text-[#ff0000] font-semibold'>
-										KAO 5000
-									</td>
-								</tr>
-								<tr className='odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700'>
-									<td className='px-[10px] py-[15px]'>Buyer</td>
-									<td className='px-[10px] py-[15px]'>0984399</td>
-									<td className='px-[10px] py-[15px]'>Deposit</td>
-									<td className='px-[10px] py-[15px]'>22-02-23</td>
-									<td className='px-[10px] py-[15px] text-[#ff0000] font-semibold'>
-										KAO 5000
-									</td>
-								</tr>
+								))}
 							</tbody>
 						</table>
 					</div>

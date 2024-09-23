@@ -7,94 +7,75 @@ import {
 	CartesianGrid,
 	Tooltip,
 	Legend,
-
+	ResponsiveContainer,
 } from "recharts";
 
-const data = [
-	{
-		name: "Mon",
-		uv: 4000,
-		pv: 2400,
-		amt: 2400,
-	},
-	{
-		name: "Tue",
-		uv: 3000,
-		pv: 1398,
-		amt: 2210,
-	},
-	{
-		name: "Wed",
-		uv: 2000,
-		pv: 9800,
-		amt: 2290,
-	},
-	{
-		name: "Thur",
-		uv: 2780,
-		pv: 3908,
-		amt: 2000,
-	},
-	{
-		name: "Fri",
-		uv: 1890,
-		pv: 4800,
-		amt: 2181,
-	},
-	{
-		name: "Sat",
-		uv: 2390,
-		pv: 3800,
-		amt: 2500,
-	},
-	{
-		name: "Sun",
-		uv: 3490,
-		pv: 4300,
-		amt: 2100,
-	},
-];
+const LineChartOverView = ({ data }: any) => {
+	const chartData = [
+		{
+			name: "Sunday",
+			revenue: data?.sunday?.revenue || 0,
+			expense: data?.sunday?.expense || 0,
+		},
+		{
+			name: "Monday",
+			revenue: data?.monday?.revenue || 0,
+			expense: data?.monday?.expense || 0,
+		},
+		{
+			name: "Tuesday",
+			revenue: data?.tuesday?.revenue || 0,
+			expense: data?.tuesday?.expense || 0,
+		},
+		{
+			name: "Wednesday",
+			revenue: data?.wednesday?.revenue || 0,
+			expense: data?.wednesday?.expense || 0,
+		},
+		{
+			name: "Thursday",
+			revenue: data?.thursday?.revenue || 0,
+			expense: data?.thursday?.expense || 0,
+		},
+		{
+			name: "Friday",
+			revenue: data?.friday?.revenue || 0,
+			expense: data?.friday?.expense || 0,
+		},
+		{
+			name: "Saturday",
+			revenue: data?.saturday?.revenue || 0,
+			expense: data?.saturday?.expense || 0,
+		},
+	];
 
-const LineChartOverView = () => {
 	return (
 		<div className='w-full'>
-			{/* <ResponsiveContainer width='100%' height='100%'> */}
-			<LineChart
-				width={1000}
-				height={300}
-				data={data}
-				margin={{
-					top: 5,
-					right: 30,
-					left: 20,
-					bottom: 5,
-				}} 
-			
-				>
-				<CartesianGrid strokeDasharray='3 3' />
-				<XAxis dataKey='name' />
-				<YAxis />
-				<Tooltip />
-				<Legend />
-				<Line
-					type='monotone'
-					dataKey='pv'
-					stroke='#0333ae'
-					activeDot={{ r: 8 }}
-				/>
-				<Line type='monotone' dataKey='uv' stroke='#CED6DE' className="-z-10" />
-			</LineChart>
-			{/* </ResponsiveContainer> */}
+			<ResponsiveContainer width='100%' aspect={4.0 / 1.5}>
+				<LineChart
+					data={chartData}
+					margin={{
+						top: 5,
+						right: 30,
+						left: 20,
+						bottom: 5,
+					}}>
+					<CartesianGrid strokeDasharray='3 3' />
+					<XAxis dataKey='name' />
+					<YAxis />
+					<Legend />
+					<Line
+						type='monotone'
+						dataKey='revenue'
+						stroke='#0333ae'
+						activeDot={{ r: 8 }}
+					/>
+					<Line type='monotone' dataKey='expense' stroke='#CED6DE' />
+					<Tooltip offset={-1} />
+				</LineChart>
+			</ResponsiveContainer>
 		</div>
 	);
 };
 
 export default LineChartOverView;
-
-
-
-
-
-
- 
-

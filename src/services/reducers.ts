@@ -5,14 +5,25 @@ export interface CounterState {
 	value: number;
 }
 
-const initialState: CounterState = {
+interface UserDetails {
+	email?: string;
+	password?: string
+}
+
+const initialState = {
 	value: 0,
+	currentUser: {} as UserDetails | any
 };
 
 export const Reducers = createSlice({
 	name: "Koa-ecomerce",
 	initialState,
 	reducers: {
+		updateUserDetails: (state, action: PayloadAction<UserDetails>) => {
+			state.currentUser = action.payload
+		},
+
+		logoutUser: () => initialState,
 		increment: (state) => {
 			state.value += 1;
 		},
@@ -25,6 +36,6 @@ export const Reducers = createSlice({
 	},
 });
 
-export const { increment, decrement, incrementByAmount } = Reducers.actions;
+export const { increment, decrement, incrementByAmount, updateUserDetails, logoutUser } = Reducers.actions;
 
 export default Reducers.reducer;
