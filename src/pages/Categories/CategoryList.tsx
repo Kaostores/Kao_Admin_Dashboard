@@ -1,184 +1,231 @@
-import { GetCategories, UpdateCategory, DeleteCategory } from "@/utils/ApiCalls";
-import { useState, useEffect } from "react";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import ReactModal from "react-modal";
-import ReactPaginate from "react-paginate";
-import Swal from 'sweetalert2';
+'use client'
+
+import { GetCategories, UpdateCategory, DeleteCategory } from "@/utils/ApiCalls"
+import { useState, useEffect } from "react"
+import { toast } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
+import ReactModal from "react-modal"
+import Swal from 'sweetalert2'
+import { Skeleton } from "@/components/ui/skeleton"
+import { Button } from "@/components/ui/button"
+import { ChevronLeft, ChevronRight, Pencil, Trash2 } from "lucide-react"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+
+interface Category {
+  id: string
+  name: string
+  image?: string
+  subcategories?: Category[]
+}
 
 const CategoryList = () => {
-    const [categories, setCategories] = useState<any[]>([]);
-    const [editCategoryId, setEditCategoryId] = useState<string | null>(null);
-    const [editCategoryName, setEditCategoryName] = useState<string>("");
-    const [modalIsOpen, setModalIsOpen] = useState(false);
-    const [editCategoryImage, setEditCategoryImage] = useState<File | null>(null);
+  const [categories, setCategories] = useState<Category[]>([])
+  const [editCategoryId, setEditCategoryId] = useState<string | null>(null)
+  const [editCategoryName, setEditCategoryName] = useState<string>("")
+  const [modalIsOpen, setModalIsOpen] = useState(false)
+  const [editCategoryImage, setEditCategoryImage] = useState<File | null>(null)
+  const [loading, setLoading] = useState(true)
 
-    const [currentPage, setCurrentPage] = useState(0);
-  const categoriesPerPage = 5;
+  const [currentPage, setCurrentPage] = useState(1)
+  const categoriesPerPage = 5
 
-    useEffect(() => {
-        const fetchCategories = async () => {
-            const response = await GetCategories();
-            if (response && response.status === 200) {
-                console.log("Categories fetched successfully:", response.data.data);
-                setCategories(response.data.data);
-            } else {
-                console.error("Failed to fetch categories.");
-            }
-        };
-
-        fetchCategories();
-    }, []);
-
-    const handleEdit = (category: any) => {
-        setEditCategoryId(category.id);
-        setEditCategoryName(category.name);
-        setEditCategoryImage(null);
-        setModalIsOpen(true);
-    };
-
-   const handleUpdate = async () => {
-    if (editCategoryId) {
-        try {
-
-            // Create a new FormData object to send the category data
-            const formData = new FormData();
-            formData.append("name", editCategoryName);
-            if (editCategoryImage) {
-                formData.append("image", editCategoryImage); // Append the new image if it exists
-            }
-
-            // Send the formData to the API
-            const response = await UpdateCategory(editCategoryId, formData);
-            if (response?.status === 200) {
-                toast.success("Category updated successfully!");
-                const updatedCategories = categories.map((cat) =>
-                    cat.id === editCategoryId ? { ...cat, name: editCategoryName, image: response.data.image } : cat
-                );
-                setCategories(updatedCategories);
-                setModalIsOpen(false);
-                setEditCategoryId(null);
-                setEditCategoryImage(null); // Reset image state after update
-            } else {
-                toast.error(response?.data?.message || "Failed to update category.");
-            }
-        } catch (error) {
-            toast.error("An error occurred while updating the category.");
-            console.error("Error updating category:", error);
-        } 
+  useEffect(() => {
+    const fetchCategories = async () => {
+      setLoading(true)
+      const response = await GetCategories()
+      if (response && response.status === 200) {
+        console.log("Categories fetched successfully:", response.data.data)
+        setCategories(response.data.data)
+      } else {
+        console.error("Failed to fetch categories.")
+      }
+      setLoading(false)
     }
-};
 
+    fetchCategories()
+  }, [])
 
-    const handleDelete = async (categoryId: string) => {
-        try {
-            // Fetch categories to check if the selected category has subcategories
-            const response = await GetCategories();
-            const category = response.data.data.find((cat: any) => cat.id === categoryId);
+  const handleEdit = (category: Category) => {
+    setEditCategoryId(category.id)
+    setEditCategoryName(category.name)
+    setEditCategoryImage(null)
+    setModalIsOpen(true)
+  }
 
-            if (category && category.subcategories && category.subcategories.length > 0) {
-                // Show SweetAlert if subcategories exist
-                 Swal.fire({
-                    title: 'Warning',
-                    text: 'This category has subcategories. Please delete the subcategories before deleting this category.',
-                    icon: 'warning',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                });
-            } else {
-                // Proceed with deleting the category if no subcategories are found
-                const deleteResponse = await DeleteCategory(categoryId);
-                if (deleteResponse?.status === 200) {
-                    toast.success("Category deleted successfully!");
-                    setCategories(categories.filter((cat) => cat.id !== categoryId));
-                } else {
-                    Swal.fire({
-                    title: 'Warning',
-                    text: 'This category has subcategories. Please delete the subcategories before deleting this category.',
-                    icon: 'warning',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                });
-                } 
-            }
-        } catch (error) {
-            toast.error("An error occurred while deleting the category.");
-            console.error("Error:", error);
+  const handleUpdate = async () => {
+    if (editCategoryId) {
+      try {
+        const formData = new FormData()
+        formData.append("name", editCategoryName)
+        if (editCategoryImage) {
+          formData.append("image", editCategoryImage)
         }
-    };
 
+        const response = await UpdateCategory(editCategoryId, formData)
+        if (response?.status === 200) {
+          toast.success("Category updated successfully!")
+          const updatedCategories = categories.map((cat) =>
+            cat.id === editCategoryId ? { ...cat, name: editCategoryName, image: response.data.image } : cat
+          )
+          setCategories(updatedCategories)
+          setModalIsOpen(false)
+          setEditCategoryId(null)
+          setEditCategoryImage(null)
+        } else {
+          toast.error(response?.data?.message || "Failed to update category.")
+        }
+      } catch (error) {
+        toast.error("An error occurred while updating the category.")
+        console.error("Error updating category:", error)
+      } 
+    }
+  }
 
-    const handleCloseModal = () => {
-    setModalIsOpen(false);
-    setEditCategoryImage(null);
-  };
+  const handleDelete = async (categoryId: string) => {
+    try {
+      const response = await GetCategories()
+      const category = response.data.data.find((cat: Category) => cat.id === categoryId)
 
-  const handlePageClick = (data: { selected: number }) => {
-    setCurrentPage(data.selected);
-  };
-  
-  const offset = currentPage * categoriesPerPage;
-  const currentCategories = categories.slice(offset, offset + categoriesPerPage);
-  const pageCount = Math.ceil(categories.length / categoriesPerPage);
+      if (category && category.subcategories && category.subcategories.length > 0) {
+        Swal.fire({
+          title: 'Warning',
+          text: 'This category has subcategories. Please delete the subcategories before deleting this category.',
+          icon: 'warning',
+          confirmButtonColor: '#3085d6',
+          confirmButtonText: 'OK'
+        })
+      } else {
+        const deleteResponse = await DeleteCategory(categoryId)
+        if (deleteResponse?.status === 200) {
+          toast.success("Category deleted successfully!")
+          setCategories(categories.filter((cat) => cat.id !== categoryId))
+        } else {
+          Swal.fire({
+            title: 'Warning',
+            text: 'This category has subcategories. Please delete the subcategories before deleting this category.',
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK'
+          })
+        } 
+      }
+    } catch (error) {
+      toast.error("An error occurred while deleting the category.")
+      console.error("Error:", error)
+    }
+  }
 
-    return (
-        <div className="w-[95%] bg-[#fff] h-[100%] pt-[20px] flex justify-center items-center pb-[30px] mt-[70px]">
-            <div className="w-[100%] flex-col h-[100%] flex">
-                <h1 className="text-[20px] font-[600] mb-6">Manage Categories</h1>
+  const handleCloseModal = () => {
+    setModalIsOpen(false)
+    setEditCategoryImage(null)
+  }
 
-                <div className="mt-[15px] shadow-sm border rounded-lg overflow-x-auto">
-                <table className="w-full table-auto text-sm text-left">
-                    <thead className="bg-gray-50 text-gray-600 font-medium border-b">
-                        <tr>
-                            <th className="py-3 px-6">Category Name</th>
-                            <th className="py-3 px-6"></th>
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber)
 
-                        </tr>
-                    </thead>
-                    <tbody className="text-gray-600 divide-y">
-                        {
-                            currentCategories.map((category) => (
-                                <tr key={category.id}>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        
-                                        {category.name}
-                                    </td>
-                                    <td className="text-right px-6 whitespace-nowrap">
-                                        
-                                            <button onClick={() => handleEdit(category)} className="py-2 px-3 font-medium text-blue-500 hover:text-blue-500 duration-150 hover:bg-gray-50 rounded-lg">
-                                            Edit
-                                        </button>
-                                        
-                                        <button onClick={() => handleDelete(category.id)} className="py-2 leading-none px-3 font-medium text-red-600 hover:text-red-500 duration-150 hover:bg-gray-50 rounded-lg">
-                                            Delete
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))
-                        }
-                    </tbody>
-                </table>
+  const indexOfLastCategory = currentPage * categoriesPerPage
+  const indexOfFirstCategory = indexOfLastCategory - categoriesPerPage
+  const currentCategories = categories.slice(indexOfFirstCategory, indexOfLastCategory)
+
+  return (
+    <div className="w-[95%] bg-white h-full pt-5 flex justify-center items-center pb-8 mt-[70px]">
+      <div className="w-full flex-col h-full flex">
+        <h1 className="text-2xl font-semibold mb-6">Manage Categories</h1>
+
+        <div className="mt-4 border rounded-lg overflow-hidden">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Category Name</TableHead>
+                <TableHead className="text-right">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {loading ? (
+                Array.from({ length: 5 }).map((_, index) => (
+                  <TableRow key={index}>
+                    <TableCell>
+                      <Skeleton className="h-4 w-[200px]" />
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <Skeleton className="h-8 w-[100px] inline-block mr-2" />
+                      <Skeleton className="h-8 w-[100px] inline-block" />
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                currentCategories.map((category) => (
+                  <TableRow key={category.id}>
+                    <TableCell>{category.name}</TableCell>
+                    <TableCell className="text-right">
+                      {/* <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleEdit(category)}
+                        className="mr-2"
+                      >
+                        Edit
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleDelete(category.id)}
+                        className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                      >
+                        Delete
+                      </Button> */}
+                      <div className=" space-x-1">
+                      <Button variant="outline" size="icon" onClick={() => handleEdit(category)}>
+                        <Pencil className="h-4 w-4 " />
+                      </Button>
+                      <Button variant="outline" size="icon" onClick={() => handleDelete(category.id)}>
+                        <Trash2 className="h-4 w-4 " />
+                      </Button>
+                    </div>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
+        </div>
+
+        {!loading && (
+          <div className="flex items-center justify-between py-4">
+            <div className="text-sm text-muted-foreground">
+              Page {currentPage} of {Math.ceil(categories.length / categoriesPerPage)}
             </div>
-            <div className="flex justify-center mt-6">
-                    <ReactPaginate
-                        previousLabel={"Previous"}
-                        nextLabel={"Next"}
-                        breakLabel={"..."}
-                        pageCount={pageCount}
-                        marginPagesDisplayed={2}
-                        pageRangeDisplayed={3}
-                        onPageChange={handlePageClick}
-                        containerClassName="flex space-x-2"
-                        pageClassName="border border-gray-300 text-black px-3 py-1 rounded cursor-pointer"
-                        previousClassName="border border-gray-300 text-black px-3 py-1 rounded cursor-pointer"
-                        nextClassName="border border-gray-300 text-black px-3 py-1 rounded cursor-pointer"
-                        breakClassName="border border-gray-300 text-black px-3 py-1 rounded cursor-pointer"
-                        activeClassName="bg-blue-500 text-white border-blue-500"
-                    />
-                </div>
+            <div className="flex space-x-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => paginate(currentPage - 1)}
+                disabled={currentPage === 1}
+              >
+                <ChevronLeft className="h-4 w-4 mr-2" />
+                Previous
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => paginate(currentPage + 1)}
+                disabled={currentPage === Math.ceil(categories.length / categoriesPerPage)}
+              >
+                Next
+                <ChevronRight className="h-4 w-4 ml-2" />
+              </Button>
             </div>
+          </div>
+        )}
+      </div>
 
-        <ReactModal
+      <ReactModal
         isOpen={modalIsOpen}
         onRequestClose={() => setModalIsOpen(false)}
         contentLabel="Edit Category"
@@ -188,53 +235,60 @@ const CategoryList = () => {
         <h2 className="text-xl font-semibold mb-4">Edit Category</h2>
         <form>
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2">Category Name:</label>
+            <label htmlFor="categoryName" className="block text-sm font-medium text-gray-700">Category Name:</label>
             <input
               type="text"
+              id="categoryName"
               value={editCategoryName}
               onChange={(e) => setEditCategoryName(e.target.value)}
-              className="border border-gray-300 p-2 w-full rounded"
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
             />
           </div>
 
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2">Category Image:</label>
+            <label htmlFor="categoryImage" className="block text-sm font-medium text-gray-700">Category Image:</label>
             <input
               type="file"
+              id="categoryImage"
               onChange={(e) => setEditCategoryImage(e.target.files?.[0] || null)}
-              className="border border-gray-300 p-2 w-full rounded"
+              className="mt-1 block w-full text-sm text-gray-500
+                file:mr-4 file:py-2 file:px-4
+                file:rounded-md file:border-0
+                file:text-sm file:font-semibold
+                file:bg-indigo-50 file:text-indigo-700
+                hover:file:bg-indigo-100"
             />
             {editCategoryImage ? (
               <img
                 src={URL.createObjectURL(editCategoryImage)}
-                alt="Selected"
-                className="w-[100px] h-[100px] object-cover mt-2"
+                alt="Selected category"
+                className="mt-2 w-24 h-24 object-cover rounded"
               />
             ) : (
-              <p className="text-sm text-gray-500 mt-2">No image selected</p>
+              <p className="mt-2 text-sm text-gray-500">No image selected</p>
             )}
           </div>
 
-          <div className="flex justify-end">
-            <button
+          <div className="flex justify-end space-x-2">
+            <Button
               type="button"
               onClick={handleUpdate}
-              className="bg-green-500 text-white px-4 py-2 rounded mr-2"
+              className="bg-green-500 text-white hover:bg-green-600"
             >
               Save
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
               onClick={handleCloseModal}
-              className="bg-gray-500 text-white px-4 py-2 rounded"
+              variant="outline"
             >
               Cancel
-            </button>
+            </Button>
           </div>
         </form>
       </ReactModal>
-        </div>
-    );
-};
+    </div>
+  )
+}
 
-export default CategoryList;
+export default CategoryList

@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { FiUnlock } from "react-icons/fi";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Cookies from "universal-cookie";
@@ -88,7 +88,7 @@ const SignIn = () => {
         <div className='w-[50%] h-[100vh] relative sm:w-[100%] sm:h-[130vh] sm:my-[20px] md:w-[100%] lg:w-[50%]'>
           <div className='w-[100%] h-[100%] bg-cover bg-center bg-bb absolute ' />
           <div className='w-[100%] h-[100%] bg-[#fcfcfc] absolute bg-opacity-90'></div>
-          <div className='w-[500px] pt-[20px] pb-[20px] bg-slate-900 absolute top-[20%] left-[20%] rounded-[20px] bg-opacity-20 sm:w-[290px] sm:left-[15px] sm:top-[30%] smm:left-[10%] smx:left-[10%] smx:w-[350px] md:w-[600px] lg:w-[500px] lg:left-[15%] lg:top-[25%]'>
+          <div className='w-[500px] pt-[20px] pb-[20px] bg-white absolute top-[20%] left-[20%] rounded-[20px] bg-opacity-20 sm:w-[290px] sm:left-[15px] sm:top-[30%] smm:left-[10%] smx:left-[10%] smx:w-[350px] md:w-[600px] lg:w-[500px] lg:left-[15%] lg:top-[25%]'>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
               className='w-[100%] h-[100%] flex justify-center items-center flex-col'>
@@ -124,11 +124,21 @@ const SignIn = () => {
                 </div>
               </div>
 
-              <div className='w-[60%] flex justify-end sm:w-[90%] md:w-[81%] lg:w-[90%]'>
+              <div className='font-bold mb-[20px] flex w-[100%] pl-7 items-center'>
+									<input
+										type='checkbox'
+										name=''
+										id=''
+										className='mr-[15px] cursor-pointer'
+									/>{" "}
+									Remember Me
+								</div>
+
+              {/* <div className='w-[60%] flex justify-end sm:w-[90%] md:w-[81%] lg:w-[90%]'>
                 <div className='text-[#0333ae] font-bold cursor-pointer'>
                   Forget Password?
                 </div>
-              </div>
+              </div> */}
               <div className='w-[100%] flex justify-center items-center flex-col mt-[30px]'>
                 <div className='font-bold mb-[20px] flex justify-center items-center'></div>
                 <button
@@ -137,11 +147,11 @@ const SignIn = () => {
                   className='w-[300px] h-[45px] flex justify-center items-center text-white bg-[#0333ae] rounded-[10px] mb-[10px] cursor-pointer sm:w-[270px] smx:w-[320px] md:w-[500px] lg:w-[450px]'>
                   {load ? "Loading..." : "Login"}
                 </button>
-                <Link to='/'>
+                {/* <Link to='/'>
                   <div className='text-[#0333ae] font-bold cursor-pointer'>
                     Sign Up
                   </div>
-                </Link>
+                </Link> */}
               </div>
             </form>
           </div>

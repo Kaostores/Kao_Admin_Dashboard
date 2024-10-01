@@ -17,8 +17,19 @@ const Coupon = () => {
   const [categories, setCategories] = useState<any[]>([]);
   const [subCategories, setSubCategories] = useState<any[]>([]);
   const [products, setProducts] = useState<any[]>([]);
+  const [isFormValid, setIsFormValid] = useState(false);
 
-  // Fetch categories and products on component mount
+  useEffect(() => {
+    const isFormValid =
+      couponCode !== "" &&
+      discountType !== "" &&
+      discountAmount > 0 &&
+      minimumPurchaseAmount > 0 &&
+      endDate !== "" &&
+      !loading;
+    setIsFormValid(isFormValid);
+  }, [couponCode, discountType, discountAmount, minimumPurchaseAmount, endDate, loading]);
+
   useEffect(() => {
     const fetchCategories = async () => {
       const response = await GetCategories();
@@ -137,9 +148,9 @@ const Coupon = () => {
   };
 
   return (
-    <div className="w-[95%] bg-[#fff] h-[100%] pt-[20px] flex justify-center items-center pb-[30px] mt-[40px]">
-      <div className="w-[100%] flex-col h-[100%] flex">
-        <div className="w-full bg-white p-8 mt-10 rounded-lg shadow-md">
+    <div className="w-[95%] bg-[#fff] h-[100%] pt-[20px] flex items-center pb-[30px] mt-[40px]">
+      <div className="w-[55%] flex-col h-[100%] flex">
+        <div className="w-full bg-white p-8 mt-10 rounded-lg">
           <h1 className="text-[20px] font-[600] mb-6">Create a New Coupon</h1>
           <form onSubmit={handleCreateCoupon}>
             {/* Coupon Code */}
@@ -282,13 +293,15 @@ const Coupon = () => {
             </div>
 
             {/* Submit Button */}
+            <div className="w-[100%] flex justify-end">
             <button
               type="submit"
-              className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition"
-              disabled={loading}
+              className={`py-2 px-4 bg-[#0333ae] hover:bg-[#0333ae] text-white rounded ${!isFormValid ? 'opacity-50 cursor-not-allowed' : ''}`}
+              disabled={!isFormValid}
             >
               {loading ? "Creating..." : "Create Coupon"}
             </button>
+            </div>
           </form>
         </div>
       </div>

@@ -1,5 +1,4 @@
 import { useRef, useEffect, useState } from "react";
-import { BiSearch } from "react-icons/bi";
 import { SlCalender } from "react-icons/sl";
 import { BiPrinter } from "react-icons/bi";
 import { HiOutlineFolderDownload } from "react-icons/hi";
@@ -9,9 +8,10 @@ import {  useLocation } from "react-router-dom";
 import { CiMenuBurger } from "react-icons/ci";
 import Last7DaysDropdown from "./DropDown";
 import 'react-toastify/dist/ReactToastify.css';
+import { useProfileImage } from '@/pages/Settings/ProfileImageContext';
 
 const Header = () => {
-
+	const { profileImage } = useProfileImage();
 	const [show3, setShow3] = useState(true);
 	const location = useLocation();
 	const active = location?.pathname;
@@ -64,7 +64,7 @@ const Header = () => {
 								<CiMenuBurger />
 							</div>
 							<div className='w-[60%]  flex sm:mt-[-10px] sm:flex xl:mt-[0px] md:flex md:flex-row md:mt-[0px] md:w-[60%] flex-col justify-between xl:flex-row md:items-center items-center'>
-								<div className='sm:w-[150px] smx:w-[200px] sm:mb-[10px] md:mb-[0px] sm:h-[25px] xl:h-[40px] md:h-[38px] xl:w-[250px] bg-white  border-solid  border-[#9ea0a0] border-[1px] flex justify-center items-center rounded-[5px]'>
+								{/* <div className='sm:w-[150px] smx:w-[200px] sm:mb-[10px] md:mb-[0px] sm:h-[25px] xl:h-[40px] md:h-[38px] xl:w-[250px] bg-white  border-solid  border-[#9ea0a0] border-[1px] flex justify-center items-center rounded-[5px]'>
 									<div className='mr-[10px] text-[#0333ae] sm:ml-[10px] sm:text-[13px] xl:text-[16px] '>
 										<BiSearch />
 									</div>
@@ -75,7 +75,7 @@ const Header = () => {
 											className='w-[100%] h-[100%] pl-[5px] outline-none border-0 bg-transparent sm:text-[13px] xl:text-[16px]'
 										/>
 									</div>
-								</div>
+								</div> */}
 								<div className='sm:w-[150px] sm:h-[25px] xl:w-[250px] xl:h-[40px]  flex justify-between flex-col items-center xl:mt-[0px] sm:mt-[0] smx:mt-[0] md:mt-[-13px]'>
 									<div className='sm:w-[150px] smx:w-[200px] sm:min-h-[25px] xl:w-[200px] xl:min-h-[40px] md:min-h-[38px]  bg-white  flex justify-center items-center border-solid border-[#9ea0a0] border-[1px] rounded-[5px]'>
 										<div className='mr-[10px] sm:text-[13px] text-[#0333ae]'>
@@ -107,7 +107,9 @@ const Header = () => {
 									</div>
 								</div>
 								<div className='xl:min-w-[110px] sm:w-[60px] md:w-[120px] xl:flex sm:flex justify-between items-center rounded-[5px] overflow-hidden ml-[20px] sm:mt-[0] smx:mt-[0] xl:mt-[0] md:mt-[10px]'>
-									<div className='xl:w-[30px] smx:w-[15px] md:w-[25px] md:h-[25px] xl:h-[30px] smx:h-[10px] sm:w-[10px] smx:mr-[15px] sm:h-[10px] rounded-[50%] bg-orange-600'></div>
+									<div className='xl:w-[30px] smx:w-[15px] overflow-hidden md:w-[25px] md:h-[25px] xl:h-[30px] smx:h-[10px] sm:w-[10px] smx:mr-[15px] sm:h-[10px] rounded-[50%] bg-orange-600'>
+										<img src={profileImage || ""} alt="" className="w-[100%] h-[100%] object-cover"/>
+									</div>
 									<div className='xl:text-[16px] sm:text-[10px] md:text-[14px]'>
 										Dan Casey
 									</div>

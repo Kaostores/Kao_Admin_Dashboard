@@ -1,10 +1,12 @@
+import { useState, useEffect } from "react";
 import Card from "@/components/props/DashBoardCard";
-import { PiArrowDownLight } from "react-icons/pi";
+import { ArrowDown } from "lucide-react";
 import LineChartOverView from "@/Charts/LineChartOverView";
 import StackedChartComps from "@/Charts/StackedChartComps";
 import TableComp from "@/components/TableComp";
 import { GetAdminMetrics, getPaymentMethodMetrics } from "@/utils/ApiCalls";
-import { useState, useEffect } from "react"
+import { useFetchAdminGraphDataQuery } from '@/services/apiSlice';
+import { Skeleton } from "@/components/ui/skeleton";
 
 type PaymentMethodMetric = {
   _id: string;
@@ -12,135 +14,192 @@ type PaymentMethodMetric = {
   paymentMethod: string;
 };
 
-const Home = () => {
-	const [metrics, setMetrics] = useState<any>();
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState(null);
-	const [paymentMetrics, setPaymentMetrics] = useState<PaymentMethodMetric[]>([]);
-	const [loadingPayment, setLoadingPayment] = useState(true);
-	const [errorPayment, setErrorPayment] = useState(null);
+type Metrics = {
+  user_metrics: { currentWeekUsers: number; percentageIncrease: number };
+  store_metrics: { currentWeekStores: number; percentageIncrease: number };
+  revenue_metrics: { currentWeekRevenue: number; percentageIncrease: number };
+  order_metrics: { currentWeekOrders: number; percentageIncrease: number };
+};
 
-	useEffect(() => {
-    const fetchMetrics = async () => {
+export default function Home() {
+  const [metrics, setMetrics] = useState<Metrics | null>(null);
+  const [paymentMetrics, setPaymentMetrics] = useState<PaymentMethodMetric[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const [selectedWeek, setSelectedWeek] = useState<'current' | 'previous'>('current');
+
+  // Fetch graph data based on selected week
+  const { data: graphData, isLoading: graphLoading, isError: graphError } = useFetchAdminGraphDataQuery({
+    timeline: selectedWeek === 'current' ? 'this_week' : 'last_week',
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
       try {
-        const data = await GetAdminMetrics();
-        setMetrics(data);
-      } catch (err: any) {
-        setError(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchMetrics();
-  }, []);
-	
-	useEffect(() => {
-    const fetchPaymentMetrics = async () => {
-      try {
-        const paymentData = await getPaymentMethodMetrics();
+        const [metricsData, paymentData] = await Promise.all([
+          GetAdminMetrics(),
+          getPaymentMethodMetrics(),
+        ]);
+        setMetrics(metricsData.data);
         setPaymentMetrics(paymentData.data);
-      } catch (err: any) {
-        setErrorPayment(err);
-      } finally {
-        setLoadingPayment(false);
+      } catch (err) {
+        setError("Error loading data");
       }
     };
-    fetchPaymentMetrics();
+    fetchData();
   }, []);
 
-  if (loading) {
-    return <div>Loading...</div>;
+  useEffect(() => {
+    // Log the current and last week's graph data when selectedWeek changes
+    if (graphData) {
+      console.log("Graph Data:", graphData.data);
+      console.log("Selected Week:", selectedWeek);
+    }
+  }, [graphData, selectedWeek]);
+
+  if (error || graphError) {
+    return <div className="flex items-center justify-center h-screen">Error loading data</div>;
   }
 
-  if (error) {
-    return <div>Error loading metrics: {error}</div>;
+  if (!metrics) {
+    return null;
   }
 
-	const {
+  const isGraphDataEmpty = !graphData?.data || graphData.data.length === 0;
+
+  const {
     user_metrics: { currentWeekUsers, percentageIncrease: userIncrease },
     store_metrics: { currentWeekStores, percentageIncrease: storeIncrease },
     revenue_metrics: { currentWeekRevenue, percentageIncrease: revenueIncrease },
-    order_metrics: { currentWeekOrders, percentageIncrease: orderIncrease }
-  } = metrics.data;
+    order_metrics: { currentWeekOrders, percentageIncrease: orderIncrease },
+  } = metrics || {}; // Use default empty object to avoid destructuring error
 
-	return (
-		<div className='w-[100%] xl:min-h-[calc(100%-70px)] sm:w-[100%] bg-[#fff] pl-[20px] pt-[20px] justify-center items-center pb-[30px] mt-[70px]'>
-			<div className='xl:w-[100%] xl:h-[100%] flex  items-center flex-col'>
-				<div className='xl:w-[95%]  sm:w-[100%]  bg-none  shadow-lg flex-col justify-between p-[15px]'>
-					<div className='w-[100%] flex justify-between items-center flex-wrap'>
-						<div>Total Sales</div>
-						<div className='flex justify-center items-center'>
-							<div className='flex justify-center items-center mr-[30px]'>
-								<div className='w-[10px] h-[10px] rounded-[50%] bg-[#0333ae] mr-[5px]'></div>
-								<div className='text-[#88898a]'>Current Weeks</div>
-							</div>
-							<div className='font-semibold'>N31,000</div>
-						</div>
-						<div className='flex justify-center items-center'>
-							<div className='flex justify-center items-center mr-[30px]'>
-								<div className='w-[10px] h-[10px] rounded-[50%] bg-[#88898a] mr-[5px]'></div>
-								<div>Previous Weeks</div>
-							</div>
-							<div className='font-semibold'>N37,000</div>
-						</div>
-						<div className='flex justify-center items-center'>
-							<div className='flex justify-center items-center mr-[10px]'>
-								<div className=' text-[#ff3b3b] mr-[1px]'>
-									<PiArrowDownLight />
-								</div>
-								<div className='text-[#ff3b3b]'>16.21%</div>
-							</div>
-							<div className='text-[14px]'>Since last week</div>
-						</div>
-					</div>
-					<div className='text-[14px] my-[10px] text-[#8b8c8d]'>
-						Sales over time
-					</div>
+  const totalCreditSum = graphData?.data?.reduce((acc: number, day: any) => acc + day.totalCredit, 0) || 0;
+  const totalDebitSum = graphData?.data?.reduce((acc: number, day: any) => acc + day.totalDebit, 0) || 0;
 
-					<div className='w-[100%]'>
-						<LineChartOverView />
-					</div>
-				</div>
-				<div className='w-[95%] flex justify-between gap-4 items-center mt-[20px]'>
-					<Card tit='Customers' fig={currentWeekUsers} increment={`${userIncrease}%`} Ic='' Cl='' />
-          <Card tit='Stores' fig={currentWeekStores} increment={`${storeIncrease}%`} Ic='' Cl='' />
-          <Card tit='Revenue' fig={`N${currentWeekRevenue}`} increment={`${revenueIncrease}%`} Ic='' Cl='' />
-          <Card
-            tit='Average Order Value'
-            fig={currentWeekOrders}
-            increment={`${orderIncrease}%`}
-            Ic=''
-            Cl=''
+  return (
+    <div className="w-full xl:min-h-[calc(100%-70px)] bg-white pl-5 pt-5 pb-8 mt-[70px]">
+      <div className="xl:w-full xl:h-full flex items-center flex-col">
+        <div className="xl:w-[95%] sm:w-full bg-none shadow-lg flex-col justify-between p-4">
+          <div className="w-full flex justify-between items-center flex-wrap mb-4">
+            <div className="text-xl font-semibold">Total sales</div>
+            <div className="flex justify-center items-center">
+              <div className="flex items-center">
+                <input 
+                  type="radio" 
+                  id="current-week" 
+                  name="week" 
+                  value="current" 
+                  checked={selectedWeek === 'current'} 
+                  onChange={() => {
+                    setSelectedWeek('current');
+                    console.log("Fetching current week's data...");
+                  }} 
+                  className="mr-2" 
+                />
+                <label htmlFor="current-week" className="text-gray-600">Current week</label>
+              </div>
+              <div className="font-semibold">NGN {totalCreditSum}</div>
+            </div>
+            <div className="flex justify-center items-center">
+              <div className="flex items-center">
+                <input 
+                  type="radio" 
+                  id="previous-week" 
+                  name="week" 
+                  value="previous" 
+                  checked={selectedWeek === 'previous'} 
+                  onChange={() => {
+                    setSelectedWeek('previous');
+                    console.log("Fetching previous week's data...");
+                  }} 
+                  className="mr-2" 
+                />
+                <label htmlFor="previous-week" className="text-gray-600">Previous week</label>
+              </div>
+              <div className="font-semibold ml-[5px]">NGN {totalDebitSum}</div>
+            </div>
+            <div className="flex justify-center items-center">
+            <div className="flex justify-center items-center mr-2">
+              <ArrowDown className="text-red-500 mr-1" />
+              <div className="text-red-500">
+              {totalDebitSum !== 0 ? 
+                `${((currentWeekRevenue - totalDebitSum) / totalDebitSum * 100).toFixed(2)}%` : 
+                '0.00%'}
+            </div>
+            </div>
+              <div className="text-sm">Since last week</div>
+            </div>
+          </div>
+          <div className="text-sm mb-2 text-gray-500">Sales over time</div>
+
+          <div className="w-full">
+            {graphLoading ? (
+              <div className="w-full h-[300px] flex items-center justify-center">
+                <Skeleton className="w-full h-full" />
+              </div>
+            ) : isGraphDataEmpty ? (
+              <div className="text-center text-gray-500">
+                No data available for {selectedWeek === 'current' ? "current week" : "previous week"}.
+              </div>
+            ) : (
+              <LineChartOverView data={graphData.data} />
+            )}
+          </div>
+        </div>
+        <div className="w-[95%] flex justify-between gap-4 items-center mt-5">
+          <Card 
+            tit="Customers" 
+            fig={currentWeekUsers.toString()}
+            increment={`${userIncrease.toFixed(0)}%`} 
+            Ic="" 
+            Cl="" 
           />
-				</div>
-				<div className='w-[95%] flex justify-between items-center mt-[20px]'>
-					<div className='w-[49%] h-[300px] rounded-[5px] bg-[#fff] shadow-xl'>
-						<h3 className='m-3 font-bold'>Payment Methods</h3>
-						<div className='flex justify-between'>
-							<StackedChartComps />
-							<div className='flex-1 pr-5'>
-								<div>
-                  {paymentMetrics.map((method, index) => (
-                    <div key={method._id} className='flex justify-between border-b-[1px] pb-2 mb-2'>
-                      <div className='flex items-center'>
-                        <div className={`h-[9px] w-[9px] rounded-full bg-${index % 2 === 0 ? 'yellow-300' : '#0030AD'} mr-2`}></div>
-                        <div className='text-[#797979]'>{method.paymentMethod}</div>
-                      </div>
-                      <div className='font-bold'>{method.totalOrders}%</div>
+          <Card 
+            tit="Stores" 
+            fig={currentWeekStores.toString()}
+            increment={`${storeIncrease.toFixed(0)}%`} 
+            Ic="" 
+            Cl="" 
+          />
+          <Card 
+            tit="Revenue" 
+            fig={`N${currentWeekRevenue}`} 
+            increment={`${revenueIncrease.toFixed(0)}%`} 
+            Ic="" 
+            Cl="" 
+          />
+          <Card
+            tit="Average Order Value"
+            fig={currentWeekOrders.toString()}
+            increment={`${orderIncrease.toFixed(0)}%`}
+            Ic=""
+            Cl=""
+          />
+        </div>
+        <div className="w-[95%] flex justify-between items-start mt-5">
+          <div className="w-[49%] rounded-lg bg-white shadow-xl p-4">
+            <h3 className="font-bold mb-4">Payment methods</h3>
+            <div className="flex justify-between">
+              <StackedChartComps />
+              <div className="flex-1 pl-4">
+                {paymentMetrics.map((method, index) => (
+                  <div key={method._id} className="flex justify-between border-b pb-2 mb-2">
+                    <div className="flex items-center">
+                      <div className={`h-2 w-2 rounded-full ${index % 2 === 0 ? 'bg-yellow-300' : 'bg-blue-600'} mr-2`}></div>
+                      <div className="text-gray-600">{method.paymentMethod}</div>
                     </div>
-                  ))}
-                </div>
-							</div>
-						</div>
-					</div>
-					<div className='w-[49%] h-[300px] rounded-[5px] bg-[#fff] shadow-xl'>
-						<h3 className='m-3 font-bold'>Top selling stores</h3>
-						<TableComp />
-					</div>
-				</div>
-			</div>
-		</div>
-	);
-};
-
-export default Home;
+                    <div className="font-bold">{method.totalOrders}%</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+          <div className="w-[49%] rounded-lg bg-white shadow-xl p-4">
+            <h3 className="font-bold mb-4">Recent transactions</h3>
+            <TableComp />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

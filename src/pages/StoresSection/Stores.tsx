@@ -1,5 +1,4 @@
 import React from "react";
-import { IoStorefrontOutline } from "react-icons/io5";
 import StoresSec from "@/components/store/StoreSec";
 import StoreWithdrawal from "@/components/props/StoreWithdrawal";
 import { useViewAllStoresQuery } from "@/services/apiSlice";
@@ -9,10 +8,12 @@ const Store = () => {
     const [show2, setShow2] = React.useState(true);
     const [show3, setShow3] = React.useState(false);
 
-    const { data: stores, isLoading, isError } = useViewAllStoresQuery({});
+    const { data: stores, isLoading, isError, error } = useViewAllStoresQuery({});
 
-    if (isLoading) return <div>Loading...</div>;
-    if (isError) return <div>Error fetching stores.</div>;
+    if (isError) {
+        console.error("Error loading store details.", error);
+        return <div>Error loading store details.</div>;
+    }
 
 console.log("Fetched stores data:", stores?.data);
 
@@ -51,14 +52,14 @@ console.log("Fetched stores data:", stores?.data);
                                 Withdrawals
                             </div>
                         </div>
-                        {show2 ? (
+                        {/* {show2 ? (
                             <div className="w-[210px] h-[30px] flex justify-between items-center border-[2px] border-[#0333ae] border-solid rounded-[5px]">
                                 <div className="w-[30px] h-[100%] flex justify-center items-center"><IoStorefrontOutline /></div>
                                 <div className="bg-[#0333ae] w-[180px] text-white h-[100%] flex justify-center items-center text-[15px] cursor-pointer z-0" onClick={toggleBtn}>
                                     ADD STORE
                                 </div>
                             </div>
-                        ) : null}
+                        ) : null} */}
                     </div>
                 </div>
 

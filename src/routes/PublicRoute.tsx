@@ -1,6 +1,5 @@
 import HomeLayout from "@/components/layouts/HomeLayout";
 import SignIn from "@/pages/AdminSignUp/SignIn";
-import SignUp from "@/pages/AdminSignUp/SignUp";
 import Home from "@/pages/Home";
 import Agents from "@/pages/Agents/AgentEmplyee";
 import Wallet from "@/pages/AdminWallet/Wallet";
@@ -123,10 +122,6 @@ const PublicRoute = () => {
 
 		{
 			path: "/",
-			element: <SignUp />,
-		},
-		{
-			path: "signin",
 			element: <SignIn />,
 		},
 	];

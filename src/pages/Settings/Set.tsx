@@ -3,6 +3,7 @@ import { UpdateHeroBanner, UpdateMiddleAdvert } from '../../utils/ApiCalls';
 import { toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 import { useDropzone } from "react-dropzone";
+import { Button } from "@/components/ui/button"
 
 const Settings = () => {
     const [heroBanner, setHeroBanner] = useState<File | null>(null);
@@ -97,33 +98,32 @@ const Settings = () => {
     };
 
     return (
-        <div className='w-[95%] bg-[#fff] h-[100%] pt-[20px] flex justify-center items-center pb-[30px] mt-[70px]'>
+        <div className='w-[100%] bg-[#fff] h-[100%] flex justify-center items-center pb-[30px]'>
             <div className='w-[100%] h-[100%] flex flex-col'>
-                <h1 className="text-[20px] font-[600] mb-6">Home Settings</h1>
 
                 <div className='w-[100%] flex items-center h-[50px] border-b border-[#a8a8a8]'>
                     <h1
                         onClick={Togglebanner}
-                        className={`text-[16px] font-[600] text-[#0333ae] cursor-pointer ${show ? 'underline underline-offset-4 text-blue-600' : ''}`}
+                        className={`text-[16px] font-[600] text-[#0333ae] cursor-pointer ${show ? 'underline underline-offset-4 text-[#0333AE]' : ''}`}
                     >
                         Update Hero Banner
                     </h1>
                     <h1
                         onClick={ToggleAdvert}
-                        className={`text-[16px] font-[600] text-[#0333ae] ml-[25px] cursor-pointer ${show2 ? 'underline underline-offset-4 text-blue-600' : ''}`}
+                        className={`text-[16px] font-[600] text-[#0333ae] ml-[25px] cursor-pointer ${show2 ? 'underline underline-offset-4 text-[#0333AE]' : ''}`}
                     >
                         Update Home Middle Advert
                     </h1>
                 </div>
 
                 {show && (
-                    <div className='mt-[20px] w-[100%] flex flex-col'>
+                    <div className='mt-[20px] w-[55%] flex flex-col'>
                         <div
                             {...getRootPropsHero()}
-                            className="h-[180px] border-2 border-dashed border-blue-400 bg-blue-50 p-6 rounded-lg text-center justify-center flex items-center cursor-pointer hover:bg-blue-100 transition-all duration-300"
+                            className="h-[180px] border-2 border-dashed bg-blue-50 p-6 rounded-lg text-center justify-center flex items-center cursor-pointer hover:bg-blue-100 transition-all duration-300"
                         >
                             <input {...getInputPropsHero()} />
-                            <p className="text-blue-600">Drag & drop an image here, or click to select a file</p>
+                            <p className="">Drag and drop an image here, or click to select a file</p>
                         </div>
 
                         {previewHeroBanner && (
@@ -137,24 +137,27 @@ const Settings = () => {
                             </div>
                         )}
 
-                        <button
+                        {/* <button
                             onClick={handleHeroBannerSubmit}
-                            className='mt-6 w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-5 rounded-lg text-lg transition duration-300 ease-in-out shadow-md'
+                            className='mt-6 w-[25%] bg-[#0333AE] hover:bg-[#0333AE] text-white py-3 px-5 rounded-lg text-lg transition duration-300 ease-in-out shadow-md'
                             disabled={isLoadingHero}
                         >
                             {isLoadingHero ? 'Updating...' : 'Update Hero Banner'}
-                        </button>
+                        </button> */}
+                        <div className='w-[100%] justify-end flex mt-[15px]'>
+                            <Button disabled={isLoadingHero} className="bg-[#0333AE] hover:bg-[#0333AE]" onClick={handleHeroBannerSubmit}>{isLoadingHero ? 'Updating...' : 'Update Hero Banner'}</Button>
+                        </div>
                     </div>
                 )}
 
                 {show2 && (
-                    <div className='mt-[20px] w-[100%] flex flex-col'>
+                    <div className='mt-[20px] w-[55%] flex flex-col'>
                         <div
                             {...getRootPropsAdvert()}
-                            className="h-[180px] border-2 border-dashed border-blue-400 bg-blue-50 p-6 rounded-lg text-center justify-center flex items-center cursor-pointer hover:bg-blue-100 transition-all duration-300"
+                            className="h-[180px] border-2 border-dashed bg-blue-50 p-6 rounded-lg text-center justify-center flex items-center cursor-pointer hover:bg-blue-100 transition-all duration-300"
                         >
                             <input {...getInputPropsAdvert()} />
-                            <p className="text-blue-600">Drag & drop an image here, or click to select a file</p>
+                            <p className="text-[#0333AE]">Drag and drop an image here, or click to select a file</p>
                         </div>
 
                         {previewMiddleAdvert && (
@@ -168,13 +171,16 @@ const Settings = () => {
                             </div>
                         )}
 
-                        <button
+                        {/* <button
                             onClick={handleMiddleAdvertSubmit}
-                            className="mt-6 w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-5 rounded-lg text-lg transition duration-300 ease-in-out shadow-md"
+                            className="mt-6 w-[25%] bg-[#0333AE] hover:bg-[#0333AE] text-white py-3 px-5 rounded-lg text-lg transition duration-300 ease-in-out shadow-md"
                             disabled={isLoadingAdvert}
                         >
                             {isLoadingAdvert ? 'Updating...' : 'Update Middle Advert'}
-                        </button>
+                        </button> */}
+                        <div className='w-[100%] justify-end flex mt-[15px]'>
+                            <Button disabled={isLoadingAdvert} className="bg-[#0333AE] hover:bg-[#0333AE]" onClick={handleMiddleAdvertSubmit}>{isLoadingHero ? 'Updating...' : 'Update Hero Banner'}</Button>
+                        </div>
                     </div>
                 )}
             </div>

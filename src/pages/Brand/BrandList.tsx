@@ -1,201 +1,263 @@
-import { useEffect, useState } from 'react';
-import { GetBrands, UpdateBrand, DeleteBrand } from '../../utils/ApiCalls';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import ReactModal from 'react-modal';
-import Swal from 'sweetalert2';
+'use client'
 
-// Set app element for accessibility
-ReactModal.setAppElement('#root');
+import { useEffect, useState } from 'react'
+import { GetBrands, UpdateBrand, DeleteBrand } from '../../utils/ApiCalls'
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+import Swal from 'sweetalert2'
+import { Skeleton } from "@/components/ui/skeleton"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { ChevronLeft, ChevronRight, Pencil, Trash2 } from "lucide-react"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
 
-const BrandList = () => {
-    const [brands, setBrands] = useState([]);
-    const [editingBrand, setEditingBrand] = useState<any>(null);
-    const [updatedData, setUpdatedData] = useState<any>({});
-    const [brandImage, setBrandImage] = useState<File | null>(null); // Track image file
-    const [imagePreview, setImagePreview] = useState<string | null>(null); // Preview URL
-    const [loading, setLoading] = useState(false);
-    const [modalIsOpen, setModalIsOpen] = useState(false);
+export default function BrandList() {
+  const [brands, setBrands] = useState<any[]>([])
+  const [editingBrand, setEditingBrand] = useState<any>(null)
+  const [updatedData, setUpdatedData] = useState<any>({})
+  const [brandImage, setBrandImage] = useState<File | null>(null)
+  const [imagePreview, setImagePreview] = useState<string | null>(null)
+  const [loading, setLoading] = useState(false)
+  const [modalIsOpen, setModalIsOpen] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1)
+  const brandsPerPage = 5
 
-    useEffect(() => {
-        const fetchBrands = async () => {
-            try {
-                setLoading(true);
-                const response = await GetBrands();
-                if (response.data.success) {
-                    setBrands(response.data.data);
-                }
-            } catch (error) {
-                console.error('Error fetching brands:', error);
-                toast.error('Failed to fetch brands');
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchBrands();
-    }, []);
-
-    // Handle updating brand details
-    const handleUpdate = async (brandId: string) => {
-        try {
-            const formData = new FormData();
-            formData.append('name', updatedData.name);
-
-            // Only append image if there's a new image
-            if (brandImage) {
-                formData.append('image', brandImage);
-            }
-
-            const response = await UpdateBrand(brandId, formData);
-            if (response.status === 200) {
-                setBrands((prevBrands: any) =>
-                    prevBrands.map((brand: any) =>
-                        brand.id === brandId ? { ...brand, ...updatedData, image: imagePreview || brand.image } : brand
-                    )
-                );
-                setEditingBrand(null);
-                setModalIsOpen(false);
-                toast.success('Brand updated successfully!');
-            }
-        } catch (error) {
-            console.error('Error updating brand:', error);
-            toast.error('Failed to update brand');
+  useEffect(() => {
+    const fetchBrands = async () => {
+      try {
+        setLoading(true)
+        const response = await GetBrands()
+        if (response.data.success) {
+          setBrands(response.data.data)
         }
-    };
+      } catch (error) {
+        console.error('Error fetching brands:', error)
+        toast.error('Failed to fetch brands')
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchBrands()
+  }, [])
 
-    // Handle image selection
-    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (file) {
-            setBrandImage(file);
-            setImagePreview(URL.createObjectURL(file)); // Create a preview URL for the selected image
-        }
-    };
+  const handleUpdate = async (brandId: string) => {
+    try {
+      const formData = new FormData()
+      formData.append('name', updatedData.name)
 
-    const handleDelete = async (brandId: string) => {
-        try {
-            await DeleteBrand(brandId);
-            setBrands(brands.filter((brand: any) => brand.id !== brandId));
-            toast.success('Brand deleted successfully!');
-        } catch (error: any) {
-            console.error('Error deleting brand:', error);
+      if (brandImage) {
+        formData.append('image', brandImage)
+      }
 
-            if (error.response && error.response.data && error.response.data.message) {
-                Swal.fire({
-                    title: 'Error',
-                    text: error.response.data.message,
-                    icon: 'error',
-                    confirmButtonText: 'OK',
-                    confirmButtonColor: '#ff0000',
-                });
-            } else {
-                toast.error('Failed to delete brand');
-            }
-        }
-    };
+      const response = await UpdateBrand(brandId, formData)
+      if (response.status === 200) {
+        setBrands((prevBrands: any) =>
+          prevBrands.map((brand: any) =>
+            brand.id === brandId ? { ...brand, ...updatedData, image: imagePreview || brand.image } : brand
+          )
+        )
+        setEditingBrand(null)
+        setModalIsOpen(false)
+        toast.success('Brand updated successfully!')
+      }
+    } catch (error) {
+      console.error('Error updating brand:', error)
+      toast.error('Failed to update brand')
+    }
+  }
 
-    const openEditModal = (brand: any) => {
-        setEditingBrand(brand);
-        setUpdatedData({ ...brand });
-        setImagePreview(brand.image); // Show the existing image in the modal
-        setModalIsOpen(true);
-    };
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      setBrandImage(file)
+      setImagePreview(URL.createObjectURL(file))
+    }
+  }
 
-    const closeModal = () => {
-        setModalIsOpen(false);
-        setEditingBrand(null);
-        setBrandImage(null); // Clear the image when modal is closed
-        setImagePreview(null);
-    };
+  const handleDelete = async (brandId: string) => {
+    try {
+      await DeleteBrand(brandId)
+      setBrands(brands.filter((brand: any) => brand.id !== brandId))
+      toast.success('Brand deleted successfully!')
+    } catch (error: any) {
+      console.error('Error deleting brand:', error)
 
-    return (
-        <div className="w-[95%] bg-[#fff] h-[100%] pt-[20px] flex justify-center items-center pb-[30px] mt-[70px]">
-            <div className="w-[100%] flex-col h-[100%] flex">
-                <h1 className="text-[20px] font-[600] mb-6">Brand Management</h1>
+      if (error.response && error.response.data && error.response.data.message) {
+        Swal.fire({
+          title: 'Error',
+          text: error.response.data.message,
+          icon: 'error',
+          confirmButtonText: 'OK',
+          confirmButtonColor: '#ff0000',
+        })
+      } else {
+        toast.error('Failed to delete brand')
+      }
+    }
+  }
 
-                {loading ? (
-                    <p>Loading...</p>
-                ) : (
-                    <div className="mt-[15px] shadow-sm border rounded-lg overflow-x-auto">
-                        <table className="w-full table-auto text-sm text-left">
-                            <thead className="bg-gray-50 text-gray-600 font-medium border-b">
-                                <tr>
-                                    <th className="py-3 px-6">Brand Name</th>
-                                    <th className="py-3 px-6">Image</th>
-                                    <th className="py-3 px-6">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody className="text-gray-600 divide-y">
-                                {brands.map((brand: any) => (
-                                    <tr key={brand.id}>
-                                        <td className="px-6 py-4 whitespace-nowrap">{brand.name}</td>
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <img src={brand.image} alt="" className="w-[170px] h-[100px] object-cover" />
-                                        </td>
-                                        <td className="px-6 py-4 whitespace-nowrap space-x-2">
-                                            <button
-                                                className="bg-yellow-400 hover:bg-yellow-500 text-white py-1 px-3 rounded"
-                                                onClick={() => openEditModal(brand)}
-                                            >
-                                                Edit
-                                            </button>
-                                            <button
-                                                className="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded"
-                                                onClick={() => handleDelete(brand.id)}
-                                            >
-                                                Delete
-                                            </button>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
+  const openEditModal = (brand: any) => {
+    setEditingBrand(brand)
+    setUpdatedData({ ...brand })
+    setImagePreview(brand.image)
+    setModalIsOpen(true)
+  }
+
+  const closeModal = () => {
+    setModalIsOpen(false)
+    setEditingBrand(null)
+    setBrandImage(null)
+    setImagePreview(null)
+  }
+
+  const paginate = (pageNumber: number) => {
+    setCurrentPage(pageNumber)
+  }
+
+  // Calculate pagination values
+  const indexOfLastBrand = currentPage * brandsPerPage
+  const indexOfFirstBrand = indexOfLastBrand - brandsPerPage
+  const currentBrands = brands.slice(indexOfFirstBrand, indexOfLastBrand)
+
+  return (
+    <div className="w-[95%] bg-[#fff] h-[100%] pt-[20px] flex justify-center items-center pb-[30px] mt-[70px]">
+      <div className="w-[100%] flex-col h-[100%] flex">
+        <h1 className="text-[20px] font-[600] mb-6">Brand Management</h1>
+
+        <div className="mt-[15px] shadow-sm border rounded-lg overflow-x-auto">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Brand Name</TableHead>
+                <TableHead>Image</TableHead>
+                <TableHead>Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {loading ? (
+                Array.from({ length: brandsPerPage }).map((_, index) => (
+                  <TableRow key={index}>
+                    <TableCell><Skeleton className="h-4 w-[200px]" /></TableCell>
+                    <TableCell><Skeleton className="w-[70px] h-[70px] rounded-full" /></TableCell>
+                    <TableCell><Skeleton className="h-8 w-[100px]" /></TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                currentBrands.map((brand: any) => (
+                  <TableRow key={brand.id}>
+                    <TableCell>{brand.name}</TableCell>
+                    <TableCell>
+                      <img src={brand.image} alt="" className="w-[70px] h-[70px] rounded-full object-cover" />
+                    </TableCell>
+                    {/* <TableCell>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => openEditModal(brand)}
+                        className="mr-2"
+                      >
+                        Edit
+                      </Button>
+                      <Button
+                        variant="destructive"
+                        size="sm"
+                        onClick={() => handleDelete(brand.id)}
+                      >
+                        Delete
+                      </Button>
+                    </TableCell> */}
+                    <TableCell>
+                    <div className="flex space-x-1">
+                      <Button variant="outline" size="icon" onClick={() => openEditModal(brand)}>
+                        <Pencil className="h-4 w-4" />
+                      </Button>
+                      <Button variant="outline" size="icon" onClick={() => handleDelete(brand.id)}>
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
                     </div>
-                )}
-
-                <ReactModal
-                    isOpen={modalIsOpen}
-                    onRequestClose={closeModal}
-                    className="bg-white p-6 rounded-lg shadow-lg w-[400px] h-auto"
-                    overlayClassName="fixed inset-0 bg-gray-500 bg-opacity-50 backdrop-blur-sm flex justify-center items-center"
-                >
-                    {editingBrand && (
-                        <div>
-                            <h2 className="text-xl mb-4">Edit Brand</h2>
-                            <input
-                                type="text"
-                                value={updatedData.name}
-                                onChange={(e) => setUpdatedData({ ...updatedData, name: e.target.value })}
-                                className="border p-2 w-full mb-4"
-                                placeholder="Brand Name"
-                            />
-                            <input
-                                type="file"
-                                accept="image/*"
-                                onChange={handleImageChange}
-                                className="border p-2 w-full mb-4"
-                            />
-                            {imagePreview && (
-                                <img src={imagePreview} alt="Brand preview" className="w-[170px] h-[100px] mb-4" />
-                            )}
-                            <button
-                                className="bg-green-500 text-white py-2 px-4 rounded"
-                                onClick={() => handleUpdate(editingBrand.id)}
-                            >
-                                Save Changes
-                            </button>
-                            <button
-                                className="ml-4 bg-gray-400 text-white py-2 px-4 rounded"
-                                onClick={closeModal}
-                            >
-                                Cancel
-                            </button>
-                        </div>
-                    )}
-                </ReactModal>
-            </div>
+                  </TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
         </div>
-    );
-};
 
-export default BrandList;
+        {!loading && (
+          <div className="flex items-center justify-between py-4">
+            <div className="text-sm text-muted-foreground">
+              Page {currentPage} of {Math.ceil(brands.length / brandsPerPage)}
+            </div>
+            <div className="flex space-x-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => paginate(currentPage - 1)}
+              disabled={currentPage === 1}
+            >
+              <ChevronLeft className="h-4 w-4 mr-2" />
+              Previous
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => paginate(currentPage + 1)}
+              disabled={currentPage === Math.ceil(brands.length / brandsPerPage)}
+            >
+              Next
+              <ChevronRight className="h-4 w-4 ml-2" />
+            </Button>
+            </div>
+          </div>
+        )}
+
+        <Dialog open={modalIsOpen} onOpenChange={setModalIsOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Edit Brand</DialogTitle>
+            </DialogHeader>
+            {editingBrand && (
+              <div className="grid gap-4 py-4">
+                <Input
+                  type="text"
+                  value={updatedData.name}
+                  onChange={(e) => setUpdatedData({ ...updatedData, name: e.target.value })}
+                  placeholder="Brand Name"
+                />
+                <Input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                />
+                {imagePreview && (
+                  <img src={imagePreview} alt="Brand preview" className="w-[170px] h-[100px] mb-4" />
+                )}
+                <div className="flex justify-end space-x-2">
+                  <Button variant="outline" onClick={closeModal}>
+                    Cancel
+                  </Button>
+                  <Button onClick={() => handleUpdate(editingBrand.id)}>
+                    Save Changes
+                  </Button>
+                </div>
+              </div>
+            )}
+          </DialogContent>
+        </Dialog>
+      </div>
+    </div>
+  )
+}

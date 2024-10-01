@@ -100,9 +100,11 @@ const Brand = () => {
         }
     };
 
+    const isButtonDisabled = !selectedCategory || !selectedSubcategory || !brandImage || loading;
+
     return (
-        <div className="w-[95%] bg-[#fff] h-[100%] pt-[20px] flex justify-center items-center pb-[30px] mt-[70px]">
-            <div className="w-[100%] flex-col h-[100%] flex">
+        <div className="w-[95%] bg-[#fff] h-[100%] pt-[20px] flex items-center pb-[30px] mt-[70px]">
+            <div className="w-[55%] flex-col h-[100%] flex">
                 <h1 className="text-[20px] font-[600] mb-6">Create Brand</h1>
 
                 <div className="mb-4">
@@ -132,22 +134,23 @@ const Brand = () => {
                     </select>
                 </div>
 
-                <div className="mb-4">
-                    <label className="block mb-2 text-sm font-medium text-gray-700">Select Subcategory</label>
-                    <select
-                        value={selectedSubcategory}
-                        onChange={(e) => setSelectedSubcategory(e.target.value)}
-                        className="border p-2 w-full outline-none"
-                        disabled={!selectedCategory}
-                    >
-                        <option value="">Select Subcategory</option>
-                        {subcategories.map((subcategory) => (
-                            <option key={subcategory.id} value={subcategory.id}>
-                                {subcategory.name}
-                            </option>
-                        ))}
-                    </select>
-                </div>
+                {selectedCategory && (
+                    <div className="mb-4">
+                        <label className="block mb-2 text-sm font-medium text-gray-700">Select Subcategory</label>
+                        <select
+                            value={selectedSubcategory}
+                            onChange={(e) => setSelectedSubcategory(e.target.value)}
+                            className="border p-2 w-full outline-none"
+                        >
+                            <option value="">Select Subcategory</option>
+                            {subcategories.map((subcategory) => (
+                                <option key={subcategory.id} value={subcategory.id}>
+                                    {subcategory.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                )}
 
                 <div className="mb-4">
                     <label className="block mb-2 text-sm font-medium text-gray-700">Brand Image</label>
@@ -161,7 +164,7 @@ const Brand = () => {
                         {isDragActive ? (
                             <p>Drop the image here ...</p>
                         ) : (
-                            <p>Drag 'n' drop an image here, or click to select one</p>
+                            <p>Drag and drop an image here, or click to select one</p>
                         )}
                     </div>
                     {imagePreview && (
@@ -175,13 +178,15 @@ const Brand = () => {
                     )}
                 </div>
 
+                <div className='w-[100%] flex justify-end'>
                 <button
-                    className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
+                    className={`bg-[#0333ae] hover:bg-[#0333ae] text-white py-2 px-4 rounded ${isButtonDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
                     onClick={handleCreateBrand}
-                    disabled={loading}
+                    disabled={isButtonDisabled}
                 >
                     {loading ? 'Creating...' : 'Create Brand'}
                 </button>
+                </div>
             </div>
         </div>
     );

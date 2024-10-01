@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { BarChart, Bar, XAxis, Tooltip } from 'recharts';
 import { getPaymentMethodMetrics } from '@/utils/ApiCalls'; // Ensure correct import
+import { Skeleton } from "@/components/ui/skeleton"; // Adjust this import based on your project structure
 
 type PaymentMethodMetric = {
   _id: string;
@@ -11,7 +12,7 @@ type PaymentMethodMetric = {
 const StackedChartComps = () => {
   const [paymentMetrics, setPaymentMetrics] = useState<PaymentMethodMetric[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchPaymentMetrics = async () => {
@@ -23,7 +24,7 @@ const StackedChartComps = () => {
         }));
         setPaymentMetrics(transformedData);
       } catch (err: any) {
-        setError(err);
+        setError(err.message || "Error fetching data");
       } finally {
         setLoading(false);
       }
@@ -32,7 +33,11 @@ const StackedChartComps = () => {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="w-full h-full flex items-center justify-center">
+        <Skeleton className="w-full h-[250px]" />
+      </div>
+    );
   }
 
   if (error) {

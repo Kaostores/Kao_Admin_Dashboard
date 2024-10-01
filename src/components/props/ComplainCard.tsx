@@ -44,23 +44,23 @@ const Card: React.FC<Data> = ({
             <div className='w-[96%] flex flex-col py-[10px] px-[10px]'>
                 <div className='flex items-center mb-[15px]'>
                     <div className='text-[13px] font-bold mr-[10px]'>Store ID:</div>
-                    <div className='text-[14px] text-[#0000ff]'>{storeId}</div>
+                    <div className='text-[14px] text-[#0333ae]'>{storeId}</div>
                 </div>
                 <div className='flex items-center mb-[15px]'>
                     <div className='text-[13px] font-bold mr-[10px]'>Agent ID:</div>
-                    <div className='text-[14px] text-[#0000ff]'>{agentId}</div>
+                    <div className='text-[14px] text-[#0333ae]'>{agentId}</div>
                 </div>
                 <div className='flex items-center mb-[15px]'>
                     <div className='text-[13px] font-bold mr-[10px]'>Complaint Category:</div>
-                    <div className='text-[14px] text-[#0000ff]'>{category}</div>
+                    <div className='text-[14px] text-[#0333ae]'>{category}</div>
                 </div>
                 <div className='flex items-center mb-[15px]'>
                     <div className='text-[13px] font-bold mr-[10px]'>Store Name:</div>
-                    <div className='text-[14px] text-[#0000ff]'>{name}</div>
+                    <div className='text-[14px] text-[#0333ae]'>{name}</div>
                 </div>
                 <div className='flex items-center mb-[15px]'>
                     <div className='text-[13px] font-bold mr-[10px]'>Agent Name:</div>
-                    <div className='text-[14px] text-[#0000ff]'>{agentName}</div>
+                    <div className='text-[14px] text-[#0333ae]'>{agentName}</div>
                 </div>
                 <div className='flex items-center mb-[15px]'>
                     <div className='text-[13px] font-bold mr-[10px] text-[#818181]'>Time|Date:</div>
@@ -70,7 +70,7 @@ const Card: React.FC<Data> = ({
                     className='w-[130px] z-10 cursor-pointer flex justify-center items-center rounded-[5px] py-[5px] bg-[white] border-solid border-[#0000ff] border-[1px]'
                     onClick={toggleBtn}
                 >
-                    <div className='text-[#0000ff] text-[14px]'>View More</div>
+                    <div className='text-[#0333ae] text-[14px]'>View More</div>
                 </button>
                 {show ? (
                     <ComplianceDetails

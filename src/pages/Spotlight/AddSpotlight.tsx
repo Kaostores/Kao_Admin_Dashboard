@@ -72,9 +72,9 @@ const AddSpotlight = () => {
 
 
     return (
-        <div className="w-[95%] bg-white h-[100%] pt-[20px] flex justify-center items-center pb-[30px] mt-[30px]">
-            <div className="w-[100%] flex-col h-[100%] flex">
-                <div className="w-full bg-white p-8 mt-10 rounded-lg shadow-md">
+        <div className="w-[95%] bg-white h-[100%] pt-[20px] flexitems-center pb-[30px] mt-[30px]">
+            <div className="w-[55%] flex-col h-[100%] flex">
+                <div className="w-full bg-white p-8 mt-10 rounded-lg">
                     <h1 className="text-[20px] font-[600] mb-6">Add Spotlight</h1>
                     <form onSubmit={handleSubmit}>
                         <div className="mb-4">
@@ -122,10 +122,10 @@ const AddSpotlight = () => {
                             <label className="block text-gray-700 text-sm font-bold mb-2">Banner</label>
                             <div
                                 {...getRootProps()}
-                                className="h-[180px] border-2 border-dashed border-blue-400 bg-blue-50 p-6 rounded-lg text-center justify-center flex items-center cursor-pointer hover:bg-blue-100 transition-all duration-300"
+                                className="h-[180px] border-2 border-dashed bg-blue-50 p-6 rounded-lg text-center justify-center flex items-center cursor-pointer hover:bg-blue-100 transition-all duration-300"
                             >
                                 <input {...getInputProps()} />
-                                <p className="text-blue-600">Drag & drop an image here, or click to select a file</p>
+                                <p className="">Drag and drop an image here, or click to select a file</p>
                             </div>
 
                             {previewBanner && (
@@ -144,7 +144,7 @@ const AddSpotlight = () => {
                             <button
                                 type="submit"
                                 disabled={loading}
-                                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-200"
+                                className="bg-[#0333AE] text-white px-4 py-2 rounded hover:bg-[#0333AE] transition duration-200"
                             >
                                 {loading ? 'Adding...' : 'Add Spotlight'}
                             </button>

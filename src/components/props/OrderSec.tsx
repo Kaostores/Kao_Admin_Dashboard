@@ -1,100 +1,152 @@
-import React, { useEffect, useState } from 'react';
-import ReactPaginate from 'react-paginate';
-import { GetOrders } from '../../utils/ApiCalls';
+"use client"
+
+import { useEffect, useState } from 'react'
+import { GetOrders } from '@/utils/ApiCalls'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Skeleton } from "@/components/ui/skeleton"
+import { ChevronLeft, ChevronRight, Search } from 'lucide-react'
 
 interface Order {
-  orderId: string;
-  storeId: string;
-  customerId: string;
-  timeDate: string;
-  amount: number;
-  paymentMethod: string;
+  orderId: string
+  storeId: string
+  customerId: string
+  timeDate: string
+  amount: number
+  paymentMethod: string
 }
 
-const Orders: React.FC = () => {
-  const [orders, setOrders] = useState<Order[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [currentPage, setCurrentPage] = useState<number>(0);
-  const [ordersPerPage] = useState<number>(5);
+export default function Orders() {
+  const [orders, setOrders] = useState<Order[]>([])
+  const [loading, setLoading] = useState<boolean>(true)
+  const [currentPage, setCurrentPage] = useState<number>(1)
+  const [ordersPerPage] = useState<number>(5)
+  const [searchTerm, setSearchTerm] = useState<string>('')
 
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await GetOrders();
-        console.log("Fetched orders response data:", response.data);
+        const response = await GetOrders()
         const ordersData = response.data.data.map((order: any) => ({
           orderId: order.id,
-          storeId: order.store.name,
-          customerId: order.shippingAddress.fullname,
+          storeId: order.store?.name || 'Unknown Store',
+          customerId: order.shippingAddress?.fullname || 'Unknown Customer',
           timeDate: new Date(order.orderDate).toLocaleString(),
-          amount: order.totalPrice, 
+          amount: order.totalPrice,
           paymentMethod: order.paymentMethod
-        }));
-
-        setOrders(ordersData);
-        setLoading(false);
+        }))
+        setOrders(ordersData)
+        setLoading(false)
       } catch (err: any) {
-        console.error("Error fetching orders:", err.response?.data || err.message || err);
-        setLoading(false);
+        console.error("Error fetching orders:", err.response?.data || err.message || err)
+        setLoading(false)
       }
-    };
+    }
 
-    fetchOrders();
-  }, []);
+    fetchOrders()
+  }, [])
 
-  const handlePageChange = (selectedItem: { selected: number }) => {
-    setCurrentPage(selectedItem.selected);
-  };
+  const filteredOrders = orders.filter(order =>
+    order.storeId.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    order.customerId.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    order.paymentMethod.toLowerCase().includes(searchTerm.toLowerCase())
+  )
 
-  const startIndex = currentPage * ordersPerPage;
-  const currentOrders = orders.slice(startIndex, startIndex + ordersPerPage);
+  const indexOfLastOrder = currentPage * ordersPerPage
+  const indexOfFirstOrder = indexOfLastOrder - ordersPerPage
+  const currentOrders = filteredOrders.slice(indexOfFirstOrder, indexOfLastOrder)
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber)
+
+  const SkeletonRow = () => (
+    <TableRow>
+      <TableCell><Skeleton className="h-4 w-[100px]" /></TableCell>
+      <TableCell><Skeleton className="h-4 w-[150px]" /></TableCell>
+      <TableCell><Skeleton className="h-4 w-[120px]" /></TableCell>
+      <TableCell><Skeleton className="h-4 w-[80px]" /></TableCell>
+      <TableCell><Skeleton className="h-4 w-[100px]" /></TableCell>
+    </TableRow>
+  )
 
   return (
-    <div className='relative overflow-hidden w-[100%] h-[100%]'>
-      <div className='relative overflow-x-auto shadow-md sm:rounded-lg'>
-        <table className='w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'>
-          <thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400'>
-            <tr>
-              <th scope='col' className='px-[5px] py-[5px]'>Store Name</th>
-              <th scope='col' className='px-6 py-3'>Customer Name</th>
-              <th scope='col' className='px-6 py-3'>Time/Date</th>
-              <th scope='col' className='px-6 py-3'>Amount</th>
-              <th scope='col' className='px-6 py-3'>Payment Method</th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentOrders.map((order) => (
-              <tr key={order.orderId} className='bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600'>
-                <td className='px-[5px] py-[5px] min-w-[100px]'>{order.storeId}</td>
-                <td className='px-6 py-4'>{order.customerId}</td>
-                <td className='px-6 py-4'>{order.timeDate}</td>
-                <td className='px-6 py-4'>{order.amount}</td>
-                <td className='px-6 py-4'>{order.paymentMethod}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <div className='flex justify-center my-4'>
-        <ReactPaginate
-          pageCount={Math.ceil(orders.length / ordersPerPage)}
-          marginPagesDisplayed={2}
-            pageRangeDisplayed={3}
-          onPageChange={handlePageChange}
-          containerClassName="flex space-x-2"
-        	pageClassName="border border-gray-300 text-black px-3 py-1 rounded cursor-pointer"
-                        previousClassName="border border-gray-300 text-black px-3 py-1 rounded cursor-pointer"
-                        nextClassName="border border-gray-300 text-black px-3 py-1 rounded cursor-pointer"
-                        breakClassName="border border-gray-300 text-black px-3 py-1 rounded cursor-pointer"
-                        activeClassName="bg-blue-500 text-white border-blue-500"
-        />
-      </div>
-    </div>
-  );
-};
+    <div className="container mx-auto py-10">
+      <h1 className="text-2xl font-bold mb-6">Orders</h1>
 
-export default Orders;
+      <div className="flex items-center mb-4">
+        <Input
+          placeholder="Search orders..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="max-w-sm"
+        />
+        <Button variant="ghost" className="ml-2">
+          <Search className="h-4 w-4" />
+        </Button>
+      </div>
+
+      <div className="rounded-md border">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Store Name</TableHead>
+              <TableHead>Customer Name</TableHead>
+              <TableHead>Time/Date</TableHead>
+              <TableHead>Amount</TableHead>
+              <TableHead>Payment Method</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {loading ? (
+              <>
+                <SkeletonRow />
+                <SkeletonRow />
+                <SkeletonRow />
+                <SkeletonRow />
+                <SkeletonRow />
+              </>
+            ) : (
+              currentOrders.map((order) => (
+                <TableRow key={order.orderId}>
+                  <TableCell className="font-medium">{order.storeId}</TableCell>
+                  <TableCell>{order.customerId}</TableCell>
+                  <TableCell>{order.timeDate}</TableCell>
+                  <TableCell>{new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN' }).format(order.amount)}</TableCell>
+                  <TableCell>{order.paymentMethod}</TableCell>
+                </TableRow>
+              ))
+            )}
+          </TableBody>
+        </Table>
+      </div>
+
+      {!loading && (
+        <div className="flex items-center justify-between py-4">
+          <div className="text-sm text-muted-foreground">
+            Page {currentPage} of {Math.ceil(filteredOrders.length / ordersPerPage)}
+          </div>
+          <div className="flex space-x-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => paginate(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            <ChevronLeft className="h-4 w-4 mr-2" />
+            Previous
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => paginate(currentPage + 1)}
+            disabled={currentPage === Math.ceil(filteredOrders.length / ordersPerPage)}
+          >
+            Next
+            <ChevronRight className="h-4 w-4 ml-2" />
+          </Button>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}

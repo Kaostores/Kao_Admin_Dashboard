@@ -15,7 +15,7 @@ export const api = createApi({
       }
     }
   }),
-  tagTypes: ["category", "subcategory", "stores", "complaints", "metrics", "vendors", "agents"],
+  tagTypes: ["category", "subcategory", "stores", "complaints", "metrics", "vendors", "agents", "Currencies"],
   endpoints: (builder) => ({
     createCategory: builder.mutation({
       query: (formData) => ({
@@ -113,36 +113,64 @@ export const api = createApi({
       invalidatesTags: ["vendors"],
     }),
      getStoreById: builder.query<any, string>({
-      query: (storeUuid) => `/stores/${storeUuid}`, 
+      query: (storeUuid) => `/stores/update//${storeUuid}`, 
     }),
 
     
     updateStore: builder.mutation({
-      query: (storeData) => {
-        const formData = new FormData();
-        formData.append('name', storeData.name);
-        formData.append('email', storeData.email);
-        formData.append('phone', storeData.phone);
-        formData.append('address', storeData.address);
-        formData.append('category', storeData.category);
-        formData.append('cac_number', storeData.cac_number);
-        if (storeData.cac_document) formData.append('cac_document', storeData.cac_document);
-        if (storeData.kyc_document) formData.append('kyc_document', storeData.kyc_document);
-        if (storeData.business_document) formData.append('business_document', storeData.business_document);
-        if (storeData.utility_bill) formData.append('utility_bill', storeData.utility_bill);
-
+      query: ({ store_uuid, ...formData }) => {
+        const data = new FormData();
+        for (const key in formData) {
+          data.append(key, formData[key]);
+        }
         return {
-          url: `/store/update/${storeData.id}`,
+          url: `/stores/update/${store_uuid}`,
           method: 'POST',
-          body: formData,
+          body: data,
         };
       },
+    }),
+
+    getUserData: builder.query({
+      query: () => 'user/userdata',
+    }),
+    addCurrency: builder.mutation({
+      query: (newCurrency) => ({
+        url: '/currencies/create',
+        method: 'POST',
+        body: newCurrency,
+      }),
+    }),
+    getCurrencies: builder.query({
+      query: () => '/currencies',
+      providesTags: ['Currencies'],
+    }),
+    updateCurrency: builder.mutation({
+      query: (currency) => ({
+        url: `/currencies/update/${currency.currency_uuid}`,
+        method: 'POST',
+        body: currency,
+      }),
+      invalidatesTags: ['Currencies'],
+    }),
+    deleteCurrency: builder.mutation({
+      query: (currency) => ({
+        url: `currencies/delete`,
+        method: 'DELETE',
+        params: { currency },
+      }),
+      invalidatesTags: ['Currencies'],
+    }),
+    fetchAdminGraphData: builder.query({
+      query: ({ timeline = 'last_week', store = '', userId }) => 
+        `/analytics/admin/graph?timeline=${timeline}&store=${store}&userId=${userId}`,
     }),
     
      }),
 });
 
 export const {
+  useGetUserDataQuery ,
   useCreateCategoryMutation,
   useCreateSubcategoryMutation,
   useViewAllStoresQuery,
@@ -158,4 +186,9 @@ export const {
   useCreateVendorAccountMutation,
   useGetStoreByIdQuery,
   useUpdateStoreMutation,
+  useAddCurrencyMutation,
+  useGetCurrenciesQuery,
+  useUpdateCurrencyMutation,
+  useDeleteCurrencyMutation,
+  useFetchAdminGraphDataQuery,
 } = api;

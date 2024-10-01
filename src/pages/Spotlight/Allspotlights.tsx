@@ -1,250 +1,289 @@
-import { useEffect, useState } from 'react';
-import ReactModal from 'react-modal';
-import { GetAllPosters, UpdatePosterInfo, UpdatePosterImage, DeletePoster } from '@/utils/ApiCalls';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+"use client"
+
+import { useEffect, useState } from 'react'
+import { GetAllPosters, UpdatePosterInfo, UpdatePosterImage, DeletePoster } from '@/utils/ApiCalls'
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
+import { Label } from "@/components/ui/label"
+import { Skeleton } from "@/components/ui/skeleton"
+import { Pencil, Trash2, ChevronLeft, ChevronRight } from 'lucide-react'
 
 interface Poster {
-    id: string;
-    title: string;
-    description: string;
-    store?: { name: string };
-    image: string;
+  id: string
+  title: string
+  description: string
+  store?: { name: string }
+  image: string
 }
 
-const AllSpotlights = () => {
-    const [posters, setPosters] = useState<Poster[]>([]);
-    const [selectedPoster, setSelectedPoster] = useState<Poster | null>(null);
-    const [title, setTitle] = useState('');
-    const [description, setDescription] = useState('');
-    const [banner, setBanner] = useState<File | null>(null);
-    const [bannerPreview, setBannerPreview] = useState<string | null>(null); // Preview state
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState('');
-    const [isModalOpen, setIsModalOpen] = useState(false);
+export default function AllSpotlights() {
+  const [posters, setPosters] = useState<Poster[]>([])
+  const [selectedPoster, setSelectedPoster] = useState<Poster | null>(null)
+  const [title, setTitle] = useState('')
+  const [description, setDescription] = useState('')
+  const [banner, setBanner] = useState<File | null>(null)
+  const [bannerPreview, setBannerPreview] = useState<string | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [postersPerPage] = useState(5)
 
-    useEffect(() => {
-        const fetchPosters = async () => {
-            try {
-                const { data } = await GetAllPosters();
-                if (data.success) {
-                    setPosters(data.data);
-                } else {
-                    setError('Failed to load posters.');
-                }
-            } catch (error) {
-                setError('An error occurred while fetching posters.');
-                toast.error('Failed to fetch posters.');
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchPosters();
-    }, []);
-
-    const handlePosterUpdate = async () => {
-        if (selectedPoster) {
-            try {
-                const body = { title, description };
-                await UpdatePosterInfo(selectedPoster.id, body);
-
-                setPosters(
-                    posters.map((p: Poster) =>
-                        p.id === selectedPoster.id ? { ...p, title, description } : p
-                    )
-                );
-                toast.success('Poster updated successfully.');
-                closeModal(); // Close the modal after successful update
-            } catch (error) {
-                toast.error('Failed to update poster info.');
-            }
+  useEffect(() => {
+    const fetchPosters = async () => {
+      try {
+        const { data } = await GetAllPosters()
+        if (data.success) {
+          setPosters(data.data)
+        } else {
+          console.log('Failed to load posters.')
         }
-    };
-
-    const handleBannerUpdate = async () => {
-        if (selectedPoster && banner) {
-            const formData = new FormData();
-            formData.append('image', banner);
-
-            try {
-                await UpdatePosterImage(selectedPoster.id, formData);
-                toast.success('Poster banner updated successfully.');
-
-                // Update the poster's image in state
-                setPosters(
-                    posters.map((p: Poster) =>
-                        p.id === selectedPoster.id
-                            ? { ...p, image: URL.createObjectURL(banner) } // Update with new image URL
-                            : p
-                    )
-                );
-
-                // Close the modal and reset states
-                closeModal();
-            } catch (error) {
-                toast.error('Failed to update poster banner.');
-            }
-        }
-    };
-
-    const handlePosterDelete = async (posterId: string) => {
-        try {
-            await DeletePoster(posterId);
-            setPosters(posters.filter((p: Poster) => p.id !== posterId));
-            toast.success('Poster deleted successfully.');
-        } catch (error) {
-            toast.error('Failed to delete poster.');
-        }
-    };
-
-    const openModal = (poster: Poster) => {
-        setSelectedPoster(poster);
-        setTitle(poster.title);
-        setDescription(poster.description);
-        setBanner(null); // Clear previous banner file
-        setBannerPreview(poster.image); // Set the current image as preview
-        setIsModalOpen(true);
-    };
-
-    const closeModal = () => {
-        setIsModalOpen(false);
-        setSelectedPoster(null);
-        setTitle('');
-        setDescription('');
-        setBanner(null);
-        setBannerPreview(null);
-    };
-
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files[0]) {
-            setBanner(e.target.files[0]);
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setBannerPreview(reader.result as string);
-            };
-            reader.readAsDataURL(e.target.files[0]);
-        }
-    };
-
-    if (loading) {
-        return <div>Loading posters...</div>;
+      } catch (error) {
+        toast.error('Failed to fetch posters.')
+      } finally {
+        setLoading(false)
+      }
     }
 
-    if (error) {
-        return <div>{error}</div>;
+    fetchPosters()
+  }, [])
+
+  const handlePosterUpdate = async () => {
+    if (selectedPoster) {
+      try {
+        const body = { title, description }
+        await UpdatePosterInfo(selectedPoster.id, body)
+
+        setPosters(
+          posters.map((p: Poster) =>
+            p.id === selectedPoster.id ? { ...p, title, description } : p
+          )
+        )
+        toast.success('Poster updated successfully.')
+        closeModal()
+      } catch (error) {
+        toast.error('Failed to update poster info.')
+      }
     }
+  }
 
-    return (
-        <div className="w-[95%] bg-white h-[100%] pt-[20px] flex justify-center items-center pb-[30px] mt-[70px]">
-            <div className="w-[100%] flex-col h-[100%] flex">
-                <h1 className="text-[20px] font-[600] mb-6">All Spotlights</h1>
+  const handleBannerUpdate = async () => {
+    if (selectedPoster && banner) {
+      const formData = new FormData()
+      formData.append('image', banner)
 
-                <div className="mt-[15px] shadow-sm border rounded-lg overflow-x-auto">
-                    {posters.length > 0 ? (
-                        <table className="w-full table-auto text-sm text-left">
-                            <thead className="bg-gray-50 text-gray-600 font-medium border-b">
-                                <tr>
-                                    <th className="py-3 px-6">Title</th>
-                                    <th className="py-3 px-6">Description</th>
-                                    <th className="py-3 px-6">Store</th>
-                                    <th className="py-3 px-6">Banner</th>
-                                    <th className="py-3 px-6">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody className="text-gray-600 divide-y">
-                                {posters.map((poster: Poster) => (
-                                    <tr key={poster.id}>
-                                        <td className="px-6 py-4 whitespace-nowrap">{poster.title}</td>
-                                        <td className="px-6 py-4 whitespace-nowrap">{poster.description}</td>
-                                        <td className="px-6 py-4 whitespace-nowrap">{poster.store?.name}</td>
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <img src={poster.image} alt={poster.title} className="w-20 h-20 object-cover" />
-                                        </td>
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <button onClick={() => openModal(poster)} className="text-blue-500 mr-2">
-                                                Edit
-                                            </button>
-                                            <button onClick={() => handlePosterDelete(poster.id)} className="text-red-500">
-                                                Delete
-                                            </button>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    ) : (
-                        <div>No posters found.</div>
-                    )}
-                </div>
+      try {
+        await UpdatePosterImage(selectedPoster.id, formData)
+        toast.success('Poster banner updated successfully.')
 
-                {/* Modal */}
-                <ReactModal
-                    isOpen={isModalOpen}
-                    onRequestClose={closeModal}
-                    contentLabel="Edit Poster"
-                    className="relative h-[500px] overflow-y-scroll bg-white p-6 rounded-lg shadow-lg z-[70] top-0"
-                    overlayClassName="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center"
-                >
-                    <h2 className="text-lg font-semibold mb-4">Edit Poster</h2>
-                    <div className="mb-4">
-                        <label className="block mb-2">Title:</label>
-                        <input
-                            type="text"
-                            value={title}
-                            onChange={(e) => setTitle(e.target.value)}
-                            className="w-full p-2 border rounded"
-                        />
+        setPosters(
+          posters.map((p: Poster) =>
+            p.id === selectedPoster.id
+              ? { ...p, image: URL.createObjectURL(banner) }
+              : p
+          )
+        )
+
+        closeModal()
+      } catch (error) {
+        toast.error('Failed to update poster banner.')
+      }
+    }
+  }
+
+  const handlePosterDelete = async (posterId: string) => {
+    try {
+      await DeletePoster(posterId)
+      setPosters(posters.filter((p: Poster) => p.id !== posterId))
+      toast.success('Poster deleted successfully.')
+    } catch (error) {
+      toast.error('Failed to delete poster.')
+    }
+  }
+
+  const openModal = (poster: Poster) => {
+    setSelectedPoster(poster)
+    setTitle(poster.title)
+    setDescription(poster.description)
+    setBanner(null)
+    setBannerPreview(poster.image)
+    setIsModalOpen(true)
+  }
+
+  const closeModal = () => {
+    setIsModalOpen(false)
+    setSelectedPoster(null)
+    setTitle('')
+    setDescription('')
+    setBanner(null)
+    setBannerPreview(null)
+  }
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setBanner(e.target.files[0])
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        setBannerPreview(reader.result as string)
+      }
+      reader.readAsDataURL(e.target.files[0])
+    }
+  }
+
+  // Pagination logic
+  const indexOfLastPoster = currentPage * postersPerPage
+  const indexOfFirstPoster = indexOfLastPoster - postersPerPage
+  const currentPosters = posters.slice(indexOfFirstPoster, indexOfLastPoster)
+
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber)
+
+  const SkeletonRow = () => (
+    <TableRow>
+      <TableCell><Skeleton className="h-4 w-[250px]" /></TableCell>
+      <TableCell><Skeleton className="h-4 w-[300px]" /></TableCell>
+      <TableCell><Skeleton className="h-4 w-[100px]" /></TableCell>
+      <TableCell><Skeleton className="h-20 w-20" /></TableCell>
+      <TableCell><Skeleton className="h-10 w-20" /></TableCell>
+    </TableRow>
+  )
+
+  return (
+    <div className="container mx-auto py-10">
+      <h1 className="text-2xl font-bold mb-6">All Spotlights</h1>
+
+      <div className="rounded-md border">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Title</TableHead>
+              <TableHead>Description</TableHead>
+              <TableHead>Store</TableHead>
+              <TableHead>Banner</TableHead>
+              <TableHead>Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {loading ? (
+              <>
+                <SkeletonRow />
+                <SkeletonRow />
+                <SkeletonRow />
+              </>
+            ) : (
+              currentPosters.map((poster: Poster) => (
+                <TableRow key={poster.id}>
+                  <TableCell className="font-medium">{poster.title}</TableCell>
+                  <TableCell>{poster.description}</TableCell>
+                  <TableCell>{poster.store?.name}</TableCell>
+                  <TableCell>
+                    <img src={poster.image} alt={poster.title} className="w-20 h-20 object-cover rounded" />
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex space-x-2">
+                      <Button variant="outline" size="icon" onClick={() => openModal(poster)}>
+                        <Pencil className="h-4 w-4" />
+                      </Button>
+                      <Button variant="outline" size="icon" onClick={() => handlePosterDelete(poster.id)}>
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
                     </div>
-                    <div className="mb-4">
-                        <label className="block mb-2">Description:</label>
-                        <textarea
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
-                            className="w-full p-2 border rounded"
-                        />
-                    </div>
-                    <div className="mb-4">
-                        <label className="block mb-2">Update Banner:</label>
-                        <input
-                            type="file"
-                            onChange={handleFileChange}
-                            className="border rounded p-2 w-full"
-                        />
-                        {bannerPreview && (
-                            <div className="mt-4">
-                                <img
-                                    src={bannerPreview}
-                                    alt="Preview"
-                                    className="w-40 h-40 object-cover border rounded"
-                                />
-                            </div>
-                        )}
-                    </div>
-                    <div className="flex gap-4">
-                        <button
-                            onClick={handlePosterUpdate}
-                            className="bg-blue-500 text-white px-4 py-2 rounded"
-                        >
-                            Update Info
-                        </button>
-                        <button
-                            onClick={handleBannerUpdate}
-                            className="bg-green-500 text-white px-4 py-2 rounded"
-                        >
-                            Update Banner
-                        </button>
-                        <button
-                            onClick={closeModal}
-                            className="bg-gray-500 text-white px-4 py-2 rounded"
-                        >
-                            Cancel
-                        </button>
-                    </div>
-                </ReactModal>
-            </div>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
+          </TableBody>
+        </Table>
+      </div>
+
+      {/* Pagination */}
+      {!loading && (
+        <div className="flex items-center justify-between py-4">
+          <div className="text-sm text-muted-foreground">
+            Page {currentPage} of {Math.ceil(posters.length / postersPerPage)}
+          </div>
+          <div className="flex space-x-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => paginate(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            <ChevronLeft className="h-4 w-4" />
+            Previous
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => paginate(currentPage + 1)}
+            disabled={currentPage === Math.ceil(posters.length / postersPerPage)}
+          >
+            Next
+            <ChevronRight className="h-4 w-4" />
+          </Button>
+          </div>
         </div>
-    );
-};
+      )}
 
-export default AllSpotlights;
+      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Edit Poster</DialogTitle>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="title" className="text-right">
+                Title
+              </Label>
+              <Input
+                id="title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                className="col-span-3"
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="description" className="text-right">
+                Description
+              </Label>
+              <Textarea
+                id="description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                className="col-span-3"
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="banner" className="text-right">
+                Banner
+              </Label>
+              <div className="col-span-3">
+                <Input
+                  id="banner"
+                  type="file"
+                  onChange={handleFileChange}
+                />
+                {bannerPreview && (
+                  <div className="mt-2">
+                    <img
+                      src={bannerPreview}
+                      alt="Preview"
+                      className="w-40 h-40 object-cover rounded"
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+          <div className="flex justify-end space-x-2">
+            <Button className='bg-[#0333AE] hover:bg-[#0333AE]' onClick={handlePosterUpdate}>Update Info</Button>
+            <Button className='bg-[#0333AE] hover:bg-[#0333AE]' onClick={handleBannerUpdate}>Update Banner</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </div>
+  )
+}

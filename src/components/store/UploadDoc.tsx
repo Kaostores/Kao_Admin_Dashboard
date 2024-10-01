@@ -25,7 +25,6 @@ const Upload: React.FC<Iprops> = ({ togleBtn, onFileChange, onSubmit, storeDetai
   const [utilityBill, setUtilityBill] = useState<File | null>(null);
 
   useEffect(() => {
-    // Prepopulate form with store details (URLs or file names)
     if (storeDetails) {
       if (storeDetails.cacDocument) setCacDocument(storeDetails.cacDocument as unknown as File);
       if (storeDetails.kycDocument) setKycDocument(storeDetails.kycDocument as unknown as File);
@@ -38,7 +37,6 @@ const Upload: React.FC<Iprops> = ({ togleBtn, onFileChange, onSubmit, storeDetai
     const file = e.target.files?.[0];
     onFileChange({ [docType]: file });
 
-    // Update local state using if-else
     if (docType === "cacDocument") {
       setCacDocument(file || null);
     } else if (docType === "kycDocument") {
@@ -52,7 +50,7 @@ const Upload: React.FC<Iprops> = ({ togleBtn, onFileChange, onSubmit, storeDetai
 
   return (
     <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center bg-[#ffffffd9]">
-      <div className="bg-white w-[70%] h-[70%] flex flex-col p-[20px] border border-[#0000ff]">
+      <div className="bg-white w-[40%] rounded-[10px] overflow-y-scroll h-[70%] flex flex-col p-[20px] border border-[#0000ff]">
         <div className="flex justify-between items-center mb-[20px]">
           <h2>Upload Documents</h2>
           <button onClick={togleBtn} className="text-red-500">
