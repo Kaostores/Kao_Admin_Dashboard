@@ -26,14 +26,15 @@ export default function Home() {
   const [paymentMetrics, setPaymentMetrics] = useState<PaymentMethodMetric[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [selectedWeek, setSelectedWeek] = useState<'current' | 'previous'>('current');
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Fetch graph data based on selected week
   const { data: graphData, isLoading: graphLoading, isError: graphError } = useFetchAdminGraphDataQuery({
     timeline: selectedWeek === 'current' ? 'this_week' : 'last_week',
   });
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
       try {
         const [metricsData, paymentData] = await Promise.all([
           GetAdminMetrics(),
@@ -43,13 +44,14 @@ export default function Home() {
         setPaymentMetrics(paymentData.data);
       } catch (err) {
         setError("Error loading data");
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchData();
   }, []);
 
   useEffect(() => {
-    // Log the current and last week's graph data when selectedWeek changes
     if (graphData) {
       console.log("Graph Data:", graphData.data);
       console.log("Selected Week:", selectedWeek);
@@ -71,7 +73,7 @@ export default function Home() {
     store_metrics: { currentWeekStores, percentageIncrease: storeIncrease },
     revenue_metrics: { currentWeekRevenue, percentageIncrease: revenueIncrease },
     order_metrics: { currentWeekOrders, percentageIncrease: orderIncrease },
-  } = metrics || {}; // Use default empty object to avoid destructuring error
+  } = metrics;
 
   const totalCreditSum = graphData?.data?.reduce((acc: number, day: any) => acc + day.totalCredit, 0) || 0;
   const totalDebitSum = graphData?.data?.reduce((acc: number, day: any) => acc + day.totalDebit, 0) || 0;
@@ -119,14 +121,14 @@ export default function Home() {
               <div className="font-semibold ml-[5px]">NGN {totalDebitSum}</div>
             </div>
             <div className="flex justify-center items-center">
-            <div className="flex justify-center items-center mr-2">
-              <ArrowDown className="text-red-500 mr-1" />
-              <div className="text-red-500">
-              {totalDebitSum !== 0 ? 
-                `${((currentWeekRevenue - totalDebitSum) / totalDebitSum * 100).toFixed(2)}%` : 
-                '0.00%'}
-            </div>
-            </div>
+              <div className="flex justify-center items-center mr-2">
+                <ArrowDown className="text-red-500 mr-1" />
+                <div className="text-red-500">
+                  {totalDebitSum !== 0 ? 
+                    `${((currentWeekRevenue - totalDebitSum) / totalDebitSum * 100).toFixed(2)}%` : 
+                    '0.00%'}
+                </div>
+              </div>
               <div className="text-sm">Since last week</div>
             </div>
           </div>
@@ -147,34 +149,45 @@ export default function Home() {
           </div>
         </div>
         <div className="w-[95%] flex justify-between gap-4 items-center mt-5">
-          <Card 
-            tit="Customers" 
-            fig={currentWeekUsers.toString()}
-            increment={`${userIncrease.toFixed(0)}%`} 
-            Ic="" 
-            Cl="" 
-          />
-          <Card 
-            tit="Stores" 
-            fig={currentWeekStores.toString()}
-            increment={`${storeIncrease.toFixed(0)}%`} 
-            Ic="" 
-            Cl="" 
-          />
-          <Card 
-            tit="Revenue" 
-            fig={`N${currentWeekRevenue}`} 
-            increment={`${revenueIncrease.toFixed(0)}%`} 
-            Ic="" 
-            Cl="" 
-          />
-          <Card
-            tit="Average Order Value"
-            fig={currentWeekOrders.toString()}
-            increment={`${orderIncrease.toFixed(0)}%`}
-            Ic=""
-            Cl=""
-          />
+          {isLoading ? (
+            <>
+              <Skeleton />
+              <Skeleton />
+              <Skeleton />
+              <Skeleton />
+            </>
+          ) : (
+            <>
+              <Card 
+                tit="Customers" 
+                fig={currentWeekUsers.toString()}
+                increment={`${userIncrease.toFixed(0)}%`} 
+                Ic="" 
+                Cl="" 
+              />
+              <Card 
+                tit="Stores" 
+                fig={currentWeekStores.toString()}
+                increment={`${storeIncrease.toFixed(0)}%`} 
+                Ic="" 
+                Cl="" 
+              />
+              <Card 
+                tit="Revenue" 
+                fig={`N${currentWeekRevenue}`} 
+                increment={`${revenueIncrease.toFixed(0)}%`} 
+                Ic="" 
+                Cl="" 
+              />
+              <Card
+                tit="Average Order Value"
+                fig={currentWeekOrders.toString()}
+                increment={`${orderIncrease.toFixed(0)}%`}
+                Ic=""
+                Cl=""
+              />
+            </>
+          )}
         </div>
         <div className="w-[95%] flex justify-between items-start mt-5">
           <div className="w-[49%] rounded-lg bg-white shadow-xl p-4">
@@ -182,15 +195,23 @@ export default function Home() {
             <div className="flex justify-between">
               <StackedChartComps />
               <div className="flex-1 pl-4">
-                {paymentMetrics.map((method, index) => (
-                  <div key={method._id} className="flex justify-between border-b pb-2 mb-2">
-                    <div className="flex items-center">
-                      <div className={`h-2 w-2 rounded-full ${index % 2 === 0 ? 'bg-yellow-300' : 'bg-blue-600'} mr-2`}></div>
-                      <div className="text-gray-600">{method.paymentMethod}</div>
+                {isLoading ? (
+                  <>
+                    <Skeleton />
+                    <Skeleton />
+                    <Skeleton />
+                  </>
+                ) : (
+                  paymentMetrics.map((method, index) => (
+                    <div key={method._id} className="flex justify-between border-b pb-2 mb-2">
+                      <div className="flex items-center">
+                        <div className={`h-2 w-2 rounded-full ${index % 2 === 0 ? 'bg-yellow-300' : 'bg-blue-600'} mr-2`}></div>
+                        <div className="text-gray-600">{method.paymentMethod}</div>
+                      </div>
+                      <div className="font-bold">{method.totalOrders}%</div>
                     </div>
-                    <div className="font-bold">{method.totalOrders}%</div>
-                  </div>
-                ))}
+                  ))
+                )}
               </div>
             </div>
           </div>
@@ -203,3 +224,15 @@ export default function Home() {
     </div>
   );
 }
+
+// function SkeletonPaymentMethod() {
+//   return (
+//     <div className="flex justify-between border-b pb-2 mb-2">
+//       <div className="flex items-center">
+//         <Skeleton className="h-2 w-2 rounded-full mr-2" />
+//         <Skeleton className="h-4 w-24" />
+//       </div>
+//       <Skeleton className="h-4 w-12" />
+//     </div>
+//   );
+// }
