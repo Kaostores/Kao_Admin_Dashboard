@@ -151,11 +151,11 @@ const Coupon = () => {
     <div className="w-[95%] bg-[#fff] h-[100%] pt-[20px] flex items-center pb-[30px] mt-[40px]">
       <div className="w-[55%] flex-col h-[100%] flex">
         <div className="w-full bg-white p-8 mt-10 rounded-lg">
-          <h1 className="text-[20px] font-[600] mb-6">Create a New Coupon</h1>
+          <h1 className="text-[20px] font-[600] mb-6">Create a new coupon</h1>
           <form onSubmit={handleCreateCoupon}>
             {/* Coupon Code */}
             <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">Coupon Code</label>
+              <label className="block text-gray-700 text-sm font-bold mb-2">Coupon code</label>
               <input
                 type="text"
                 value={couponCode}
@@ -167,7 +167,7 @@ const Coupon = () => {
 
             {/* Discount Type */}
             <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">Discount Type</label>
+              <label className="block text-gray-700 text-sm font-bold mb-2">Discount type</label>
               <select
                 value={discountType}
                 onChange={(e) => setDiscountType(e.target.value)}
@@ -180,7 +180,7 @@ const Coupon = () => {
 
             {/* Discount Amount */}
             <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">Discount Amount</label>
+              <label className="block text-gray-700 text-sm font-bold mb-2">Discount amount</label>
               <input
                 type="number"
                 value={discountAmount}
@@ -192,7 +192,7 @@ const Coupon = () => {
 
             {/* Minimum Purchase Amount */}
             <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">Minimum Purchase Amount</label>
+              <label className="block text-gray-700 text-sm font-bold mb-2">Minimum purchase amount</label>
               <input
                 type="number"
                 value={minimumPurchaseAmount}
@@ -204,7 +204,7 @@ const Coupon = () => {
 
             {/* End Date */}
             <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">End Date</label>
+              <label className="block text-gray-700 text-sm font-bold mb-2">End date</label>
               <input
                 type="date"
                 value={endDate}
@@ -229,7 +229,7 @@ const Coupon = () => {
 
             {/* Applicable Category */}
             <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">Applicable Category (Optional)</label>
+              <label className="block text-gray-700 text-sm font-bold mb-2">Applicable category (optional)</label>
               <select
                 value={applicableCategory || ""}
                 onChange={(e) => setApplicableCategory(e.target.value || null)}
@@ -251,7 +251,7 @@ const Coupon = () => {
             {/* Applicable Sub-Category */}
             {applicableCategory && (
               <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2">Applicable Sub-Category (Optional)</label>
+                <label className="block text-gray-700 text-sm font-bold mb-2">Applicable sub-Category (optional)</label>
                 <select
                   value={applicableSubCategory || ""}
                   onChange={(e) => setApplicableSubCategory(e.target.value || null)}
@@ -273,7 +273,7 @@ const Coupon = () => {
 
             {/* Applicable Product */}
             <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">Applicable Product (Optional)</label>
+              <label className="block text-gray-700 text-sm font-bold mb-2">Applicable product (optional)</label>
               <select
                 value={applicableProduct || ""}
                 onChange={(e) => setApplicableProduct(e.target.value || null)}
@@ -299,7 +299,7 @@ const Coupon = () => {
               className={`py-2 px-4 bg-[#0333ae] hover:bg-[#0333ae] text-white rounded ${!isFormValid ? 'opacity-50 cursor-not-allowed' : ''}`}
               disabled={!isFormValid}
             >
-              {loading ? "Creating..." : "Create Coupon"}
+              {loading ? "Creating..." : "Create coupon"}
             </button>
             </div>
           </form>

@@ -113,7 +113,7 @@ export default function VendorsEmployee() {
     <div className="w-[95%] bg-[#fff] h-[100%] pt-[20px] flex justify-center items-center pb-[30px] mt-[70px]">
       <div className="w-[100%] h-[100%] flex items-center flex-col">
         <div className="w-[100%] h-[100px] flex justify-between items-center">
-          <div>Vendors</div>
+          <div className="text-2xl font-bold">Vendors</div>
           {/* <div className="w-[160px] h-[30px] flex justify-between items-center border-[2px] border-[#0333ae] border-solid rounded-[5px] pr-[8px]">
             <div className="bg-[#0333ae] text-white h-[100%] w-[30px] flex justify-center items-center">
               <BsPersonAdd />
@@ -131,10 +131,10 @@ export default function VendorsEmployee() {
                 <TableRow>
                   <TableHead>Name</TableHead>
                   <TableHead>Address</TableHead>
-                  <TableHead>Phone No</TableHead>
+                  <TableHead>Phone no</TableHead>
                   <TableHead>Country</TableHead>
                   <TableHead>Currency</TableHead>
-                  <TableHead>Last Login</TableHead>
+                  <TableHead>Last login</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Action</TableHead>
                 </TableRow>

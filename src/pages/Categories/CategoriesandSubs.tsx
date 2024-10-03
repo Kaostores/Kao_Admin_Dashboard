@@ -148,7 +148,7 @@ const CategoriesandSubs = () => {
   return (
     <div className="w-[95%] bg-white h-full pt-[40px] flex justify-center items-center pb-8 mt-[90px]">
       <div className="w-full flex-col h-full flex">
-        <h1 className="text-[18px] font-semibold mb-6">Categories with Sub-Categories</h1>
+        <h1 className="text-[18px] font-semibold mb-6">Categories with sub-categories</h1>
 
         {load ? (
           // Skeleton component for loading state
@@ -184,9 +184,9 @@ const CategoriesandSubs = () => {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Category Name</TableHead>
+                  <TableHead>Category name</TableHead>
                   <TableHead>Image</TableHead>
-                  <TableHead>Sub-Categories</TableHead>
+                  <TableHead>Sub-categories</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -223,7 +223,7 @@ const CategoriesandSubs = () => {
                           <Table>
                             <TableHeader>
                               <TableRow>
-                                <TableHead>Sub-Category Name</TableHead>
+                                <TableHead>Sub-category name</TableHead>
                                 <TableHead>Tags</TableHead>
                                 <TableHead>Actions</TableHead>
                               </TableRow>
@@ -340,10 +340,10 @@ const CategoriesandSubs = () => {
         className="relative bg-white p-6 rounded-lg shadow-lg z-[70] top-0"
         overlayClassName="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center"
       >
-        <h2 className="text-xl font-semibold mb-4">Edit Subcategory</h2>
+        <h2 className="text-xl font-semibold mb-4">Edit subcategory</h2>
         <form>
           <div className="mb-4">
-            <label className="block text-gray-700">Subcategory Name</label>
+            <label className="block text-gray-700">Subcategory name</label>
             <input
               type="text"
               value={editSubCategoryName}

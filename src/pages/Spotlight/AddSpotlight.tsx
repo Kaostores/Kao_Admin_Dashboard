@@ -75,7 +75,7 @@ const AddSpotlight = () => {
         <div className="w-[95%] bg-white h-[100%] pt-[20px] flexitems-center pb-[30px] mt-[30px]">
             <div className="w-[55%] flex-col h-[100%] flex">
                 <div className="w-full bg-white p-8 mt-10 rounded-lg">
-                    <h1 className="text-[20px] font-[600] mb-6">Add Spotlight</h1>
+                    <h1 className="text-[20px] font-[600] mb-6">Add spotlight</h1>
                     <form onSubmit={handleSubmit}>
                         <div className="mb-4">
                             <label className="block text-gray-700 text-sm font-bold mb-2">Title</label>
@@ -102,14 +102,14 @@ const AddSpotlight = () => {
                         </div>
 
                         <div className="mb-4">
-                            <label className="block text-gray-700 text-sm font-bold mb-2">Select Store</label>
+                            <label className="block text-gray-700 text-sm font-bold mb-2">Select store</label>
                             <select
                                 value={store}
                                 onChange={(e) => setStore(e.target.value)}
                                 // required
                                 className="border border-gray-300 p-2 w-full rounded outline-none"
                             >
-                                <option value="">Select a Store</option>
+                                <option value="">Select a store</option>
                                 {stores.map((store: any) => (
                                     <option key={store.id} value={store.id}>
                                         {store.name}
@@ -146,7 +146,7 @@ const AddSpotlight = () => {
                                 disabled={loading}
                                 className="bg-[#0333AE] text-white px-4 py-2 rounded hover:bg-[#0333AE] transition duration-200"
                             >
-                                {loading ? 'Adding...' : 'Add Spotlight'}
+                                {loading ? 'Adding...' : 'Add spotlight'}
                             </button>
                         </div>
                     </form>

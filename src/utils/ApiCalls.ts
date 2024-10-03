@@ -425,7 +425,7 @@ export const GetAdminMetrics  = async () => {
 
 export const getTransactionHistory = async () => {
   try {
-    const response = await Instance.get('/analytics/get/transactions');
+    const response = await Instance.get('/transactions/get/transactions');
     console.log("this is the transaction history",response)
     return response.data;
   } catch (error) {

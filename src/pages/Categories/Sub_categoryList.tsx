@@ -96,7 +96,7 @@ const SubcategoryList = () => {
     return (
         <div className="w-[95%] bg-[#fff] h-[100%] pt-[20px] flex justify-center items-center pb-[30px] mt-[70px]">
             <div className="w-[100%] flex-col h-[100%] flex">
-                <h1 className="text-[20px] font-[600] mb-6">Manage Sub-Categories</h1>
+                <h1 className="text-[20px] font-[600] mb-6">Manage sub-categories</h1>
 
                 {load ? (
                   <p>Loading...</p>
@@ -105,7 +105,7 @@ const SubcategoryList = () => {
                     <table className="w-full table-auto text-sm text-left">
                         <thead className="bg-gray-50 text-gray-600 font-medium border-b">
                             <tr>
-                                <th className="py-3 px-6">Sub-Category Name</th>
+                                <th className="py-3 px-6">Sub-category name</th>
                                 <th className="py-3 px-6">Tags</th>
                                 <th className="py-3 px-6"></th>
                             </tr>
@@ -161,10 +161,10 @@ const SubcategoryList = () => {
     className="relative bg-white p-6 rounded-lg shadow-lg z-[70] top-0"
     overlayClassName="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center"
 >
-    <h2 className="text-xl font-semibold mb-4">Edit Sub-Category</h2>
+    <h2 className="text-xl font-semibold mb-4">Edit sub-category</h2>
     <form onSubmit={handleUpdate}>
         <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2">Sub-Category Name:</label>
+            <label className="block text-gray-700 text-sm font-bold mb-2">Sub-category name:</label>
             <input
                 type="text"
                 value={editSubcategoryName}
@@ -187,7 +187,7 @@ const SubcategoryList = () => {
             type="submit"
             className="bg-blue-500 text-white px-4 py-2 rounded-lg"
         >
-            Save Changes
+            Save changes
         </button>
         <button
             type="button"

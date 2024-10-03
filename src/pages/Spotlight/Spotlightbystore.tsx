@@ -60,10 +60,10 @@ const Spotlightbystore = () => {
   return (
     <div className="w-[95%] bg-white h-[100%] pt-[20px] flex justify-center items-center pb-[30px] mt-[70px]">
       <div className="w-[100%] flex-col h-[100%] flex">
-        <h1 className="text-[20px] font-[600] mb-6">Spotlights by Store</h1>
+        <h1 className="text-[20px] font-[600] mb-6">Spotlights by store</h1>
 
         <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2">Select Store</label>
+                <label className="block text-gray-700 text-sm font-bold mb-2">Select store</label>
                 <select
                     value={storeId}
                     onChange={handleStoreChange}

@@ -29,6 +29,7 @@ export default function CouponList() {
   const [editingCoupon, setEditingCoupon] = useState<any>(null)
   const [updatedData, setUpdatedData] = useState<any>({})
   const [loading, setLoading] = useState(false)
+  const [updateLoading, setUpdateLoading] = useState(false)
   const [subCategories, setSubCategories] = useState<any[]>([])
   const [products, setProducts] = useState<any[]>([])
   const [categories, setCategories] = useState<any[]>([])
@@ -85,6 +86,7 @@ export default function CouponList() {
       applicableProduct: updatedData.applicableProduct || null,
     }
     
+    setUpdateLoading(true)
     try {
       const response = await UpdateCoupon(couponId, sanitizedData)
       if (response.status === 200 || response.status === 201) {
@@ -99,6 +101,8 @@ export default function CouponList() {
     } catch (error) {
       console.error('Error updating coupon:', error)
       toast.error('Failed to update coupon.')
+    } finally {
+      setUpdateLoading(false)
     }
   }
 
@@ -147,19 +151,19 @@ export default function CouponList() {
   return (
     <div className="w-[95%] bg-[#fff] h-[100%] pt-[20px] flex justify-center items-center pb-[30px] mt-[70px]">
       <div className="w-[100%] flex-col h-[100%] flex">
-        <h1 className="text-[20px] font-[600] mb-6">Coupon Management</h1>
+        <h1 className="text-[20px] font-[600] mb-6">Coupon management</h1>
 
         <div className="mt-[15px] shadow-sm border rounded-lg overflow-x-auto">
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Coupon Code</TableHead>
-                <TableHead>Discount Type</TableHead>
-                <TableHead>Discount Amount</TableHead>
-                <TableHead>Minimum Purchase Amount</TableHead>
-                <TableHead>End Date</TableHead>
+                <TableHead>Coupon code</TableHead>
+                <TableHead>Discount type</TableHead>
+                <TableHead>Discount amount</TableHead>
+                <TableHead>Minimum purchase amount</TableHead>
+                <TableHead>End date</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead>Applicable Product</TableHead>
+                <TableHead>Applicable product</TableHead>
                 <TableHead>Actions</TableHead>
               </TableRow>
             </TableHeader>
@@ -194,23 +198,6 @@ export default function CouponList() {
                     <TableCell>
                       {coupon.applicableProduct ? coupon.applicableProduct.name : "No Product"}
                     </TableCell>
-                    {/* <TableCell>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => openEditModal(coupon)}
-                        className="mr-2"
-                      >
-                        Edit
-                      </Button>
-                      <Button
-                        variant="destructive"
-                        size="sm"
-                        onClick={() => handleDelete(coupon.id)}
-                      >
-                        Delete
-                      </Button>
-                    </TableCell> */}
                     <TableCell>
                     <div className="flex space-x-1">
                       <Button variant="outline" size="icon" onClick={() => openEditModal(coupon)}>
@@ -259,7 +246,7 @@ export default function CouponList() {
         <Dialog open={!!editingCoupon} onOpenChange={() => setEditingCoupon(null)}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Edit Coupon</DialogTitle>
+              <DialogTitle>Edit coupon</DialogTitle>
             </DialogHeader>
             <div className="grid gap-4 py-4">
               <Input
@@ -317,7 +304,7 @@ export default function CouponList() {
                 }}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Select Category" />
+                  <SelectValue placeholder="Select category" />
                 </SelectTrigger>
                 <SelectContent>
                   {categories.map((category) => (
@@ -332,7 +319,7 @@ export default function CouponList() {
                 onValueChange={(value) => setUpdatedData({ ...updatedData, applicableSubCategory: value })}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Select Subcategory" />
+                  <SelectValue className='text-[#000]' placeholder="Select subcategory" />
                 </SelectTrigger>
                 <SelectContent>
                   {subCategories.map((subcategory) => (
@@ -347,7 +334,7 @@ export default function CouponList() {
                 onValueChange={(value) => setUpdatedData({ ...updatedData, applicableProduct: value })}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Select Product" />
+                  <SelectValue placeholder="Select product" />
                 </SelectTrigger>
                 <SelectContent>
                   {products.map((product) => (
@@ -362,9 +349,15 @@ export default function CouponList() {
               <Button variant="outline" onClick={() => setEditingCoupon(null)}>
                 Cancel
               </Button>
-              <Button onClick={() => handleUpdate(editingCoupon.id)}>
-                Save Changes
-              </Button>
+              {updateLoading ? (
+                <Button className='bg-[#0333AE] hover:bg-[#0333AE]' disabled>
+                  <Skeleton className="h-5 w-20" />
+                </Button>
+              ) : (
+                <Button className='bg-[#0333AE] hover:bg-[#0333AE]' onClick={() => handleUpdate(editingCoupon.id)}>
+                  Save changes
+                </Button>
+              )}
             </div>
           </DialogContent>
         </Dialog>

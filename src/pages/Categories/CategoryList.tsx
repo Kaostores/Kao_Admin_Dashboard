@@ -134,15 +134,15 @@ const CategoryList = () => {
   const currentCategories = categories.slice(indexOfFirstCategory, indexOfLastCategory)
 
   return (
-    <div className="w-[95%] bg-white h-full pt-5 flex justify-center items-center pb-8 mt-[70px]">
+    <div className="w-[95%] bg-white h-full pt-5 flex justify-center items-center pb-8 mt-[90px]">
       <div className="w-full flex-col h-full flex">
-        <h1 className="text-2xl font-semibold mb-6">Manage Categories</h1>
+        <h1 className="text-2xl font-semibold mb-6">Manage categories</h1>
 
         <div className="mt-4 border rounded-lg overflow-hidden">
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Category Name</TableHead>
+                <TableHead>Category name</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
@@ -232,10 +232,10 @@ const CategoryList = () => {
         className="relative bg-white p-6 rounded-lg shadow-lg z-[70] top-0"
         overlayClassName="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center"
       >
-        <h2 className="text-xl font-semibold mb-4">Edit Category</h2>
+        <h2 className="text-xl font-semibold mb-4">Edit category</h2>
         <form>
           <div className="mb-4">
-            <label htmlFor="categoryName" className="block text-sm font-medium text-gray-700">Category Name:</label>
+            <label htmlFor="categoryName" className="block text-sm font-medium text-gray-700">Category name:</label>
             <input
               type="text"
               id="categoryName"
@@ -246,7 +246,7 @@ const CategoryList = () => {
           </div>
 
           <div className="mb-4">
-            <label htmlFor="categoryImage" className="block text-sm font-medium text-gray-700">Category Image:</label>
+            <label htmlFor="categoryImage" className="block text-sm font-medium text-gray-700">Category image:</label>
             <input
               type="file"
               id="categoryImage"

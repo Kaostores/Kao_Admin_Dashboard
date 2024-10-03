@@ -99,14 +99,14 @@ export default function AdminSettings() {
 
   return (
     <div className="container mx-auto py-[30px] pt-[90px]">
-      <h1 className="text-[20px] font-bold mb-6">Admin Account Settings</h1>
+      <h1 className="text-[20px] font-bold mb-6">Admin account settings</h1>
       
       <div className="w-[100%] flex border-b border-[#acacac] mt-[40px]">
         <div className="flex items-center">
-          <h3 className={`text-[17px] font-[500] cursor-pointer ${show1 ? ' text-blue-600' : ''}`} onClick={Toggle1}>Update Settings</h3>
-          <h3 className={`text-[17px] font-[500] ml-[30px] cursor-pointer ${show2 ? ' text-[#0333AE]' : ''}`} onClick={Toggle2}>Upload Advert</h3>
-          <h3 className={`text-[17px] font-[500] ml-[30px] cursor-pointer ${show3 ? ' text-[#0333AE]' : ''}`} onClick={Toggle3}>Update Profile</h3>
-          <h3 className={`text-[17px] font-[500] ml-[30px] cursor-pointer ${show4 ? ' text-[#0333AE]' : ''}`} onClick={Toggle4}>Manage Currency</h3>
+          <h3 className={`text-[17px] font-[500] cursor-pointer ${show1 ? ' text-blue-600' : ''}`} onClick={Toggle1}>Update settings</h3>
+          <h3 className={`text-[17px] font-[500] ml-[30px] cursor-pointer ${show2 ? ' text-[#0333AE]' : ''}`} onClick={Toggle2}>Upload advert</h3>
+          <h3 className={`text-[17px] font-[500] ml-[30px] cursor-pointer ${show3 ? ' text-[#0333AE]' : ''}`} onClick={Toggle3}>Update profile</h3>
+          <h3 className={`text-[17px] font-[500] ml-[30px] cursor-pointer ${show4 ? ' text-[#0333AE]' : ''}`} onClick={Toggle4}>Manage currency</h3>
         </div>
       </div>
 
@@ -132,7 +132,7 @@ export default function AdminSettings() {
         <div className="w-[47%]">
           <Card className="pb-[80px]">
             <CardHeader>
-              <CardTitle className="text-[18px]">Personal Information</CardTitle>
+              <CardTitle className="text-[18px]">Personal information</CardTitle>
               <CardDescription>Update your personal details here.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -155,7 +155,7 @@ export default function AdminSettings() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="phone">Phone Number</Label>
+                <Label htmlFor="phone">Phone number</Label>
                 <Input
                   id="phone"
                   value={data.data.phone}
@@ -170,12 +170,12 @@ export default function AdminSettings() {
         <div className="w-[47%]">
           <Card>
             <CardHeader>
-              <CardTitle className="text-[18px]">Change Password</CardTitle>
+              <CardTitle className="text-[18px]">Change password</CardTitle>
               <CardDescription>Ensure your account is using a strong password.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2 relative">
-                <Label htmlFor="current-password">Current Password</Label>
+                <Label htmlFor="current-password">Current password</Label>
                 <div className="flex items-center">
                   <Input
                     id="current-password"
@@ -194,7 +194,7 @@ export default function AdminSettings() {
                 </div>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="new-password">New Password</Label>
+                <Label htmlFor="new-password">New password</Label>
                 <Input
                   id="new-password"
                   type="password"
@@ -204,7 +204,7 @@ export default function AdminSettings() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="confirm-password">Confirm New Password</Label>
+                <Label htmlFor="confirm-password">Confirm new password</Label>
                 <Input
                   id="confirm-password"
                   type="password"
@@ -216,7 +216,7 @@ export default function AdminSettings() {
             </CardContent>
             <CardFooter className="justify-end">
               <Button className="bg-[#0333AE] hover:bg-[#0333AE]" onClick={handlePasswordUpdate}>
-                {loading ? "Updating..." : "Update Password"}
+                {loading ? "Updating..." : "Update password"}
               </Button>
             </CardFooter>
           </Card>
@@ -244,12 +244,12 @@ export default function AdminSettings() {
         <div className="w-[47%]">
           <Card className="pb-[40px]">
             <CardHeader>
-              <CardTitle className="text-[18px]">Two-Factor Authentication</CardTitle>
+              <CardTitle className="text-[18px]">Two-Factor authentication</CardTitle>
               <CardDescription>Add an extra layer of security to your account.</CardDescription>
             </CardHeader>
             <CardContent className="flex items-center space-x-2">
               <Switch id="two-factor" checked={twoFactor} onCheckedChange={setTwoFactor} />
-              <Label htmlFor="two-factor">Enable Two-Factor Authentication</Label>
+              <Label htmlFor="two-factor">Enable two-factor authentication</Label>
             </CardContent>
           </Card>
         </div>
@@ -257,7 +257,7 @@ export default function AdminSettings() {
         <div className="w-[47%]">
           <Card>
             <CardHeader>
-              <CardTitle className="text-[18px]">Notification Preferences</CardTitle>
+              <CardTitle className="text-[18px]">Notification preferences</CardTitle>
               <CardDescription>Manage how you receive notifications.</CardDescription>
             </CardHeader>
             <CardContent>

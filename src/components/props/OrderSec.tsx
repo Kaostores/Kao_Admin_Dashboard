@@ -1,5 +1,3 @@
-"use client"
-
 import { useEffect, useState } from 'react'
 import { GetOrders } from '@/utils/ApiCalls'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
@@ -7,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Skeleton } from "@/components/ui/skeleton"
 import { ChevronLeft, ChevronRight, Search } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 
 interface Order {
   orderId: string
@@ -23,6 +22,8 @@ export default function Orders() {
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [ordersPerPage] = useState<number>(5)
   const [searchTerm, setSearchTerm] = useState<string>('')
+
+  const navigate = useNavigate() // Initialize navigate hook
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -46,6 +47,10 @@ export default function Orders() {
 
     fetchOrders()
   }, [])
+
+  const handleOrderClick = (orderId: string) => {
+    navigate(`/app/admin/customer/${encodeURIComponent(orderId)}`);
+  };
 
   const filteredOrders = orders.filter(order =>
     order.storeId.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -89,11 +94,11 @@ export default function Orders() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Store Name</TableHead>
-              <TableHead>Customer Name</TableHead>
+              <TableHead>Store name</TableHead>
+              <TableHead>Customer name</TableHead>
               <TableHead>Time/Date</TableHead>
               <TableHead>Amount</TableHead>
-              <TableHead>Payment Method</TableHead>
+              <TableHead>Payment method</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -107,7 +112,11 @@ export default function Orders() {
               </>
             ) : (
               currentOrders.map((order) => (
-                <TableRow key={order.orderId}>
+                <TableRow
+                  key={order.orderId}
+                  className="cursor-pointer"
+                  onClick={() => handleOrderClick(order.customerId)} // Handle row click
+                >
                   <TableCell className="font-medium">{order.storeId}</TableCell>
                   <TableCell>{order.customerId}</TableCell>
                   <TableCell>{order.timeDate}</TableCell>

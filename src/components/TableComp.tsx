@@ -3,7 +3,6 @@ import { getTopStores } from '@/utils/ApiCalls';
 
 const TableComp = () => {
   const [topStores, setTopStores] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -14,17 +13,12 @@ const TableComp = () => {
       } catch (error) {
         setError('Failed to fetch top stores.');
         console.error('Error:', error);
-      } finally {
-        setLoading(false);
       }
     };
 
     fetchTopStores();
   }, []);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
 
   if (error) {
     return <div>{error}</div>;
@@ -33,11 +27,11 @@ const TableComp = () => {
   return (
     <div className='relative overflow-x-auto'>
       <table className='w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'>
-        <thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400'>
+        <thead className='text-xs text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400'>
           <tr>
-            <th scope='col' className='px-6 py-3'>Store Name</th>
+            <th scope='col' className='px-6 py-3'>Store name</th>
             <th scope='col' className='px-6 py-3'>Category</th>
-            <th scope='col' className='px-6 py-3'>Total Orders</th>
+            <th scope='col' className='px-6 py-3'>Total orders</th>
           </tr>
         </thead>
         <tbody>

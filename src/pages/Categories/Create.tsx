@@ -172,7 +172,7 @@ const Create = () => {
         <div className="w-[68%] flex flex-col">
           <div className="w-[100%] bg-[#fff] shadow-2xl rounded-[15px] flex flex-col pt-[10px] pb-[30px]">
             <div className="w-[100%] px-[30px] h-[60px] flex items-center border-b border-[#EAEDF1]">
-              <h4 className="font-[600]">Add Thumbnail Photo</h4>
+              <h4 className="font-[600]">Add thumbnail photo</h4>
             </div>
 
             <div className="w-[100%] pl-[30px] pr-[30px] mt-[35px]">
@@ -209,7 +209,7 @@ const Create = () => {
 
             <div className="w-[100%] pl-[30px] pr-[30px] flex items-center justify-between mt-[30px]">
               <div className="w-[48%] flex flex-col">
-                <p className="text-[15px] font-[400]">Category Title</p>
+                <p className="text-[15px] font-[400]">Category title</p>
                 <input
                   type="text"
                   value={inputCategoryTitle}
@@ -231,7 +231,7 @@ const Create = () => {
 
           <div className="w-[100%] bg-[#fff] shadow-2xl rounded-[15px] flex flex-col pt-[10px] pb-[30px] mt-[30px]">
             <div className="w-[100%] px-[30px] h-[60px] flex items-center border-b border-[#EAEDF1]">
-              <h4 className="font-[500]">Create Sub-category</h4>
+              <h4 className="font-[500]">Create sub-category</h4>
             </div>
 
             <div className="w-[100%] pl-[30px] pr-[30px] flex items-center justify-between mt-[30px]">
@@ -252,7 +252,7 @@ const Create = () => {
               </div>
 
               <div className="w-[48%] flex flex-col">
-                <p className="text-[15px] font-[400]">Sub-category Title</p>
+                <p className="text-[15px] font-[400]">Sub-category title</p>
                 <input
                   type="text"
                   value={subcategoryTitle}

@@ -153,7 +153,7 @@ export default function AllSpotlights() {
 
   return (
     <div className="container mx-auto py-10">
-      <h1 className="text-2xl font-bold mb-6">All Spotlights</h1>
+      <h1 className="text-2xl font-bold mb-6">All spotlights</h1>
 
       <div className="rounded-md border">
         <Table>
@@ -279,8 +279,8 @@ export default function AllSpotlights() {
             </div>
           </div>
           <div className="flex justify-end space-x-2">
-            <Button className='bg-[#0333AE] hover:bg-[#0333AE]' onClick={handlePosterUpdate}>Update Info</Button>
-            <Button className='bg-[#0333AE] hover:bg-[#0333AE]' onClick={handleBannerUpdate}>Update Banner</Button>
+            <Button className='bg-[#0333AE] hover:bg-[#0333AE]' onClick={handlePosterUpdate}>Update info</Button>
+            <Button className='bg-[#0333AE] hover:bg-[#0333AE]' onClick={handleBannerUpdate}>Update banner</Button>
           </div>
         </DialogContent>
       </Dialog>

@@ -106,13 +106,13 @@ const Settings = () => {
                         onClick={Togglebanner}
                         className={`text-[16px] font-[600] text-[#0333ae] cursor-pointer ${show ? 'underline underline-offset-4 text-[#0333AE]' : ''}`}
                     >
-                        Update Hero Banner
+                        Update hero banner
                     </h1>
                     <h1
                         onClick={ToggleAdvert}
                         className={`text-[16px] font-[600] text-[#0333ae] ml-[25px] cursor-pointer ${show2 ? 'underline underline-offset-4 text-[#0333AE]' : ''}`}
                     >
-                        Update Home Middle Advert
+                        Update home middle advert
                     </h1>
                 </div>
 
@@ -145,7 +145,7 @@ const Settings = () => {
                             {isLoadingHero ? 'Updating...' : 'Update Hero Banner'}
                         </button> */}
                         <div className='w-[100%] justify-end flex mt-[15px]'>
-                            <Button disabled={isLoadingHero} className="bg-[#0333AE] hover:bg-[#0333AE]" onClick={handleHeroBannerSubmit}>{isLoadingHero ? 'Updating...' : 'Update Hero Banner'}</Button>
+                            <Button disabled={isLoadingHero} className="bg-[#0333AE] hover:bg-[#0333AE]" onClick={handleHeroBannerSubmit}>{isLoadingHero ? 'Updating...' : 'Update hero banner'}</Button>
                         </div>
                     </div>
                 )}
@@ -179,7 +179,7 @@ const Settings = () => {
                             {isLoadingAdvert ? 'Updating...' : 'Update Middle Advert'}
                         </button> */}
                         <div className='w-[100%] justify-end flex mt-[15px]'>
-                            <Button disabled={isLoadingAdvert} className="bg-[#0333AE] hover:bg-[#0333AE]" onClick={handleMiddleAdvertSubmit}>{isLoadingHero ? 'Updating...' : 'Update Hero Banner'}</Button>
+                            <Button disabled={isLoadingAdvert} className="bg-[#0333AE] hover:bg-[#0333AE]" onClick={handleMiddleAdvertSubmit}>{isLoadingHero ? 'Updating...' : 'Update hero banner'}</Button>
                         </div>
                     </div>
                 )}

@@ -105,10 +105,10 @@ const Brand = () => {
     return (
         <div className="w-[95%] bg-[#fff] h-[100%] pt-[20px] flex items-center pb-[30px] mt-[70px]">
             <div className="w-[55%] flex-col h-[100%] flex">
-                <h1 className="text-[20px] font-[600] mb-6">Create Brand</h1>
+                <h1 className="text-[20px] font-[600] mb-6">Create brand</h1>
 
                 <div className="mb-4">
-                    <label className="block mb-2 text-sm font-medium text-gray-700">Brand Name</label>
+                    <label className="block mb-2 text-sm font-medium text-gray-700">Brand name</label>
                     <input
                         type="text"
                         value={brandName}
@@ -119,13 +119,13 @@ const Brand = () => {
                 </div>
 
                 <div className="mb-4">
-                    <label className="block mb-2 text-sm font-medium text-gray-700">Select Category</label>
+                    <label className="block mb-2 text-sm font-medium text-gray-700">Select category</label>
                     <select
                         value={selectedCategory}
                         onChange={(e) => setSelectedCategory(e.target.value)}
                         className="border p-2 w-full outline-none"
                     >
-                        <option value="">Select Category</option>
+                        <option value="">Select category</option>
                         {categories.map((category) => (
                             <option key={category.id} value={category.id}>
                                 {category.name}
@@ -136,13 +136,13 @@ const Brand = () => {
 
                 {selectedCategory && (
                     <div className="mb-4">
-                        <label className="block mb-2 text-sm font-medium text-gray-700">Select Subcategory</label>
+                        <label className="block mb-2 text-sm font-medium text-gray-700">Select subcategory</label>
                         <select
                             value={selectedSubcategory}
                             onChange={(e) => setSelectedSubcategory(e.target.value)}
                             className="border p-2 w-full outline-none"
                         >
-                            <option value="">Select Subcategory</option>
+                            <option value="">Select subcategory</option>
                             {subcategories.map((subcategory) => (
                                 <option key={subcategory.id} value={subcategory.id}>
                                     {subcategory.name}
@@ -153,7 +153,7 @@ const Brand = () => {
                 )}
 
                 <div className="mb-4">
-                    <label className="block mb-2 text-sm font-medium text-gray-700">Brand Image</label>
+                    <label className="block mb-2 text-sm font-medium text-gray-700">Brand image</label>
                     <div 
                         {...getRootProps()} 
                         className={`flex h-[200px] flex-col items-center justify-center border-2 border-dashed rounded-lg p-6 cursor-pointer ${
@@ -184,7 +184,7 @@ const Brand = () => {
                     onClick={handleCreateBrand}
                     disabled={isButtonDisabled}
                 >
-                    {loading ? 'Creating...' : 'Create Brand'}
+                    {loading ? 'Creating...' : 'Create brand'}
                 </button>
                 </div>
             </div>

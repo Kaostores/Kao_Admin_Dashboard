@@ -117,7 +117,7 @@ export default function CustomerSec() {
   const currentCustomers = customers.slice(indexOfFirstCustomer, indexOfLastCustomer)
 
   return (
-    <div className="w-[100%] bg-[#fff] h-[100%] pt-[20px] flex justify-center items-center pb-[30px] mt-[70px]">
+    <div className="w-[100%] z-[50] h-[100%] pt-[20px] flex justify-center items-center pb-[30px] mt-[70px]">
       <div className="w-[100%] h-[100%] flex items-center flex-col">
         <div className="w-[100%] h-[100px] flex justify-between items-center">
           <div>Customers</div>
@@ -126,7 +126,7 @@ export default function CustomerSec() {
               <BsPersonAdd />
             </div>
             <div className="text-[#0333ae] text-[15px] font-semibold cursor-pointer z-0" onClick={() => toggleBtn()}>
-              Add Customers
+              Add customers
             </div>
           </div>
         </div>
@@ -138,10 +138,10 @@ export default function CustomerSec() {
                 <TableRow>
                   <TableHead>Name</TableHead>
                   <TableHead>Address</TableHead>
-                  <TableHead>Phone No</TableHead>
+                  <TableHead>Phone no</TableHead>
                   <TableHead>Country</TableHead>
                   <TableHead>Currency</TableHead>
-                  <TableHead>Last Login</TableHead>
+                  <TableHead>Last login</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Action</TableHead>
                 </TableRow>
@@ -179,19 +179,6 @@ export default function CustomerSec() {
                           <div>{customerStatus[customer.id]}</div>
                         </div>
                       </TableCell>
-                      {/* <TableCell>
-                        <div className="flex justify-around items-center border-[1px] border-solid border-[black] rounded-[5px]">
-                          <div
-                            className="w-[50%] h-[30px] flex justify-center items-center border-r-[1px] border-solid border-[black] text-[#0333ae] cursor-pointer"
-                            onClick={() => handleEditCustomer(customer)}
-                          >
-                            <IoPersonAddOutline />
-                          </div>
-                          <div onClick={() => handleDeleteVendor(customer.id)} className="w-[50%] h-[100%] cursor-pointer flex justify-center items-center text-[#ff0000]">
-                            <IoPersonRemoveOutline />
-                          </div>
-                        </div>
-                      </TableCell> */}
                       <TableCell>
                     <div className="flex space-x-1">
                       <Button variant="outline" size="icon" onClick={() => handleEditCustomer(customer)}>
@@ -239,7 +226,11 @@ export default function CustomerSec() {
         </div>
       </div>
 
-      {show && <CustomersDetails togleBtn={toggleBtn} />} 
+      {show && 
+        <div className="z-[100]">
+          <CustomersDetails togleBtn={toggleBtn} />
+        </div>
+      } 
 
       {show2 && selectedCustomer && (
         <CustomerEdit 

@@ -22,6 +22,7 @@ import Vendor from "@/pages/Vendor/Vendor";
 import AllStores from "@/pages/AllStores/AllStores";
 import Allspotlights from "@/pages/Spotlight/Allspotlights";
 import VendorsEmployee from "@/pages/Vendors/VendorsEmployee";
+import CustomerDetails from "@/pages/Customer/Customer_details";
 
 const PublicRoute = () => {
 	return [
@@ -116,6 +117,10 @@ const PublicRoute = () => {
 				{
 					path: "allspotlight",
 					element: <Allspotlights />
+				},
+				{
+					path: "customer/:id",
+					element: <CustomerDetails />
 				}
 			],
 		},

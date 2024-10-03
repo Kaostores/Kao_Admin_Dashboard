@@ -165,6 +165,13 @@ export const api = createApi({
       query: ({ timeline = 'last_week', store = '', userId }) => 
         `/analytics/admin/graph?timeline=${timeline}&store=${store}&userId=${userId}`,
     }),
+    updateProfileImage: builder.mutation<any, FormData>({
+      query: (image) => ({
+        url: '/user/image/update',
+        method: 'POST',
+        body: image,
+      }),
+    }),
     
      }),
 });
@@ -191,4 +198,5 @@ export const {
   useUpdateCurrencyMutation,
   useDeleteCurrencyMutation,
   useFetchAdminGraphDataQuery,
+  useUpdateProfileImageMutation
 } = api;

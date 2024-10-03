@@ -132,12 +132,12 @@ const Currency = () => {
             <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
               <DialogTrigger asChild>
                 <Button className='bg-[#0333AE] hover:bg-[#0333AE]'>
-                  <Plus className="mr-2 h-4 w-4"/> Add Currency
+                  <Plus className="mr-2 h-4 w-4"/> Add currency
                 </Button>
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
-                  <DialogTitle>Add New Currency</DialogTitle>
+                  <DialogTitle>Add new currency</DialogTitle>
                 </DialogHeader>
                 <form onSubmit={handleAddCurrency} className="space-y-4">
                   <div>
@@ -145,7 +145,7 @@ const Currency = () => {
                     <Input id="currency" name="currency" required />
                   </div>
                   <div>
-                    <Label htmlFor="name">Currency Name</Label>
+                    <Label htmlFor="name">Currency name</Label>
                     <Input id="name" name="name" required />
                   </div>
                   <div>
@@ -157,14 +157,14 @@ const Currency = () => {
                     <Input id="country" name="country" required />
                   </div>
                   <div>
-                    <Label htmlFor="exchange_rate">Exchange Rate</Label>
+                    <Label htmlFor="exchange_rate">Exchange rate</Label>
                     <Input id="exchange_rate" name="exchange_rate" type="number" step="0.01" required />
                   </div>
                   <div>
-                    <Label htmlFor="base_currency">Base Currency</Label>
+                    <Label htmlFor="base_currency">Base currency</Label>
                     <Input id="base_currency" name="base_currency" required />
                   </div>
-                  <Button type="submit" className="bg-[#0333AE] hover:bg-[#0333AE]">Add Currency</Button>
+                  <Button type="submit" className="bg-[#0333AE] hover:bg-[#0333AE]">Add currency</Button>
                 </form>
               </DialogContent>
             </Dialog>
@@ -177,8 +177,8 @@ const Currency = () => {
                 <TableHead>Name</TableHead>
                 <TableHead>Symbol</TableHead>
                 <TableHead>Country</TableHead>
-                <TableHead>Exchange Rate</TableHead>
-                <TableHead>Base Currency</TableHead>
+                <TableHead>Exchange rate</TableHead>
+                <TableHead>Base currency</TableHead>
                 <TableHead>Actions</TableHead>
               </TableRow>
             </TableHeader>
@@ -209,16 +209,16 @@ const Currency = () => {
                         </DialogTrigger>
                         <DialogContent>
                           <DialogHeader>
-                            <DialogTitle>Edit Currency</DialogTitle>
+                            <DialogTitle>Edit currency</DialogTitle>
                           </DialogHeader>
                           {editingCurrency && (
                             <form onSubmit={handleUpdateCurrency} className="space-y-4">
                               <div>
-                                <Label htmlFor="edit-currency">Currency Code</Label>
+                                <Label htmlFor="edit-currency">Currency code</Label>
                                 <Input id="edit-currency" name="currency" defaultValue={editingCurrency.currency} required />
                               </div>
                               <div>
-                                <Label htmlFor="edit-name">Currency Name</Label>
+                                <Label htmlFor="edit-name">Currency name</Label>
                                 <Input id="edit-name" name="name" defaultValue={editingCurrency.name} required />
                               </div>
                               <div>
@@ -230,14 +230,14 @@ const Currency = () => {
                                 <Input id="edit-country" name="country" defaultValue={editingCurrency.country} required />
                               </div>
                               <div>
-                                <Label htmlFor="edit-exchange_rate">Exchange Rate</Label>
+                                <Label htmlFor="edit-exchange_rate">Exchange rate</Label>
                                 <Input id="edit-exchange_rate" name="exchange_rate" type="number" step="0.01" defaultValue={editingCurrency.exchange_rate} required />
                               </div>
                               <div>
-                                <Label htmlFor="edit-base_currency">Base Currency</Label>
+                                <Label htmlFor="edit-base_currency">Base currency</Label>
                                 <Input id="edit-base_currency" name="base_currency" defaultValue={editingCurrency.base_currency} required />
                               </div>
-                              <Button type="submit" className='bg-[#0333AE] hover:bg-[#0333AE]'>Update Currency</Button>
+                              <Button type="submit" className='bg-[#0333AE] hover:bg-[#0333AE]'>Update currency</Button>
                             </form>
                           )}
                         </DialogContent>

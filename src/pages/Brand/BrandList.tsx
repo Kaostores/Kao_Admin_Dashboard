@@ -135,13 +135,13 @@ export default function BrandList() {
   return (
     <div className="w-[95%] bg-[#fff] h-[100%] pt-[20px] flex justify-center items-center pb-[30px] mt-[70px]">
       <div className="w-[100%] flex-col h-[100%] flex">
-        <h1 className="text-[20px] font-[600] mb-6">Brand Management</h1>
+        <h1 className="text-[20px] font-[600] mb-6">Brand management</h1>
 
         <div className="mt-[15px] shadow-sm border rounded-lg overflow-x-auto">
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Brand Name</TableHead>
+                <TableHead>Brand name</TableHead>
                 <TableHead>Image</TableHead>
                 <TableHead>Actions</TableHead>
               </TableRow>
@@ -227,7 +227,7 @@ export default function BrandList() {
         <Dialog open={modalIsOpen} onOpenChange={setModalIsOpen}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Edit Brand</DialogTitle>
+              <DialogTitle>Edit brand</DialogTitle>
             </DialogHeader>
             {editingBrand && (
               <div className="grid gap-4 py-4">
@@ -249,8 +249,8 @@ export default function BrandList() {
                   <Button variant="outline" onClick={closeModal}>
                     Cancel
                   </Button>
-                  <Button onClick={() => handleUpdate(editingBrand.id)}>
-                    Save Changes
+                  <Button className='bg-[#0333AE] hover:bg-[#0333AE]' onClick={() => handleUpdate(editingBrand.id)}>
+                    Save changes
                   </Button>
                 </div>
               </div>

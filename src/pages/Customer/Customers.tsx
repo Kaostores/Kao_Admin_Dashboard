@@ -12,8 +12,8 @@ const Customers=()=>{
     
 
     return(
-        <div className='w-[95%] bg-[#fff] h-[100%] flex justify-center items-center pb-[30px]'>
-            <div className='w-[100%] h-[100%] flex  items-center flex-col z-0'>
+        <div className='w-[95%] h-[100%] flex justify-center items-center pb-[30px]'>
+            <div className='w-[100%] h-[100%] flex  items-center flex-col z-[50]'>
                 <div className="w-[100%] h-[100%] flex justify-center items-center flex-col">
                     <Customer />
                 </div>
