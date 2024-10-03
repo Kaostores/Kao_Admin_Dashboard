@@ -36,6 +36,7 @@ export default function Home() {
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
       try {
         const [metricsData, paymentData] = await Promise.all([
           GetAdminMetrics(),
@@ -47,7 +48,7 @@ export default function Home() {
         setError("Error loading data");
       } finally {
         setIsLoading(false);
-      }
+      } 
     };
     fetchData();
   }, []);
@@ -260,3 +261,15 @@ export default function Home() {
     </div>
   );
 }
+
+// function SkeletonPaymentMethod() {
+//   return (
+//     <div className="flex justify-between border-b pb-2 mb-2">
+//       <div className="flex items-center">
+//         <Skeleton className="h-2 w-2 rounded-full mr-2" />
+//         <Skeleton className="h-4 w-24" />
+//       </div>
+//       <Skeleton className="h-4 w-12" />
+//     </div>
+//   );
+// }
