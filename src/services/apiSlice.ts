@@ -172,6 +172,9 @@ export const api = createApi({
         body: image,
       }),
     }),
+    getNotifications: builder.query({
+      query: () => '/notifications',
+    }),
     
      }),
 });
@@ -198,5 +201,6 @@ export const {
   useUpdateCurrencyMutation,
   useDeleteCurrencyMutation,
   useFetchAdminGraphDataQuery,
-  useUpdateProfileImageMutation
+  useUpdateProfileImageMutation,
+  useGetNotificationsQuery
 } = api;

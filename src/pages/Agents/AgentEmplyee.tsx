@@ -264,7 +264,8 @@ export default function Agents() {
       
       {show2 && selectedAgent && (
         <AgentEdit 
-          togleBtn2={() => setShow2(false)} 
+          isOpen={show2}
+          onClose={() => setShow2(false)} 
           agent={selectedAgent} 
           onUpdate={handleAgentUpdate} 
         />

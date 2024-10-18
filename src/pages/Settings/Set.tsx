@@ -179,7 +179,7 @@ const Settings = () => {
                             {isLoadingAdvert ? 'Updating...' : 'Update Middle Advert'}
                         </button> */}
                         <div className='w-[100%] justify-end flex mt-[15px]'>
-                            <Button disabled={isLoadingAdvert} className="bg-[#0333AE] hover:bg-[#0333AE]" onClick={handleMiddleAdvertSubmit}>{isLoadingHero ? 'Updating...' : 'Update hero banner'}</Button>
+                            <Button disabled={isLoadingAdvert} className="bg-[#0333AE] hover:bg-[#0333AE]" onClick={handleMiddleAdvertSubmit}>{isLoadingHero ? 'Updating...' : 'Update home banner'}</Button>
                         </div>
                     </div>
                 )}

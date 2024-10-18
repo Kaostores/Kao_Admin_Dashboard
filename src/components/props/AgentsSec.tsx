@@ -95,7 +95,8 @@ const AgentSec: React.FC<AgentProps> = ({
             </tr>
           </tbody>
         </table>
-        {show && <AgentEdit togleBtn2={toggleBtn} />}
+        {show && <AgentEdit isOpen={show}
+          onClose={() => setShow(false)} />}
       </div>
     </div>
   );

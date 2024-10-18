@@ -75,7 +75,8 @@ const Card: React.FC<Data> = ({
                 {show ? (
                     <ComplianceDetails
                         complaint={{ storeId, agentId, category, name, agentName, timeDate, description, replies, id,  complaint }} 
-                        toggleBtn={toggleBtn}
+                        isOpen={show}
+                        onClose={() => setShow(false)}
                     />
                 ) : null}
             </div>

@@ -1,13 +1,14 @@
-'use client'
+"use client"
 
 import { GetCategories, UpdateCategory, DeleteCategory } from "@/utils/ApiCalls"
 import { useState, useEffect } from "react"
 import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
-import ReactModal from "react-modal"
 import Swal from 'sweetalert2'
 import { Skeleton } from "@/components/ui/skeleton"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import { ChevronLeft, ChevronRight, Pencil, Trash2 } from "lucide-react"
 import {
   Table,
@@ -17,6 +18,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog"
 
 interface Category {
   id: string
@@ -29,7 +37,7 @@ const CategoryList = () => {
   const [categories, setCategories] = useState<Category[]>([])
   const [editCategoryId, setEditCategoryId] = useState<string | null>(null)
   const [editCategoryName, setEditCategoryName] = useState<string>("")
-  const [modalIsOpen, setModalIsOpen] = useState(false)
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [editCategoryImage, setEditCategoryImage] = useState<File | null>(null)
   const [loading, setLoading] = useState(true)
 
@@ -56,7 +64,7 @@ const CategoryList = () => {
     setEditCategoryId(category.id)
     setEditCategoryName(category.name)
     setEditCategoryImage(null)
-    setModalIsOpen(true)
+    setIsDialogOpen(true)
   }
 
   const handleUpdate = async () => {
@@ -75,7 +83,7 @@ const CategoryList = () => {
             cat.id === editCategoryId ? { ...cat, name: editCategoryName, image: response.data.image } : cat
           )
           setCategories(updatedCategories)
-          setModalIsOpen(false)
+          setIsDialogOpen(false)
           setEditCategoryId(null)
           setEditCategoryImage(null)
         } else {
@@ -122,8 +130,8 @@ const CategoryList = () => {
     }
   }
 
-  const handleCloseModal = () => {
-    setModalIsOpen(false)
+  const handleCloseDialog = () => {
+    setIsDialogOpen(false)
     setEditCategoryImage(null)
   }
 
@@ -164,30 +172,14 @@ const CategoryList = () => {
                   <TableRow key={category.id}>
                     <TableCell>{category.name}</TableCell>
                     <TableCell className="text-right">
-                      {/* <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleEdit(category)}
-                        className="mr-2"
-                      >
-                        Edit
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleDelete(category.id)}
-                        className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                      >
-                        Delete
-                      </Button> */}
-                      <div className=" space-x-1">
-                      <Button variant="outline" size="icon" onClick={() => handleEdit(category)}>
-                        <Pencil className="h-4 w-4 " />
-                      </Button>
-                      <Button variant="outline" size="icon" onClick={() => handleDelete(category.id)}>
-                        <Trash2 className="h-4 w-4 " />
-                      </Button>
-                    </div>
+                      <div className="space-x-1">
+                        <Button variant="outline" size="icon" onClick={() => handleEdit(category)}>
+                          <Pencil className="h-4 w-4" />
+                        </Button>
+                        <Button variant="outline" size="icon" onClick={() => handleDelete(category.id)}>
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))
@@ -225,68 +217,48 @@ const CategoryList = () => {
         )}
       </div>
 
-      <ReactModal
-        isOpen={modalIsOpen}
-        onRequestClose={() => setModalIsOpen(false)}
-        contentLabel="Edit Category"
-        className="relative bg-white p-6 rounded-lg shadow-lg z-[70] top-0"
-        overlayClassName="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center"
-      >
-        <h2 className="text-xl font-semibold mb-4">Edit category</h2>
-        <form>
-          <div className="mb-4">
-            <label htmlFor="categoryName" className="block text-sm font-medium text-gray-700">Category name:</label>
-            <input
-              type="text"
-              id="categoryName"
-              value={editCategoryName}
-              onChange={(e) => setEditCategoryName(e.target.value)}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-            />
-          </div>
-
-          <div className="mb-4">
-            <label htmlFor="categoryImage" className="block text-sm font-medium text-gray-700">Category image:</label>
-            <input
-              type="file"
-              id="categoryImage"
-              onChange={(e) => setEditCategoryImage(e.target.files?.[0] || null)}
-              className="mt-1 block w-full text-sm text-gray-500
-                file:mr-4 file:py-2 file:px-4
-                file:rounded-md file:border-0
-                file:text-sm file:font-semibold
-                file:bg-indigo-50 file:text-indigo-700
-                hover:file:bg-indigo-100"
-            />
-            {editCategoryImage ? (
-              <img
-                src={URL.createObjectURL(editCategoryImage)}
-                alt="Selected category"
-                className="mt-2 w-24 h-24 object-cover rounded"
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent>
+          <DialogHeader className="mb-[30px]">
+            <DialogTitle className="text-[#0333ae]">Edit category</DialogTitle>
+          </DialogHeader>
+          <div className="flex flex-col space-y-4">
+            <div className="flex flex-col space-y-4">
+              <Label htmlFor="categoryName">Category name</Label>
+              <Input
+                id="categoryName"
+                value={editCategoryName}
+                onChange={(e) => setEditCategoryName(e.target.value)}
               />
-            ) : (
-              <p className="mt-2 text-sm text-gray-500">No image selected</p>
+            </div>
+            <div className="flex flex-col space-y-2">
+              <Label htmlFor="categoryImage">Category image</Label>
+              <Input
+                id="categoryImage"
+                type="file"
+                onChange={(e) => setEditCategoryImage(e.target.files?.[0] || null)}
+              />
+            </div>
+            {editCategoryImage && (
+              <div className="flex justify-center">
+                <img
+                  src={URL.createObjectURL(editCategoryImage)}
+                  alt="Selected category"
+                  className="w-24 h-24 object-cover rounded"
+                />
+              </div>
             )}
           </div>
-
-          <div className="flex justify-end space-x-2">
-            <Button
-              type="button"
-              onClick={handleUpdate}
-              className="bg-green-500 text-white hover:bg-green-600"
-            >
-              Save
-            </Button>
-            <Button
-              type="button"
-              onClick={handleCloseModal}
-              variant="outline"
-            >
+          <DialogFooter className="mt-[30px]">
+            <Button type="button" onClick={handleCloseDialog} variant="outline">
               Cancel
             </Button>
-          </div>
-        </form>
-      </ReactModal>
+            <Button className="bg-[#0333ae] hover:bg-[#0333ae]" type="button" onClick={handleUpdate}>
+              Save changes
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

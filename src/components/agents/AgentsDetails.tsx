@@ -49,9 +49,11 @@ const AgentDetails: React.FC<Iprops> = ({ togleBtn, onAgentAdded }) => {
   }
 
   const handleCurrencyChange = (value: string) => {
+    const selectedCurrency = currenciesResponse?.data.find((c: CurrencyData) => c.currency === value)
     setAgentData((prevData) => ({
       ...prevData,
       currency: value,
+      country: selectedCurrency?.country || prevData.country,
     }))
   }
 

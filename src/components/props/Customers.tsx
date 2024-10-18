@@ -234,7 +234,8 @@ export default function CustomerSec() {
 
       {show2 && selectedCustomer && (
         <CustomerEdit 
-          togleBtn2={() => setShow2(false)} 
+          isOpen={show2} // Control modal open state
+          onClose={() => setShow2(false)} 
           customer={selectedCustomer} 
           onUpdate={handleCustomerUpdate} 
         />

@@ -33,7 +33,10 @@ interface Store {
   LastWithdrawal: string
   category: string
   status: string
-  verifiedBy: string
+  verifiedBy: {
+    firstname: string
+    lastname: string
+  } | null
 }
 
 const Store = () => {
@@ -49,6 +52,7 @@ const Store = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
 
   const { data: stores, isLoading, isError, error } = useViewAllStoresQuery({})
+  console.log("this is stores", stores)
   const [approveStore] = useApproveStoreMutation()
   const [suspendingStore] = useSuspendStoreMutation()
 
@@ -220,7 +224,8 @@ const Store = () => {
                               </DropdownMenuContent>
                             </DropdownMenu>
                           </TableCell>
-                          <TableCell>{store.verifiedBy}</TableCell>
+                          <TableCell>{store.verifiedBy ? `${store.verifiedBy.firstname} ${store.verifiedBy.lastname}` 
+    : 'N/A'}</TableCell>
                           <TableCell>
                             <Button variant="outline" size="icon" onClick={() => handleEditClick(store.id)}>
                               <Pencil className="h-4 w-4" />

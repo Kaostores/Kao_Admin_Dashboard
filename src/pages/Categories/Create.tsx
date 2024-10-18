@@ -192,7 +192,7 @@ const Create = () => {
                   </p>
                 ) : (
                   <p className="text-gray-500 mt-[20px]">
-                    Drag 'n' drop images here, or{" "}
+                    Drag and drop images here, or{" "}
                     <span className="text-[#0333ae] font-[600] ml-[5px]">
                       click to select files
                     </span>

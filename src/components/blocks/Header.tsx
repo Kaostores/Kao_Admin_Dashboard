@@ -14,6 +14,12 @@ import { useDispatch } from "react-redux"
 import { LogOut, Bell, Settings } from "lucide-react"
 import { useGetUserDataQuery } from "@/services/apiSlice";
 import { Skeleton } from "@/components/ui/skeleton"
+import { useGetNotificationsQuery } from "@/services/apiSlice";
+import {
+	DropdownMenu,
+	DropdownMenuTrigger,
+  } from "@/components/ui/dropdown-menu"
+
 
 const Header = () => {
 	const { profileImage } = useProfileImage();
@@ -24,7 +30,10 @@ const Header = () => {
 	const active = location?.pathname;
 	console.log("active", active);
 
-	const { data, isLoading } = useGetUserDataQuery(undefined);
+	const { data: userData, isLoading: isUserDataLoading } = useGetUserDataQuery(undefined);
+	const { data: notificationsData = { data: [] }} = useGetNotificationsQuery({});
+	const notifications = notificationsData.data;
+	console.log("Notifications data:", notifications)
 
    const toggle3 = () => {
     setShow3(!show3);
@@ -67,6 +76,23 @@ const Header = () => {
         activeIndex === 4 ? `${contentHeight4.current.scrollHeight}px` : "0px";
     }
 	}, [activeIndex]);
+
+	const [notificationsViewed, setNotificationsViewed] = useState(false);
+	const [previousNotificationCount, setPreviousNotificationCount] = useState(notifications.length);
+
+	useEffect(() => {
+		if (notifications.length > previousNotificationCount) {
+		  setNotificationsViewed(false);
+		}
+		setPreviousNotificationCount(notifications.length);
+	  }, [notifications, previousNotificationCount]);
+
+	const handleNotificationClick = () => {
+		setNotificationsViewed(true);
+		navigate("/app/admin/notification");
+	  };
+
+	const unreadNotifications = notificationsViewed ? 0 : notifications.length;
 	
 
 
@@ -110,7 +136,18 @@ const Header = () => {
 										<Settings size={22} />
 									</div>
 									<div className='xl:w-[40px] xl:h-[40px] xl:text-[25px] sm:text-[15px] smx:text-[20px] smx:ml-[10px] flex justify-center items-center text-[#000]'>
-										<Bell size={22}/> 
+									<DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button onClick={handleNotificationClick} className="bg-transparent hover:bg-transparent outline-none relative" size="icon">
+                          <Bell size={22} className="text-primary"/>
+                          {unreadNotifications > 0 && (
+                            <span className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+                              {unreadNotifications}
+                            </span>
+                          )}
+                        </Button>
+                      </DropdownMenuTrigger>
+                    </DropdownMenu> 
 									</div>
 								</div>
 								<div className="">
@@ -128,10 +165,10 @@ const Header = () => {
 										<img src={profileImage || ""} alt="" className="w-[100%] h-[100%] object-cover"/>
 									</div>
 									<div className='xl:text-[16px] text-[#fff] sm:text-[10px] ml-[8px] md:text-[14px]'>
-										{isLoading ? (
+										{isUserDataLoading ? (
 											<Skeleton className="h-4 w-[80px]" />
 										) : (
-											data?.data.firstname
+											userData?.data.firstname
 										)}
 									</div>
 								</div>

@@ -255,7 +255,8 @@ export default function VendorsEmployee() {
       
       {show2 && selectedVendor && (
         <VendorsEdit 
-          togleBtn2={() => setShow2(false)} 
+          isOpen={show2}
+          onClose={() => setShow2(false)} 
           vendor={selectedVendor} 
           onUpdate={fetchVendors} 
         />
