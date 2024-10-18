@@ -74,6 +74,11 @@ export const api = createApi({
         `/analytics/admin/metrics?timeline=last_week&store&userId=${userId}`,
       providesTags: ["metrics"]
     }),
+    getAdminMetrics: builder.query({
+      query: () => 
+        `/analytics/admin/metrics?timeline=last_week&store&userId`,
+      providesTags: ["metrics"]
+    }),
 
     deleteVendorById: builder.mutation({
       query: (vendorId) => ({
@@ -189,6 +194,7 @@ export const {
   useAddReplyToComplaintMutation,
   useGetSubcategoriesQuery,
   useGetMetricsQuery,
+  useGetAdminMetricsQuery,
   useDeleteVendorByIdMutation,
   useGetUsersByTypeQuery,  
   useGetUserAddressQuery,

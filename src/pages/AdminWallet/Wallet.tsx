@@ -7,6 +7,7 @@ import LineChartOverViewWallet from "@/Charts/WalletChart";
 import { getTransactionHistory } from '@/utils/ApiCalls';
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useGetMetricsQuery } from '@/services/apiSlice';
 import {
   Table,
   TableBody,
@@ -45,6 +46,20 @@ const Wallet = () => {
   const [timeFrame, setTimeFrame] = useState("this_year");
   const [currentPage, setCurrentPage] = useState(1);
   const transactionsPerPage = 10;
+
+  const { data: metricsData, isError, isLoading } = useGetMetricsQuery({});
+
+  console.log("metrics data for wallet", metricsData)
+  console.log("Total Balance:", metricsData?.totalBalance);
+
+  // if (isLoading) {
+  //   return <Skeleton className="h-6 w-1/3" />;
+  // }
+
+  // if (error) {
+  //   return <div className="text-center text-red-500">Failed to load wallet metrics.</div>;
+  // }
+  
 
   useEffect(() => {
     const fetchTransactions = async () => {
@@ -134,7 +149,7 @@ const Wallet = () => {
                   </div>
                   <div>
                     <div className='text-[22px] font-semibold'>
-                      KAO 346,254,000.09
+                    KAO {metricsData?.data?.totalBalance?.toLocaleString() ?? '0.00'}
                     </div>
                   </div>
                   <div className='w-[100%] flex justify-between '>
