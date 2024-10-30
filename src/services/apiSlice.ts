@@ -172,7 +172,7 @@ export const api = createApi({
     }),
     updateProfileImage: builder.mutation<any, FormData>({
       query: (image) => ({
-        url: '/user/image/update',
+        url: '/update/profile/picture',
         method: 'POST',
         body: image,
       }),

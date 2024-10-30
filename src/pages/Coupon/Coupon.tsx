@@ -318,6 +318,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
 
 const Coupon = () => {
   const [couponCode, setCouponCode] = useState("");
@@ -329,6 +330,7 @@ const Coupon = () => {
   const [applicableCategory, setApplicableCategory] = useState<string | null>(null);
   const [applicableSubCategory, setApplicableSubCategory] = useState<string | null>(null);
   const [applicableProduct, setApplicableProduct] = useState<string | null>(null);
+  const [description, setDescription] = useState(""); // New state for description
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState<any[]>([]);
   const [subCategories, setSubCategories] = useState<any[]>([]);
@@ -425,12 +427,8 @@ const Coupon = () => {
       applicableCategory,
       applicableSubCategory,
       applicableProduct,
+      description, // Include description in coupon data
     };
-
-    // if (applicableCategory && applicableProduct) {
-    //   toast.error("Please select only one of category, or product.");
-    //   return;
-    // }
 
     try {
       setLoading(true);
@@ -447,6 +445,7 @@ const Coupon = () => {
         setApplicableCategory(null);
         setApplicableSubCategory(null);
         setApplicableProduct(null);
+        setDescription(""); // Reset description
       }
     } catch (error: any) {
       toast.error("Failed to create coupon. Please try again: " + (error.response?.data || error.message));
@@ -581,6 +580,19 @@ const Coupon = () => {
                 </Select>
               </div>
 
+              {/* New description text area */}
+              <div className="space-y-2">
+                <Label htmlFor="description">Description</Label>
+                <Textarea
+                  id="description"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  placeholder="Enter coupon description"
+                  rows={4}
+                  className="resize-none"
+                />
+              </div>
+
               <div className="w-[100%] flex justify-end">
                 <Button
                   type="submit"
@@ -596,6 +608,6 @@ const Coupon = () => {
       </div>
     </div>
   );
-};
+}
 
-export default Coupon;
+export default Coupon
