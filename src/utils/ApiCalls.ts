@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Instance } from "./ApiConfig";
 
 export const Login = async (data: any) => {

@@ -1,3 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState, useEffect } from 'react';
 import { BsWallet } from "react-icons/bs";
 import { GoChevronDown } from "react-icons/go";
@@ -47,7 +50,7 @@ const Wallet = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const transactionsPerPage = 10;
 
-  const { data: metricsData, isError, isLoading } = useGetMetricsQuery({});
+  const { data: metricsData } = useGetMetricsQuery({});
 
   console.log("metrics data for wallet", metricsData)
   console.log("Total Balance:", metricsData?.totalBalance);

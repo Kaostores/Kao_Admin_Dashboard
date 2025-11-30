@@ -1,10 +1,10 @@
 import axios from "axios";
-import Cookies from "universal-cookie"
+import Cookies from "universal-cookie";
 
 const cookies = new Cookies();
 
 export const Instance = axios.create({
-    baseURL: "https://kaostores.onrender.com/api/v1",
+    baseURL: import.meta.env.VITE_BASE_URL,
 });
 
 // Set token in headers before each request
