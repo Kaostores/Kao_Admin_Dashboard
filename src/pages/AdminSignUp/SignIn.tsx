@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import dp from "../../assets/Ic.png";
-import kao from "../../assets/ellipse.png";
+import kao from "../../assets/sello.png";
 import { Login } from "@/utils/ApiCalls";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
@@ -78,12 +79,15 @@ const SignIn = () => {
             <img src={dp} alt='' className='lg:w-[70%]' />
           </div>
         </div>
-        <div className='width-[100%] absolute top-0 z-10 sm:top-[20px] lg:top-[0]'>
-          <img
+        <div className='width-[100%]  absolute top-0 z-10 sm:top-[20px] lg:top-[0]'>
+          <div className="w-[100px] h-[100px] bg-[red] rounded-[100px] overflow-hidden">
+            <img
             src={kao}
             alt=''
             className='sm:w-[70px] md:w-[75px] lg:w-[100%]'
+            style={{width: "100%", height: "100%", }}
           />
+          </div>
         </div>
         <div className='w-[50%] h-[100vh] relative sm:w-[100%] sm:h-[130vh] sm:my-[20px] md:w-[100%] lg:w-[50%]'>
           <div className='w-[100%] h-[100%] bg-cover bg-center bg-bb absolute ' />

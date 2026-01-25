@@ -146,13 +146,13 @@ const Wallet = () => {
                       <div className='text-[13px]'>Balance</div>
                     </div>
                     <div className='flex justify-center items-center'>
-                      <div className='text-[14px] text-[#0000ff] mr-[5px]'>KAO</div>
+                      <div className='text-[14px] text-[#0000ff] mr-[5px]'>SellowExpress</div>
                       <div className='text-[14px] text-[#c0bfbf]'>NGN</div>
                     </div>
                   </div>
                   <div>
                     <div className='text-[22px] font-semibold'>
-                    KAO {metricsData?.data?.totalBalance?.toLocaleString() ?? '0.00'}
+                    SellowExpress {metricsData?.data?.totalBalance?.toLocaleString() ?? '0.00'}
                     </div>
                   </div>
                   <div className='w-[100%] flex justify-between '>
@@ -164,7 +164,7 @@ const Wallet = () => {
                         </div>
                       </div>
                       <div className='text-[#008348] font-semibold text-[13px]'>
-                        KAO 45.000
+                        SellowExpress 45.000
                       </div>
                     </div>
                     <div className='flex justify-center items-center'>

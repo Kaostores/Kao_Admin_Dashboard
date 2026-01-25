@@ -6,7 +6,7 @@ const cookies = new Cookies();
 
 export const api = createApi({
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://kaostores-production.up.railway.app/api/v1",
+    baseUrl: "https://api.sellowexpress.com/api/v1",
     prepareHeaders: (headers) => {
       const token = cookies.get("Kao_cookie_admin");
       if (token) {

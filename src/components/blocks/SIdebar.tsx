@@ -2,7 +2,7 @@
 "use client"
 
 import { useState } from "react"
-import pc from "../../assets/ellipse.png"
+import pc from "../../assets/sello.png"
 import { useNavigate, useLocation } from "react-router-dom"
 // import { useDispatch } from "react-redux"
 // import { toast } from "react-toastify"
@@ -128,7 +128,7 @@ export default function Sidebar() {
       <div className="flex items-center justify-center p-6">
         <div className="mb-[15px] w-[100%] justify-center flex">
           <div className="w-[120px] h-[120px] rounded-full overflow-hidden">
-            <img src={profileImage || pc} alt='' className='w-[100%] h-[100%] object-cover' />
+            <img src={profileImage || pc} alt='' className='w-[100%] h-[100%]' />
           </div>
         </div>
       </div>
