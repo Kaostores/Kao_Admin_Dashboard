@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -98,41 +100,41 @@ export default function AdminSettings() {
   }
 
   return (
-    <div className="container mx-auto py-[30px] pt-[90px]">
-      <h1 className="text-[20px] font-bold mb-6">Admin account settings</h1>
+    <div className="container mx-auto px-4 py-6 sm:py-8 sm:pt-10">
+      <h1 className="text-xl sm:text-2xl font-bold mb-6">Admin account settings</h1>
       
-      <div className="w-[100%] flex border-b border-[#acacac] mt-[40px]">
-        <div className="flex items-center">
-          <h3 className={`text-[17px] font-[500] cursor-pointer ${show1 ? ' text-blue-600' : ''}`} onClick={Toggle1}>Update settings</h3>
-          <h3 className={`text-[17px] font-[500] ml-[30px] cursor-pointer ${show2 ? ' text-[#0333AE]' : ''}`} onClick={Toggle2}>Upload advert</h3>
-          <h3 className={`text-[17px] font-[500] ml-[30px] cursor-pointer ${show3 ? ' text-[#0333AE]' : ''}`} onClick={Toggle3}>Update profile</h3>
-          <h3 className={`text-[17px] font-[500] ml-[30px] cursor-pointer ${show4 ? ' text-[#0333AE]' : ''}`} onClick={Toggle4}>Manage currency</h3>
+      <div className="w-full flex flex-wrap gap-2 sm:gap-0 border-b border-[#acacac] mt-6 sm:mt-10 pb-2">
+        <div className="flex flex-wrap gap-4 sm:gap-6 w-full">
+          <h3 className={`text-sm sm:text-base font-medium cursor-pointer whitespace-nowrap ${show1 ? 'text-blue-600' : ''}`} onClick={Toggle1}>Update settings</h3>
+          <h3 className={`text-sm sm:text-base font-medium cursor-pointer whitespace-nowrap ${show2 ? 'text-[#0333AE]' : ''}`} onClick={Toggle2}>Upload advert</h3>
+          <h3 className={`text-sm sm:text-base font-medium cursor-pointer whitespace-nowrap ${show3 ? 'text-[#0333AE]' : ''}`} onClick={Toggle3}>Update profile</h3>
+          <h3 className={`text-sm sm:text-base font-medium cursor-pointer whitespace-nowrap ${show4 ? 'text-[#0333AE]' : ''}`} onClick={Toggle4}>Manage currency</h3>
         </div>
       </div>
 
-      <div className="w-[100%] mt-[30px]">
+      <div className="w-full mt-6 sm:mt-8">
       {show1 ? (
   <div className="space-y-6">
     {isLoading && (
-      <div className="w-[100%] flex justify-between">
+      <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
         {/* Personal Information Skeleton */}
-        <div className="w-[47%]">
+        <div>
           <Skeleton className="h-[280px]" />
         </div>
 
         {/* Change Password Skeleton */}
-        <div className="w-[47%]">
+        <div>
           <Skeleton className="h-[280px]" />
         </div>
       </div>
     )}
 
     {!isLoading && data && (
-      <div className="w-[100%] flex justify-between">
-        <div className="w-[47%]">
-          <Card className="pb-[80px]">
+      <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+        <div>
+          <Card className="pb-16 sm:pb-20">
             <CardHeader>
-              <CardTitle className="text-[18px]">Personal information</CardTitle>
+              <CardTitle className="text-base sm:text-lg">Personal information</CardTitle>
               <CardDescription>Update your personal details here.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -167,10 +169,10 @@ export default function AdminSettings() {
           </Card>
         </div>
 
-        <div className="w-[47%]">
+        <div>
           <Card>
             <CardHeader>
-              <CardTitle className="text-[18px]">Change password</CardTitle>
+              <CardTitle className="text-base sm:text-lg">Change password</CardTitle>
               <CardDescription>Ensure your account is using a strong password.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -226,25 +228,25 @@ export default function AdminSettings() {
 
     {/* Two-Factor Authentication & Notification Preferences */}
     {isLoading && (
-      <div className="w-[100%] flex justify-between">
+      <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
         {/* Two-Factor Authentication Skeleton */}
-        <div className="w-[47%]">
+        <div>
           <Skeleton className="h-[180px]" />
         </div>
 
         {/* Notification Preferences Skeleton */}
-        <div className="w-[47%]">
+        <div>
           <Skeleton className="h-[180px]" />
         </div>
       </div>
     )}
 
     {!isLoading && (
-      <div className="w-[100%] flex justify-between">
-        <div className="w-[47%]">
-          <Card className="pb-[40px]">
+      <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+        <div>
+          <Card className="pb-8 sm:pb-10">
             <CardHeader>
-              <CardTitle className="text-[18px]">Two-Factor authentication</CardTitle>
+              <CardTitle className="text-base sm:text-lg">Two-Factor authentication</CardTitle>
               <CardDescription>Add an extra layer of security to your account.</CardDescription>
             </CardHeader>
             <CardContent className="flex items-center space-x-2">
@@ -254,10 +256,10 @@ export default function AdminSettings() {
           </Card>
         </div>
 
-        <div className="w-[47%]">
+        <div>
           <Card>
             <CardHeader>
-              <CardTitle className="text-[18px]">Notification preferences</CardTitle>
+              <CardTitle className="text-base sm:text-lg">Notification preferences</CardTitle>
               <CardDescription>Manage how you receive notifications.</CardDescription>
             </CardHeader>
             <CardContent>
@@ -283,16 +285,16 @@ export default function AdminSettings() {
 
     {/* Theme */}
     {isLoading && (
-      <div className="w-[47%]">
+      <div className="w-full sm:w-1/2">
         <Skeleton className="h-[150px]" />
       </div>
     )}
 
     {!isLoading && (
-      <div className="w-[47%]">
+      <div className="w-full">
         <Card>
           <CardHeader>
-            <CardTitle className="text-[18px]">Theme</CardTitle>
+            <CardTitle className="text-base sm:text-lg">Theme</CardTitle>
             <CardDescription>Select your preferred theme.</CardDescription>
           </CardHeader>
           <CardContent>

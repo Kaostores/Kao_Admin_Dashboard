@@ -107,78 +107,90 @@ export default function Home() {
   );
 
   return (
-    <div className="w-full xl:min-h-[calc(100%-70px)] bg-white pl-5 pt-5 pb-8 mt-[70px]">
-      <div className="xl:w-full xl:h-full flex items-center flex-col">
-        <div className="xl:w-[95%] sm:w-full bg-none shadow-lg flex-col justify-between p-4">
-          <div className="w-full flex justify-between items-center flex-wrap mb-4">
-            <div className="text-xl font-semibold">Total sales</div>
-            <div className="flex justify-center items-center">
-              <div className="flex items-center">
-                <input 
-                  type="radio" 
-                  id="current-week" 
-                  name="week" 
-                  value="current" 
-                  checked={selectedWeek === 'current'} 
-                  onChange={() => {
-                    setSelectedWeek('current');
-                    console.log("Fetching current week's data...");
-                  }} 
-                  className="mr-2" 
-                />
-                <label htmlFor="current-week" className="text-gray-600">Current week</label>
-              </div>
-              <div className="font-semibold ml-[5px]">
-                {isLoading ? <Skeleton className="h-6 w-20" /> : `NGN ${totalCreditSum}`}
-              </div>
-            </div>
-            <div className="flex justify-center items-center">
-              <div className="flex items-center">
-                <input 
-                  type="radio" 
-                  id="previous-week" 
-                  name="week" 
-                  value="previous" 
-                  checked={selectedWeek === 'previous'} 
-                  onChange={() => {
-                    setSelectedWeek('previous');
-                    console.log("Fetching previous week's data...");
-                  }} 
-                  className="mr-2" 
-                />
-                <label htmlFor="previous-week" className="text-gray-600">Previous week</label>
-              </div>
-              <div className="font-semibold ml-[5px]">
-                {isLoading ? <Skeleton className="h-6 w-20" /> : `NGN ${totalDebitSum}`}
-              </div>
-            </div>
-            <div className="flex justify-center items-center">
-            {isLoading ? (
-                <div className="flex justify-center items-center mr-2">
-                  <Skeleton className="h-4 w-4 mr-1" /> {/* Skeleton for the ArrowDown icon */}
-                  <Skeleton className="h-4 w-16" /> {/* Skeleton for the percentage text */}
+    <div className="w-full bg-white px-3 sm:px-5 pt-3 sm:pt-5 pb-8 mt-[10px]">
+      <div className="w-full flex flex-col gap-5">
+        {/* Sales Chart Section */}
+        <div className="w-full bg-white shadow-lg rounded-lg p-3 sm:p-4">
+          {/* Header and Controls */}
+          <div className="w-full flex flex-col gap-3 sm:gap-4 mb-4">
+            <h2 className="text-lg sm:text-xl font-semibold">Total sales</h2>
+            
+            {/* Radio Controls - Responsive Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+              {/* Current Week */}
+              <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+                <div className="flex items-center">
+                  <input 
+                    type="radio" 
+                    id="current-week" 
+                    name="week" 
+                    value="current" 
+                    checked={selectedWeek === 'current'} 
+                    onChange={() => {
+                      setSelectedWeek('current');
+                      console.log("Fetching current week's data...");
+                    }} 
+                    className="mr-2" 
+                  />
+                  <label htmlFor="current-week" className="text-sm sm:text-base text-gray-600">Current week</label>
                 </div>
-              ) : (
-                <div className="flex justify-center items-center mr-2">
-                  <ArrowDown className="text-red-500 mr-1" />
-                  <div className="text-red-500">
-                    {totalDebitSum !== 0 ? 
-                      `${((currentWeekRevenue - totalDebitSum) / totalDebitSum * 100).toFixed(2)}%` : 
-                      '0.00%'
-                    }
+                <div className="font-semibold text-sm sm:text-base">
+                  {isLoading ? <Skeleton className="h-5 w-24" /> : `NGN ${totalCreditSum}`}
+                </div>
+              </div>
+
+              {/* Previous Week */}
+              <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+                <div className="flex items-center">
+                  <input 
+                    type="radio" 
+                    id="previous-week" 
+                    name="week" 
+                    value="previous" 
+                    checked={selectedWeek === 'previous'} 
+                    onChange={() => {
+                      setSelectedWeek('previous');
+                      console.log("Fetching previous week's data...");
+                    }} 
+                    className="mr-2" 
+                  />
+                  <label htmlFor="previous-week" className="text-sm sm:text-base text-gray-600">Previous week</label>
+                </div>
+                <div className="font-semibold text-sm sm:text-base">
+                  {isLoading ? <Skeleton className="h-5 w-24" /> : `NGN ${totalDebitSum}`}
+                </div>
+              </div>
+
+              {/* Change Percentage */}
+              <div className="flex items-center gap-2 col-span-1 sm:col-span-2 lg:col-span-1">
+                {isLoading ? (
+                  <div className="flex items-center gap-1">
+                    <Skeleton className="h-4 w-4 rounded-full" />
+                    <Skeleton className="h-4 w-16" />
                   </div>
-                </div>
-              )}
-              <div className="text-sm">Since last week</div>
+                ) : (
+                  <div className="flex items-center gap-1">
+                    <ArrowDown className="text-red-500 w-4 h-4" />
+                    <div className="text-sm sm:text-base text-red-500 font-semibold">
+                      {totalDebitSum !== 0 ? 
+                        `${((currentWeekRevenue - totalDebitSum) / totalDebitSum * 100).toFixed(2)}%` : 
+                        '0.00%'
+                      }
+                    </div>
+                  </div>
+                )}
+                <div className="text-xs sm:text-sm text-gray-600">Since last week</div>
+              </div>
             </div>
           </div>
-          <div className="text-sm mb-2 text-gray-500">Sales over time</div>
 
-          <div className="w-full">
+          {/* Chart */}
+          <div className="text-xs sm:text-sm mb-3 text-gray-500">Sales over time</div>
+          <div className="w-full overflow-x-auto">
             {graphLoading || isLoading ? (
               <ChartSkeleton />
             ) : isGraphDataEmpty ? (
-              <div className="text-center text-gray-500">
+              <div className="text-center text-sm sm:text-base text-gray-500 py-8">
                 No data available for {selectedWeek === 'current' ? "current week" : "previous week"}.
               </div>
             ) : (
@@ -186,7 +198,9 @@ export default function Home() {
             )}
           </div>
         </div>
-        <div className="w-[95%] flex justify-between gap-4 items-center mt-5">
+
+        {/* Metrics Cards - Responsive Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
           {isLoading ? (
             <>
               <CardSkeleton />
@@ -227,12 +241,17 @@ export default function Home() {
             </>
           )}
         </div>
-        <div className="w-[95%] flex justify-between items-start mt-5">
-          <div className="w-[49%] rounded-lg bg-white shadow-xl p-4">
-            <h3 className="font-bold mb-4">Payment methods</h3>
-            <div className="flex justify-between">
-              {isLoading ? <ChartSkeleton /> : <StackedChartComps />}
-              <div className="flex-1 pl-4">
+
+        {/* Bottom Sections - Responsive Stack */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
+          {/* Payment Methods */}
+          <div className="rounded-lg bg-white shadow-lg p-3 sm:p-4">
+            <h3 className="font-bold mb-3 sm:mb-4 text-base sm:text-lg">Payment methods</h3>
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+              <div className="w-full sm:w-1/2">
+                {isLoading ? <ChartSkeleton /> : <StackedChartComps />}
+              </div>
+              <div className="w-full sm:w-1/2">
                 {isLoading ? (
                   <>
                     <PaymentMethodSkeleton />
@@ -242,20 +261,24 @@ export default function Home() {
                 ) : (
                   paymentMetrics.map((method, index) => (
                     <div key={method._id} className="flex justify-between border-b pb-2 mb-2">
-                      <div className="flex items-center">
-                        <div className={`h-2 w-2 rounded-full ${index % 2 === 0 ? 'bg-yellow-300' : 'bg-blue-600'} mr-2`}></div>
-                        <div className="text-gray-600">{method.paymentMethod}</div>
+                      <div className="flex items-center gap-2">
+                        <div className={`h-2 w-2 rounded-full flex-shrink-0 ${index % 2 === 0 ? 'bg-yellow-300' : 'bg-blue-600'}`}></div>
+                        <div className="text-xs sm:text-sm text-gray-600 truncate">{method.paymentMethod}</div>
                       </div>
-                      <div className="font-bold">{method.totalOrders}%</div>
+                      <div className="font-bold text-xs sm:text-sm flex-shrink-0">{method.totalOrders}%</div>
                     </div>
                   ))
                 )}
               </div>
             </div>
           </div>
-          <div className="w-[49%] rounded-lg bg-white shadow-xl p-4">
-            <h3 className="font-bold mb-4">Recent transactions</h3>
-            {isLoading ? <ChartSkeleton /> : <TableComp />}
+
+          {/* Recent Transactions */}
+          <div className="rounded-lg bg-white shadow-lg p-3 sm:p-4">
+            <h3 className="font-bold mb-3 sm:mb-4 text-base sm:text-lg">Recent transactions</h3>
+            <div className="overflow-x-auto">
+              {isLoading ? <ChartSkeleton /> : <TableComp />}
+            </div>
           </div>
         </div>
       </div>

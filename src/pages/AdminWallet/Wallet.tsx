@@ -1,3 +1,5 @@
+'use client';
+
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -125,11 +127,11 @@ const Wallet = () => {
   if (error) return <div className="text-center text-red-500">{error}</div>;
 
   return (
-    <div className='w-[95%] bg-[#fff] h-[100%] pt-[20px] flex justify-center items-center pb-[30px] mt-[70px]'>
-      <div className='w-[100%] min-h-[100%] flex justify-between items-start'>
-        <div className='w-[40%] h-[100%] flex flex-col justify-center items-center'>
-          <div className='w-[100%] h-[200px] bg-white mb-[25px] flex justify-center items-center rounded-[10px] shadow-xl'>
-            <div className='w-[95%] h-[92%] flex flex-col justify-between'>
+    <div className='w-full bg-white min-h-screen pt-4 md:pt-5 pb-8 md:pb-12 px-4 md:px-8'>
+      <div className='w-full min-h-full flex flex-col lg:flex-row gap-4 md:gap-6 lg:gap-8 lg:justify-between lg:items-start'>
+        <div className='w-full lg:w-2/5 flex flex-col'>
+          <div className='w-full bg-white mb-4 md:mb-6 p-4 md:p-6 rounded-lg shadow-lg'>
+            <div className='w-full flex flex-col gap-4 md:gap-5'>
               {loading ? (
                 <>
                   <Skeleton className="h-6 w-1/3" />
@@ -138,85 +140,83 @@ const Wallet = () => {
                 </>
               ) : (
                 <>
-                  <div className='w-[100%] flex justify-between items-center'>
-                    <div className='flex justify-center items-center'>
-                      <div className='mr-[10px] text-[#0000ff] text-[14px]'>
+                  <div className='w-full flex justify-between items-start md:items-center flex-col md:flex-row gap-3'>
+                    <div className='flex justify-center items-center gap-2'>
+                      <div className='text-blue-600 text-base md:text-lg'>
                         <BsWallet />
                       </div>
-                      <div className='text-[13px]'>Balance</div>
+                      <div className='text-xs md:text-sm font-medium'>Balance</div>
                     </div>
-                    <div className='flex justify-center items-center'>
-                      <div className='text-[14px] text-[#0000ff] mr-[5px]'>SellowExpress</div>
-                      <div className='text-[14px] text-[#c0bfbf]'>NGN</div>
+                    <div className='flex justify-center items-center gap-1'>
+                      <div className='text-lg md:text-sm text-blue-600 font-medium'>SellowExpress</div>
+                      <div className='text-xs md:text-sm text-gray-500'>NGN</div>
                     </div>
                   </div>
                   <div>
-                    <div className='text-[22px] font-semibold'>
-                    SellowExpress {metricsData?.data?.totalBalance?.toLocaleString() ?? '0.00'}
+                    <div className='text-lg md:text-lg lg:text-2xl font-semibold'>
+                      SellowExpress {metricsData?.data?.totalBalance?.toLocaleString() ?? '0.00'}
                     </div>
                   </div>
-                  <div className='w-[100%] flex justify-between '>
-                    <div className='flex flex-col'>
-                      <div className='flex items-center'>
-                        <div className='text-[11px]'>Profit weekly</div>
-                        <div className='text-[14px] text-[#0000ff]'>
+                  <div className='w-full flex justify-between flex-col sm:flex-row gap-3'>
+                    <div className='flex flex-col gap-1'>
+                      <div className='flex items-center gap-1'>
+                        <div className='text-xs md:text-sm'>Profit weekly</div>
+                        <div className='text-blue-600 text-sm md:text-base'>
                           <GoChevronDown />
                         </div>
                       </div>
-                      <div className='text-[#008348] font-semibold text-[13px]'>
+                      <div className='text-green-700 font-semibold text-xs md:text-sm'>
                         SellowExpress 45.000
                       </div>
                     </div>
-                    <div className='flex justify-center items-center'>
-                      <div className='text-[#008348] text-[14px]'>
+                    <div className='flex justify-center items-center gap-1'>
+                      <div className='text-green-700 text-sm md:text-base'>
                         <PiArrowUpLight />
                       </div>
-                      <div className='text-[#008348] text-[14px]'>3.27%</div>
+                      <div className='text-green-700 text-sm md:text-base font-semibold'>3.27%</div>
                     </div>
                   </div>
                 </>
               )}
             </div>
           </div>
-          <div className='w-[100%] h-[80px] bg-white mb-[25px] flex justify-center items-center rounded-[10px] shadow-xl'>
-            <div className='w-[94%] flex justify-center items-center'>
+          <div className='w-full bg-white mb-4 md:mb-6 p-4 md:p-6 rounded-lg shadow-lg min-h-20 md:min-h-24 flex items-center'>
+            <div className='w-full flex justify-start items-center'>
               {loading ? (
                 <Skeleton className="h-6 w-1/3" />
               ) : (
-                <div className='w-[100%] flex justify-between '>
-                  <div className='flex justify-center items-center'>
-                    <div className='text-[#008348] text-[14px]'>
-                      <PiArrowUpLight />
-                    </div>
-                    <div className='text-[#008348] text-[14px]'>3.27%</div>
+                <div className='flex justify-center items-center gap-1'>
+                  <div className='text-green-700 text-sm md:text-base'>
+                    <PiArrowUpLight />
                   </div>
+                  <div className='text-green-700 text-sm md:text-base font-semibold'>3.27%</div>
                 </div>
               )}
             </div>
           </div>
-          <div className='w-[100%] py-[10px] px-[10px] bg-white mb-[15px] flex justify-center items-center rounded-[10px] shadow-xl'>
-            <div className='w-[94%] h-[98%] flex justify-between  flex-col'>
+          <div className='w-full bg-white mb-4 md:mb-6 p-4 md:p-6 rounded-lg shadow-lg flex flex-col gap-3'>
+            <div className='w-full flex flex-col gap-2'>
               {loading ? (
                 <>
-                  <Skeleton className="h-4 w-1/4 mb-2" />
-                  <Skeleton className="h-4 w-1/3 mb-2" />
-                  <Skeleton className="h-[200px] w-full" />
+                  <Skeleton className="h-4 w-1/4" />
+                  <Skeleton className="h-4 w-1/3" />
+                  <Skeleton className="h-40 md:h-48 w-full" />
                 </>
               ) : (
                 <>
-                  <div className='text-[13px]'>income</div>
-                  <div className='flex items-center'>
-                    <div className='flex justify-center items-center mr-[10px]'>
-                      <div className='text-[13px] text-[#ff0000]'>
+                  <div className='text-xs md:text-sm font-medium'>Income</div>
+                  <div className='flex items-center gap-2'>
+                    <div className='flex justify-center items-center gap-1'>
+                      <div className='text-red-600 text-xs md:text-sm'>
                         <PiArrowUpLight />
                       </div>
-                      <div className='text-[13px] text-[#ff0000]'>16.21%</div>
+                      <div className='text-red-600 text-xs md:text-sm font-semibold'>16.21%</div>
                     </div>
-                    <div className='text-[13px] text-[#666565]'>
+                    <div className='text-xs md:text-sm text-gray-600'>
                       Since last week
                     </div>
                   </div>
-                  <div className='w-[100%] h-[200px] mt-[20px] flex justify-start'>
+                  <div className='w-full h-40 md:h-48 mt-3 md:mt-4 flex justify-start'>
                     <LineChartOverViewWallet />
                   </div>
                 </>
@@ -224,17 +224,17 @@ const Wallet = () => {
             </div>
           </div>
         </div>
-        <div className='w-[57%] min-h-[650px] bg-white rounded-[10px] shadow-xl flex-col p-[10px]'>
-          <div className='w-[100%] flex justify-between items-center mb-[20px]'>
-            <div className='text-[13px]'>Transaction history</div>
-            <div className='flex justify-center items-center'>
-              <div className='flex justify-center items-center mr-[10px]'>
+        <div className='w-full lg:w-3/5 bg-white rounded-lg shadow-lg flex flex-col p-4 md:p-6'>
+          <div className='w-full flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 md:gap-4 mb-4 md:mb-6'>
+            <div className='text-xs md:text-sm font-medium'>Transaction history</div>
+            <div className='flex flex-col sm:flex-row gap-2 md:gap-3 w-full sm:w-auto'>
+              <div className='flex-1 sm:flex-none'>
                 <Select
                   value={transactionType}
                   onValueChange={(value) => setTransactionType(value)}
                   disabled={loading}
                 >
-                  <SelectTrigger className="w-[100px]">
+                  <SelectTrigger className="w-full sm:w-24">
                     <SelectValue placeholder="Type" />
                   </SelectTrigger>
                   <SelectContent>
@@ -244,13 +244,13 @@ const Wallet = () => {
                   </SelectContent>
                 </Select>
               </div>
-              <div className='flex justify-center items-center'>
+              <div className='flex-1 sm:flex-none'>
                 <Select
                   value={timeFrame}
                   onValueChange={(value) => setTimeFrame(value)}
                   disabled={loading}
                 >
-                  <SelectTrigger className="w-[120px]">
+                  <SelectTrigger className="w-full sm:w-28">
                     <SelectValue placeholder="Time frame" />
                   </SelectTrigger>
                   <SelectContent>
@@ -262,70 +262,74 @@ const Wallet = () => {
               </div>
             </div>
           </div>
-          <div className='w-[100%] h-[500px] overflow-y-auto'>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>User</TableHead>
-                  <TableHead>ID number</TableHead>
-                  <TableHead>Type</TableHead>
-                  <TableHead>Date</TableHead>
-                  <TableHead>Amount</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {loading ? (
-                  Array.from({ length: 5 }).map((_, index) => (
-                    <TableRow key={index}>
-                      <TableCell><Skeleton className="h-4 w-[100px]" /></TableCell>
-                      <TableCell><Skeleton className="h-4 w-[80px]" /></TableCell>
-                      <TableCell><Skeleton className="h-4 w-[60px]" /></TableCell>
-                      <TableCell><Skeleton className="h-4 w-[120px]" /></TableCell>
-                      <TableCell><Skeleton className="h-4 w-[80px]" /></TableCell>
-                    </TableRow>
-                  ))
-                ) : currentTransactions.length > 0 ? (
-                  currentTransactions.map((transaction: Transaction) => (
-                    <TableRow key={transaction.id}>
-                      <TableCell>{`${transaction.user.firstname} ${transaction.user.lastname}`}</TableCell>
-                      <TableCell>0984399</TableCell>
-                      <TableCell>{transaction.type}</TableCell>
-                      <TableCell>{new Date(transaction.date).toLocaleString()}</TableCell>
-                      <TableCell className='text-[#ff0000] font-semibold'>
-                        {transaction.amount}
-                      </TableCell>
-                    </TableRow>
-                  ))
-                ) : (
+          <div className='w-full max-h-96 md:max-h-[500px] overflow-y-auto'>
+            <div className='overflow-x-auto'>
+              <Table className='min-w-full'>
+                <TableHeader>
                   <TableRow>
-                    <TableCell colSpan={5} className="text-center">No transactions found</TableCell>
+                    <TableHead className='text-xs md:text-sm'>User</TableHead>
+                    <TableHead className='text-xs md:text-sm'>ID number</TableHead>
+                    <TableHead className='text-xs md:text-sm'>Type</TableHead>
+                    <TableHead className='text-xs md:text-sm'>Date</TableHead>
+                    <TableHead className='text-xs md:text-sm'>Amount</TableHead>
                   </TableRow>
-                )}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {loading ? (
+                    Array.from({ length: 5 }).map((_, index) => (
+                      <TableRow key={index}>
+                        <TableCell><Skeleton className="h-4 w-20 md:w-32" /></TableCell>
+                        <TableCell><Skeleton className="h-4 w-16 md:w-20" /></TableCell>
+                        <TableCell><Skeleton className="h-4 w-12 md:w-16" /></TableCell>
+                        <TableCell><Skeleton className="h-4 w-24 md:w-32" /></TableCell>
+                        <TableCell><Skeleton className="h-4 w-16 md:w-20" /></TableCell>
+                      </TableRow>
+                    ))
+                  ) : currentTransactions.length > 0 ? (
+                    currentTransactions.map((transaction: Transaction) => (
+                      <TableRow key={transaction.id}>
+                        <TableCell className='text-xs md:text-sm'>{`${transaction.user.firstname} ${transaction.user.lastname}`}</TableCell>
+                        <TableCell className='text-xs md:text-sm'>0984399</TableCell>
+                        <TableCell className='text-xs md:text-sm'>{transaction.type}</TableCell>
+                        <TableCell className='text-xs md:text-sm'>{new Date(transaction.date).toLocaleString()}</TableCell>
+                        <TableCell className='text-red-600 font-semibold text-xs md:text-sm'>
+                          {transaction.amount}
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell colSpan={5} className="text-center text-xs md:text-sm py-8">No transactions found</TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </div>
             {!loading && (
-              <div className="flex items-center justify-between py-4">
-                <div className="text-sm text-muted-foreground">
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 py-3 md:py-4 mt-3 md:mt-4">
+                <div className="text-xs md:text-sm text-muted-foreground">
                   Page {currentPage} of {Math.ceil(filteredTransactions.length / transactionsPerPage)}
                 </div>
-                <div className="flex space-x-2">
+                <div className="flex gap-1 md:gap-2">
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={() => paginate(currentPage - 1)}
                     disabled={currentPage === 1}
+                    className="text-xs md:text-sm p-2"
                   >
-                    <ChevronLeft className="h-4 w-4 mr-2" />
-                    Previous
+                    <ChevronLeft className="h-3 w-3 md:h-4 md:w-4 mr-1" />
+                    <span className="hidden sm:inline">Previous</span>
                   </Button>
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={() => paginate(currentPage + 1)}
                     disabled={currentPage === Math.ceil(filteredTransactions.length / transactionsPerPage)}
+                    className="text-xs md:text-sm p-2"
                   >
-                    Next
-                    <ChevronRight className="h-4 w-4 ml-2" />
+                    <span className="hidden sm:inline">Next</span>
+                    <ChevronRight className="h-3 w-3 md:h-4 md:w-4 ml-1" />
                   </Button>
                 </div>
               </div>

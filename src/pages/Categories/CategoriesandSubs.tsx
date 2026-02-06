@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
 import { useState, useEffect, Fragment } from "react"
@@ -149,33 +150,31 @@ const CategoriesandSubs = () => {
   const currentCategories = categoriesWithSubs.slice(indexOfFirstItem, indexOfLastItem)
 
   return (
-    <div className="w-[95%] bg-white h-full pt-[40px] flex justify-center items-center pb-8 mt-[90px]">
-      <div className="w-full flex-col h-full flex">
-        <h1 className="text-[18px] font-semibold mb-6">Categories with sub-categories</h1>
+    <div className="w-full bg-white px-3 sm:px-5 pt-4 sm:pt-6 pb-8 sm:pb-12 mt-[10px]">
+      <div className="w-full flex flex-col gap-4 sm:gap-6">
+        <h1 className="text-1xl sm:text-2xl font-bold">Categories with sub-categories</h1>
 
         {load ? (
-          // Skeleton component for loading state
-          <div className="mt-4 border rounded-lg overflow-hidden">
+          <div className="border rounded-lg overflow-hidden">
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Category Name</TableHead>
-                  <TableHead>Image</TableHead>
-                  <TableHead>Sub-Categories</TableHead>
+                  <TableHead className="text-xs sm:text-sm">Category Name</TableHead>
+                  <TableHead className="text-xs sm:text-sm">Image</TableHead>
+                  <TableHead className="text-xs sm:text-sm">Sub-Categories</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {/* Render skeleton rows while loading */}
                 {[...Array(5)].map((_, idx) => (
                   <TableRow key={idx}>
                     <TableCell>
-                      <Skeleton className="w-40 h-6" />
+                      <Skeleton className="w-32 h-4" />
                     </TableCell>
                     <TableCell>
-                      <Skeleton className="w-20 h-20" />
+                      <Skeleton className="w-16 h-16" />
                     </TableCell>
                     <TableCell>
-                      <Skeleton className="w-40 h-6" />
+                      <Skeleton className="w-32 h-4" />
                     </TableCell>
                   </TableRow>
                 ))}
@@ -183,122 +182,108 @@ const CategoriesandSubs = () => {
             </Table>
           </div>
         ) : (
-          <div className="mt-4 border rounded-lg overflow-hidden">
+          <div className="border rounded-lg overflow-x-auto">
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Category name</TableHead>
-                  <TableHead>Image</TableHead>
-                  <TableHead>Sub-categories</TableHead>
+                  <TableHead className="text-xs sm:text-sm">Category name</TableHead>
+                  <TableHead className="text-xs sm:text-sm hidden sm:table-cell">Image</TableHead>
+                  <TableHead className="text-xs sm:text-sm">Sub-categories</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {currentCategories.map((category) => (
                   <Fragment key={category.id}>
                     <TableRow>
-                      <TableCell>{category.name}</TableCell>
-                      <TableCell>
-                        <img src={category.image} alt={category.name} className="w-20 h-20 object-cover" />
+                      <TableCell className="text-xs sm:text-sm font-medium">{category.name}</TableCell>
+                      <TableCell className="hidden sm:table-cell">
+                        <img src={category.image || "/placeholder.svg"} alt={category.name} className="w-12 h-12 sm:w-16 sm:h-16 object-cover rounded" />
                       </TableCell>
                       <TableCell>
                         <Button
                           onClick={() => handleToggleExpand(category.id)}
                           variant="outline"
                           size="sm"
+                          className="text-xs"
                         >
                           {expandedCategoryId === category.id ? (
                             <>
-                              <ChevronUp className="h-4 w-4 mr-2" />
-                              Collapse
+                              <ChevronUp className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
+                              <span className="hidden sm:inline">Collapse</span>
                             </>
                           ) : (
                             <>
-                              <ChevronDown className="h-4 w-4 mr-2" />
-                              Expand
+                              <ChevronDown className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
+                              <span className="hidden sm:inline">Expand</span>
                             </>
                           )}
                         </Button>
                       </TableCell>
                     </TableRow>
                     {expandedCategoryId === category.id && category.sub_categories.length > 0 && (
-                      <TableRow>
-                        <TableCell colSpan={3}>
-                          <Table>
-                            <TableHeader>
-                              <TableRow>
-                                <TableHead>Sub-category name</TableHead>
-                                <TableHead>Tags</TableHead>
-                                <TableHead>Actions</TableHead>
-                              </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                              {category.sub_categories
-                                .slice(
-                                  (currentSubPage[category.id] - 1) * itemsPerPage,
-                                  currentSubPage[category.id] * itemsPerPage
-                                )
-                                .map((subCategory) => (
-                                  <TableRow key={subCategory.id}>
-                                    <TableCell>{subCategory.name}</TableCell>
-                                    <TableCell>{subCategory.tags.join(", ")}</TableCell>
-                                    <TableCell>
-                                      {/* <Button
-                                        onClick={() => handleEditSubCategory(subCategory, category.id)}
-                                        variant="outline"
-                                        size="sm"
-                                      >
-                                        Edit
+                      <div className="overflow-x-auto">
+                        <Table>
+                          <TableHeader>
+                            <TableRow>
+                              <TableHead className="text-xs sm:text-sm">Sub-category name</TableHead>
+                              <TableHead className="text-xs sm:text-sm">Tags</TableHead>
+                              <TableHead className="text-xs sm:text-sm">Actions</TableHead>
+                            </TableRow>
+                          </TableHeader>
+                          <TableBody>
+                            {category.sub_categories
+                              .slice(
+                                (currentSubPage[category.id] - 1) * itemsPerPage,
+                                currentSubPage[category.id] * itemsPerPage
+                              )
+                              .map((subCategory) => (
+                                <TableRow key={subCategory.id}>
+                                  <TableCell className="text-xs sm:text-sm">{subCategory.name}</TableCell>
+                                  <TableCell className="text-xs sm:text-sm">{subCategory.tags.join(", ")}</TableCell>
+                                  <TableCell>
+                                    <div className="flex gap-1">
+                                      <Button variant="outline" size="icon" className="h-8 w-8 bg-transparent" onClick={() => handleEditSubCategory(subCategory, category.id)}>
+                                        <Pencil className="h-3 w-3" />
                                       </Button>
-                                      <Button
-                                        onClick={() => handleDeleteSubCategory(subCategory.id, category.id)}
-                                        variant="destructive"
-                                        size="sm"
-                                        className="ml-2"
-                                      >
-                                        Delete
-                                      </Button> */}
-                                      <div className=" space-x-1">
-                                        <Button variant="outline" size="icon" onClick={() => handleEditSubCategory(subCategory, category.id)}>
-                                            <Pencil className="h-4 w-4 " />
-                                        </Button>
-                                        <Button variant="outline" size="icon" onClick={() => handleDeleteSubCategory(subCategory.id, category.id)}>
-                                            <Trash2 className="h-4 w-4 " />
-                                        </Button>
-                                        </div>
-                                    </TableCell>
-                                  </TableRow>
-                                ))}
-                            </TableBody>
-                          </Table>
-                          {category.sub_categories.length > itemsPerPage && (
-                            <div className="flex items-center justify-between py-4">
-                              <div className="text-sm text-muted-foreground">
-                                Page {currentSubPage[category.id]} of {Math.ceil(category.sub_categories.length / itemsPerPage)}
-                              </div>
-                              <div className="flex space-x-2">
-                                <Button
-                                  variant="outline"
-                                  size="sm"
-                                  onClick={() => paginateSub(category.id, currentSubPage[category.id] - 1)}
-                                  disabled={currentSubPage[category.id] === 1}
-                                >
-                                  <ChevronLeft className="h-4 w-4 mr-2" />
-                                  Previous
-                                </Button>
-                                <Button
-                                  variant="outline"
-                                  size="sm"
-                                  onClick={() => paginateSub(category.id, currentSubPage[category.id] + 1)}
-                                  disabled={currentSubPage[category.id] === Math.ceil(category.sub_categories.length / itemsPerPage)}
-                                >
-                                  Next
-                                  <ChevronRight className="h-4 w-4 ml-2" />
-                                </Button>
-                              </div>
+                                      <Button variant="outline" size="icon" className="h-8 w-8 bg-transparent" onClick={() => handleDeleteSubCategory(subCategory.id, category.id)}>
+                                        <Trash2 className="h-3 w-3" />
+                                      </Button>
+                                    </div>
+                                  </TableCell>
+                                </TableRow>
+                              ))}
+                          </TableBody>
+                        </Table>
+                        {category.sub_categories.length > itemsPerPage && (
+                          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 py-4">
+                            <div className="text-xs sm:text-sm text-muted-foreground">
+                              Page {currentSubPage[category.id]} of {Math.ceil(category.sub_categories.length / itemsPerPage)}
                             </div>
-                          )}
-                        </TableCell>
-                      </TableRow>
+                            <div className="flex gap-2 w-full sm:w-auto">
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="flex-1 sm:flex-none text-xs bg-transparent"
+                                onClick={() => paginateSub(category.id, currentSubPage[category.id] - 1)}
+                                disabled={currentSubPage[category.id] === 1}
+                              >
+                                <ChevronLeft className="h-4 w-4 mr-1" />
+                                Previous
+                              </Button>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="flex-1 sm:flex-none text-xs bg-transparent"
+                                onClick={() => paginateSub(category.id, currentSubPage[category.id] + 1)}
+                                disabled={currentSubPage[category.id] === Math.ceil(category.sub_categories.length / itemsPerPage)}
+                              >
+                                Next
+                                <ChevronRight className="h-4 w-4 ml-1" />
+                              </Button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
                     )}
                   </Fragment>
                 ))}
@@ -308,28 +293,30 @@ const CategoriesandSubs = () => {
         )}
 
         {!load && categoriesWithSubs.length > itemsPerPage && (
-          <div className="flex items-center justify-between py-4">
-            <div className="text-sm text-muted-foreground">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 py-4 border-t">
+            <div className="text-xs sm:text-sm text-muted-foreground">
               Page {currentPage} of {Math.ceil(categoriesWithSubs.length / itemsPerPage)}
             </div>
-            <div className="flex space-x-2">
+            <div className="flex gap-2 w-full sm:w-auto">
               <Button
                 variant="outline"
                 size="sm"
+                className="flex-1 sm:flex-none text-xs bg-transparent"
                 onClick={() => paginate(currentPage - 1)}
                 disabled={currentPage === 1}
               >
-                <ChevronLeft className="h-4 w-4 mr-2" />
+                <ChevronLeft className="h-4 w-4 mr-1" />
                 Previous
               </Button>
               <Button
                 variant="outline"
                 size="sm"
+                className="flex-1 sm:flex-none text-xs bg-transparent"
                 onClick={() => paginate(currentPage + 1)}
                 disabled={currentPage === Math.ceil(categoriesWithSubs.length / itemsPerPage)}
               >
                 Next
-                <ChevronRight className="h-4 w-4 ml-2" />
+                <ChevronRight className="h-4 w-4 ml-1" />
               </Button>
             </div>
           </div>
@@ -337,39 +324,39 @@ const CategoriesandSubs = () => {
       </div>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent>
-          <DialogHeader className="mb-[30px]">
-            <DialogTitle className="text-[#0333ae]">Edit subcategory</DialogTitle>
+        <DialogContent className="w-[95%] max-w-[425px] rounded-lg p-4 sm:p-6">
+          <DialogHeader className="mb-4">
+            <DialogTitle className="text-lg sm:text-xl font-semibold text-[#0333ae]">Edit subcategory</DialogTitle>
           </DialogHeader>
-          <div className="flex flex-col space-y-4">
-            <div className="flex flex-col space-y-4">
-              <Label htmlFor="name">
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="name" className="text-xs sm:text-sm">
                 Name
               </Label>
               <Input
                 id="name"
                 value={editSubCategoryName}
                 onChange={(e) => setEditSubCategoryName(e.target.value)}
-                className="col-span-3"
+                className="text-sm"
               />
             </div>
-            <div className="flex flex-col space-y-2">
-              <Label htmlFor="tags">
+            <div className="space-y-2">
+              <Label htmlFor="tags" className="text-xs sm:text-sm">
                 Tags
               </Label>
               <Input
                 id="tags"
                 value={editSubCategoryTags}
                 onChange={(e) => setEditSubCategoryTags(e.target.value)}
-                className="col-span-3"
+                className="text-sm"
               />
             </div>
           </div>
-          <DialogFooter className="mt-[30px]">
-            <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
+          <DialogFooter className="gap-2 pt-4 border-t">
+            <Button variant="outline" className="text-sm bg-transparent" onClick={() => setIsDialogOpen(false)}>
               Cancel
             </Button>
-            <Button className="bg-[#0333ae] hover:bg-[#0333ae]" onClick={handleUpdateSubCategory}>Save changes</Button>
+            <Button className="bg-[#0333ae] hover:bg-[#0333ae] text-sm" onClick={handleUpdateSubCategory}>Save changes</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

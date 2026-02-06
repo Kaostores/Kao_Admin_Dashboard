@@ -82,86 +82,92 @@ const AgentDetails: React.FC<Iprops> = ({ togleBtn, onAgentAdded }) => {
   const currencies = currenciesResponse?.data.map((item: CurrencyData) => item.currency).filter(Boolean) || []
 
   return (
-    <div className='fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm'>
-      <div className='w-full max-w-[40%] bg-white rounded-lg shadow-xl p-6'>
-        <div className='flex justify-between items-center mb-6'>
-          <h2 className='text-lg font-bold text-[#0333ae]'>Add Agent</h2>
-          <button onClick={togleBtn} className='text-gray-500 hover:text-[#0333ae]'>
+    <div className='fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm p-4'>
+      <div className='w-full max-w-[100%] lg:max-w-[40%] bg-white rounded-lg shadow-xl p-4 sm:p-6 max-h-[90vh] overflow-y-auto'>
+        <div className='flex justify-between items-center mb-4 sm:mb-6'>
+          <h2 className='text-lg sm:text-xl font-bold text-[#0333ae]'>Add Agent</h2>
+          <button onClick={togleBtn} className='text-gray-500 hover:text-[#0333ae] flex-shrink-0'>
             <VscChromeClose size={20} />
           </button>
         </div>
-        <div className='flex justify-center items-center flex-col mb-6'>
-          <div className='w-24 h-24 flex justify-center items-center rounded-full bg-gray-200 text-[#0333ae] mb-4'>
-            <BiCamera size={36} />
+        <div className='flex justify-center items-center flex-col mb-4 sm:mb-6'>
+          <div className='w-20 h-20 sm:w-24 sm:h-24 flex justify-center items-center rounded-full bg-gray-200 text-[#0333ae] mb-3 sm:mb-4 flex-shrink-0'>
+            <BiCamera size={28} className='sm:text-[36px]' />
           </div>
-          <div className='text-[#0333ae] font-semibold'>Agent ID- 0002930</div>
+          <div className='text-[#0333ae] font-semibold text-sm sm:text-base'>Agent ID- 0002930</div>
         </div>
         <form onSubmit={handleSubmit} className='space-y-4'>
-          <div className='grid grid-cols-2 gap-4'>
+          <div className='grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4'>
             <div className='space-y-2'>
-              <Label htmlFor='firstname'>First Name</Label>
+              <Label htmlFor='firstname' className='text-sm'>First Name</Label>
               <Input
                 id='firstname'
                 name='firstname'
                 value={agentData.firstname}
                 onChange={handleInputChange}
+                className='text-sm'
               />
             </div>
             <div className='space-y-2'>
-              <Label htmlFor='lastname'>Last Name</Label>
+              <Label htmlFor='lastname' className='text-sm'>Last Name</Label>
               <Input
                 id='lastname'
                 name='lastname'
                 value={agentData.lastname}
                 onChange={handleInputChange}
+                className='text-sm'
               />
             </div>
             <div className='space-y-2'>
-              <Label htmlFor='phone'>Phone Number</Label>
+              <Label htmlFor='phone' className='text-sm'>Phone Number</Label>
               <Input
                 id='phone'
                 name='phone'
                 value={agentData.phone}
                 onChange={handleInputChange}
+                className='text-sm'
               />
             </div>
             <div className='space-y-2'>
-              <Label htmlFor='email'>Email</Label>
+              <Label htmlFor='email' className='text-sm'>Email</Label>
               <Input
                 id='email'
                 name='email'
                 type='email'
                 value={agentData.email}
                 onChange={handleInputChange}
+                className='text-sm'
               />
             </div>
             <div className='space-y-2'>
-              <Label htmlFor='password'>Password</Label>
+              <Label htmlFor='password' className='text-sm'>Password</Label>
               <Input
                 id='password'
                 name='password'
                 type='password'
                 value={agentData.password}
                 onChange={handleInputChange}
+                className='text-sm'
               />
             </div>
             <div className='space-y-2'>
-              <Label htmlFor='country'>Country</Label>
+              <Label htmlFor='country' className='text-sm'>Country</Label>
               <Input
                 id='country'
                 name='country'
                 value={agentData.country}
                 onChange={handleInputChange}
+                className='text-sm'
               />
             </div>
-            <div className='space-y-2'>
-              <Label htmlFor='currency'>Currency</Label>
+            <div className='space-y-2 sm:col-span-2'>
+              <Label htmlFor='currency' className='text-sm'>Currency</Label>
               <Select
                 value={agentData.currency}
                 onValueChange={handleCurrencyChange}
                 disabled={isLoadingCurrencies || !!currenciesError}
               >
-                <SelectTrigger>
+                <SelectTrigger className='text-sm'>
                   <SelectValue placeholder="Select currency" />
                 </SelectTrigger>
                 <SelectContent>
@@ -183,7 +189,7 @@ const AgentDetails: React.FC<Iprops> = ({ togleBtn, onAgentAdded }) => {
               </Select>
             </div>
           </div>
-          <Button type="submit" className='w-full bg-[#0333ae] hover:bg-[#0333ae]' disabled={loading}>
+          <Button type="submit" className='w-full bg-[#0333ae] hover:bg-[#0333ae] text-sm sm:text-base' disabled={loading}>
             {loading ? 'Adding agent...' : 'Add agent'}
           </Button>
         </form>

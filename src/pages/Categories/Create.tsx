@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+'use client';
+
 import { useState, useCallback, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import { FaCloudUploadAlt } from "react-icons/fa";
@@ -85,42 +89,41 @@ const Create = () => {
   };
 
   const handleSubmitSubcategory = async () => {
-  if (!selectedCategory) {
-    toast.error("Please select a category.");
-    return;
-  }
-
-  if (!subcategoryTitle) {
-    toast.error("Please enter a sub-category title.");
-    return;
-  }
-
-  setLoad(true);
-  try {
-    const subcategoryData = {
-      name: subcategoryTitle,
-      categoryId: selectedCategory,
-      tags: tags.split(",").map(tag => tag.trim()), // Convert comma-separated tags to an array
-    };
-
-    console.log("Sub-category data being sent:", subcategoryData);
-
-    const response = await CreateSubcategory(subcategoryData);
-
-    if (response?.status === 200) {
-      toast.success("Sub-category created successfully!");
-      window.location.reload();
-    } else {
-      toast.error("Failed to create sub-category.");
+    if (!selectedCategory) {
+      toast.error("Please select a category.");
+      return;
     }
-  } catch (error) {
-    toast.error("An error occurred while creating the sub-category.");
-    console.log("Error:",  error);
-  } finally {
-    setLoad(false);
-  }
-};
 
+    if (!subcategoryTitle) {
+      toast.error("Please enter a sub-category title.");
+      return;
+    }
+
+    setLoad(true);
+    try {
+      const subcategoryData = {
+        name: subcategoryTitle,
+        categoryId: selectedCategory,
+        tags: tags.split(",").map(tag => tag.trim()), // Convert comma-separated tags to an array
+      };
+
+      console.log("Sub-category data being sent:", subcategoryData);
+
+      const response = await CreateSubcategory(subcategoryData);
+
+      if (response?.status === 200) {
+        toast.success("Sub-category created successfully!");
+        window.location.reload();
+      } else {
+        toast.error("Failed to create sub-category.");
+      }
+    } catch (error) {
+      toast.error("An error occurred while creating the sub-category.");
+      console.log("Error:", error);
+    } finally {
+      setLoad(false);
+    }
+  };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop: handleDrop,
@@ -131,69 +134,70 @@ const Create = () => {
   });
 
   return (
-    <div className="w-[95%] bg-[#fff] h-[100%] pt-[20px] flex justify-center items-center pb-[30px] mt-[70px]">
-      <div className="w-[100%] h-[100%] flex justify-between">
-        <div className="w-[30%] h-[100%] bg-[#fff] p-[30px] shadow-2xl rounded-[15px] flex flex-col">
-          <div className="w-[100%] h-[180px] border border-[#EAEDF1] rounded-[15px] overflow-hidden">
+    <div className="w-full bg-white px-3 sm:px-5 sm:pt-6 pb-8 sm:pb-12 mt-[10px]">
+      <div className="w-full flex flex-col lg:flex-row gap-4 sm:gap-6">
+        <div className="w-full lg:w-[30%] bg-white p-4 sm:p-6 shadow-lg rounded-lg flex flex-col">
+          <div className="w-full h-40 sm:h-48 border border-gray-200 rounded-lg overflow-hidden">
             {image && (
               <img
-                src={URL.createObjectURL(image)}
+                src={URL.createObjectURL(image) || "/placeholder.svg"}
                 alt="Selected"
-                className="w-[100%] h-[100%] object-cover"
+                className="w-full h-full object-cover"
               />
             )}
           </div>
 
-          <div className="w-[100%] mt-[12px] flex flex-col">
-            <div className="w-[100%] flex flex-col">
-              <h3 className="text-[18px] font-[600]">Category</h3>
-              <p className="text-[15px] font-[500] mt-[3px]">
+          <div className="w-full mt-3 sm:mt-4 flex flex-col">
+            <div className="w-full flex flex-col">
+              <h3 className="text-base sm:text-lg font-semibold">Category</h3>
+              <p className="text-sm sm:text-base font-medium mt-1 text-gray-600">
                 {categoryTitle}
               </p>
             </div>
           </div>
 
-          <div className="w-[100%] h-[1px] bg-[#EAEDF1] mt-[25px]"></div>
+          <div className="w-full h-px bg-gray-200 mt-4 sm:mt-6"></div>
 
-          <div className="w-[100%] flex mt-[25px] justify-between">
+          <div className="w-full flex gap-2 sm:gap-3 mt-4 sm:mt-6">
             <button
               disabled={!image || !inputCategoryTitle || load}
               onClick={handleSubmitCategory}
-              className="w-[49%] h-[45px] bg-[#0333ae] text-[#fff] flex justify-center items-center text-[13px] rounded-[10px]"
+              className="flex-1 h-10 sm:h-11 bg-[#0333ae] text-white flex justify-center items-center text-xs sm:text-sm rounded-lg font-medium hover:bg-[#0333ae] disabled:opacity-50"
             >
               {load ? "Loading..." : "Create category"}
             </button>
-            <button className="w-[49%] h-[45px] border border-[#0333ae] text-[#0333ae] flex justify-center items-center text-[13px] rounded-[10px]">
+            <button className="flex-1 h-10 sm:h-11 border border-[#0333ae] text-[#0333ae] flex justify-center items-center text-xs sm:text-sm rounded-lg font-medium hover:bg-blue-50">
               Cancel
             </button>
           </div>
         </div>
 
-        <div className="w-[68%] flex flex-col">
-          <div className="w-[100%] bg-[#fff] shadow-2xl rounded-[15px] flex flex-col pt-[10px] pb-[30px]">
-            <div className="w-[100%] px-[30px] h-[60px] flex items-center border-b border-[#EAEDF1]">
-              <h4 className="font-[600]">Add thumbnail photo</h4>
+        <div className="w-full lg:w-[70%] flex flex-col gap-4 sm:gap-6">
+          {/* Upload Photo Section */}
+          <div className="w-full bg-white shadow-md rounded-lg flex flex-col">
+            <div className="w-full px-4 sm:px-6 h-14 flex items-center border-b border-gray-200">
+              <h4 className="font-semibold text-sm sm:text-base">Add thumbnail photo</h4>
             </div>
 
-            <div className="w-[100%] pl-[30px] pr-[30px] mt-[35px]">
+            <div className="w-full px-4 sm:px-6 py-6 sm:py-8">
               <div
                 {...getRootProps()}
-                className={`flex h-[200px] flex-col items-center justify-center border-2 border-dashed rounded-lg p-6 cursor-pointer ${
-                  isDragActive ? "border-blue-400" : "border-gray-300"
+                className={`flex h-40 sm:h-56 flex-col items-center justify-center border-2 border-dashed rounded-lg p-4 sm:p-6 cursor-pointer transition-colors ${
+                  isDragActive ? "border-blue-400 bg-blue-50" : "border-gray-300 bg-gray-50"
                 }`}
               >
-                <div className="text-[35px] text-[#0333ae]">
+                <div className="text-3xl sm:text-4xl text-[#0333ae]">
                   <FaCloudUploadAlt />
                 </div>
                 <input {...getInputProps()} />
                 {isDragActive ? (
-                  <p className="text-blue-400 mt-[20px]">
+                  <p className="text-blue-500 mt-3 sm:mt-4 text-sm sm:text-base">
                     Drag the files here ...
                   </p>
                 ) : (
-                  <p className="text-gray-500 mt-[20px]">
+                  <p className="text-gray-600 mt-3 sm:mt-4 text-center text-xs sm:text-sm">
                     Drag and drop images here, or{" "}
-                    <span className="text-[#0333ae] font-[600] ml-[5px]">
+                    <span className="text-[#0333ae] font-semibold">
                       click to select files
                     </span>
                   </p>
@@ -202,85 +206,93 @@ const Create = () => {
             </div>
           </div>
 
-          <div className="w-[100%] bg-[#fff] shadow-2xl rounded-[15px] flex flex-col pt-[10px] pb-[30px] mt-[30px]">
-            <div className="w-[100%] px-[30px] h-[60px] flex items-center border-b border-[#EAEDF1]">
-              <h4 className="font-[500]">Create category</h4>
+          {/* Create Category Section */}
+          <div className="w-full bg-white shadow-md rounded-lg flex flex-col">
+            <div className="w-full px-4 sm:px-6 h-14 flex items-center border-b border-gray-200">
+              <h4 className="font-semibold text-sm sm:text-base">Create category</h4>
             </div>
 
-            <div className="w-[100%] pl-[30px] pr-[30px] flex items-center justify-between mt-[30px]">
-              <div className="w-[48%] flex flex-col">
-                <p className="text-[15px] font-[400]">Category title</p>
-                <input
-                  type="text"
-                  value={inputCategoryTitle}
-                  onChange={(e) => setInputCategoryTitle(e.target.value)}
-                  className="w-[100%] h-[45px] rounded-[7px] pl-[10px] mt-[12px] outline-none border border-[#D8DFE7]"
-                />
+            <div className="w-full px-4 sm:px-6 py-6">
+              <div className="space-y-3">
+                <div className="flex flex-col">
+                  <p className="text-xs sm:text-sm font-medium text-gray-700">Category title</p>
+                  <input
+                    type="text"
+                    value={inputCategoryTitle}
+                    onChange={(e) => setInputCategoryTitle(e.target.value)}
+                    className="w-full h-10 sm:h-11 rounded-lg px-3 mt-2 outline-none border border-gray-300 text-sm"
+                  />
+                </div>
               </div>
             </div>
 
-            <div className="w-[100%] flex justify-end mt-[25px] pr-[30px]">
+            <div className="w-full flex justify-end px-4 sm:px-6 pb-6">
               <button
                 onClick={handleSaveCategory}
-                className="w-[180px] h-[40px] bg-[#0333ae] rounded-[7px] flex justify-center items-center text-[#fff]"
+                className="px-6 h-10 bg-[#0333ae] rounded-lg flex justify-center items-center text-white text-sm font-medium hover:bg-[#0333ae]"
               >
                 Save
               </button>
             </div>
           </div>
 
-          <div className="w-[100%] bg-[#fff] shadow-2xl rounded-[15px] flex flex-col pt-[10px] pb-[30px] mt-[30px]">
-            <div className="w-[100%] px-[30px] h-[60px] flex items-center border-b border-[#EAEDF1]">
-              <h4 className="font-[500]">Create sub-category</h4>
+          {/* Create Sub-category Section */}
+          <div className="w-full bg-white shadow-md rounded-lg flex flex-col">
+            <div className="w-full px-4 sm:px-6 h-14 flex items-center border-b border-gray-200">
+              <h4 className="font-semibold text-sm sm:text-base">Create sub-category</h4>
             </div>
 
-            <div className="w-[100%] pl-[30px] pr-[30px] flex items-center justify-between mt-[30px]">
-              <div className="w-[48%] flex flex-col">
-                <p className="text-[15px] font-[400]">Select a category</p>
-                <select
-                  value={selectedCategory}
-                  onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="w-[100%] h-[45px] rounded-[7px] pl-[10px] mt-[12px] outline-none border border-[#D8DFE7]"
-                >
-                  <option value="">Select</option>
-                  {categories.map((category) => (
-                    <option key={category.id} value={category.id}>
-                      {category.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
+            <div className="w-full px-4 sm:px-6 py-6">
+              <div className="space-y-4">
+                {/* Category and Subcategory Title */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                  <div className="flex flex-col">
+                    <p className="text-xs sm:text-sm font-medium text-gray-700">Select a category</p>
+                    <select
+                      value={selectedCategory}
+                      onChange={(e) => setSelectedCategory(e.target.value)}
+                      className="w-full h-10 sm:h-11 rounded-lg px-3 mt-2 outline-none border border-gray-300 text-sm"
+                    >
+                      <option value="">Select</option>
+                      {categories.map((category) => (
+                        <option key={category.id} value={category.id}>
+                          {category.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
 
-              <div className="w-[48%] flex flex-col">
-                <p className="text-[15px] font-[400]">Sub-category title</p>
-                <input
-                  type="text"
-                  value={subcategoryTitle}
-                  onChange={(e) => setSubcategoryTitle(e.target.value)}
-                  className="w-[100%] h-[45px] rounded-[7px] pl-[10px] mt-[12px] outline-none border border-[#D8DFE7]"
-                />
+                  <div className="flex flex-col">
+                    <p className="text-xs sm:text-sm font-medium text-gray-700">Sub-category title</p>
+                    <input
+                      type="text"
+                      value={subcategoryTitle}
+                      onChange={(e) => setSubcategoryTitle(e.target.value)}
+                      className="w-full h-10 sm:h-11 rounded-lg px-3 mt-2 outline-none border border-gray-300 text-sm"
+                    />
+                  </div>
+                </div>
+
+                {/* Tags Input */}
+                <div className="flex flex-col">
+                  <p className="text-xs sm:text-sm font-medium text-gray-700">Tags (comma-separated)</p>
+                  <input
+                    type="text"
+                    value={tags}
+                    onChange={(e) => setTags(e.target.value)}
+                    className="w-full h-10 sm:h-11 rounded-lg px-3 mt-2 outline-none border border-gray-300 text-sm"
+                    placeholder="e.g., Footwares, Flipflops"
+                  />
+                </div>
               </div>
             </div>
 
-            <div className="w-[100%] pl-[30px] pr-[30px] mt-[30px]">
-              <div className="w-[100%] flex flex-col">
-                <p className="text-[15px] font-[400]">Tags (comma-separated)</p>
-                <input
-                  type="text"
-                  value={tags}
-                  onChange={(e) => setTags(e.target.value)}
-                  className="w-[100%] h-[45px] rounded-[7px] pl-[10px] mt-[12px] outline-none border border-[#D8DFE7]"
-                  placeholder="e.g., Footwares, Flipflops"
-                />
-              </div>
-            </div>
-
-            <div className="w-[100%] flex justify-end mt-[25px] pr-[30px]">
+            <div className="w-full flex justify-end px-4 sm:px-6 pb-6">
               <button
                 onClick={handleSubmitSubcategory}
-                className="w-[210px] h-[40px] bg-[#0333ae] rounded-[7px] flex justify-center items-center text-[#fff]"
+                className="px-6 h-10 bg-[#0333ae] rounded-lg flex justify-center items-center text-white text-sm font-medium hover:bg-[#0333ae]"
               >
-                create sub-category
+                Create sub-category
               </button>
             </div>
           </div>

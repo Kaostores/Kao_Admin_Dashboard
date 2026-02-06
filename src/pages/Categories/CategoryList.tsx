@@ -142,16 +142,16 @@ const CategoryList = () => {
   const currentCategories = categories.slice(indexOfFirstCategory, indexOfLastCategory)
 
   return (
-    <div className="w-[95%] bg-white h-full pt-5 flex justify-center items-center pb-8 mt-[90px]">
-      <div className="w-full flex-col h-full flex">
-        <h1 className="text-2xl font-semibold mb-6">Manage categories</h1>
+    <div className="w-full bg-white px-3 sm:px-5 pt-4 sm:pt-6 pb-8 sm:pb-12 mt-[10px]">
+      <div className="w-full flex flex-col gap-4 sm:gap-6">
+        <h1 className="text-xl sm:text-2xl font-bold">Manage categories</h1>
 
-        <div className="mt-4 border rounded-lg overflow-hidden">
+        <div className="border rounded-lg overflow-x-auto">
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Category name</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
+                <TableHead className="text-xs sm:text-sm">Category name</TableHead>
+                <TableHead className="text-xs sm:text-sm text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -159,25 +159,27 @@ const CategoryList = () => {
                 Array.from({ length: 5 }).map((_, index) => (
                   <TableRow key={index}>
                     <TableCell>
-                      <Skeleton className="h-4 w-[200px]" />
+                      <Skeleton className="h-4 w-32 sm:w-48" />
                     </TableCell>
                     <TableCell className="text-right">
-                      <Skeleton className="h-8 w-[100px] inline-block mr-2" />
-                      <Skeleton className="h-8 w-[100px] inline-block" />
+                      <div className="flex gap-2 justify-end">
+                        <Skeleton className="h-8 w-8" />
+                        <Skeleton className="h-8 w-8" />
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))
               ) : (
                 currentCategories.map((category) => (
                   <TableRow key={category.id}>
-                    <TableCell>{category.name}</TableCell>
+                    <TableCell className="text-xs sm:text-sm font-medium">{category.name}</TableCell>
                     <TableCell className="text-right">
-                      <div className="space-x-1">
-                        <Button variant="outline" size="icon" onClick={() => handleEdit(category)}>
-                          <Pencil className="h-4 w-4" />
+                      <div className="flex gap-1 sm:gap-2 justify-end">
+                        <Button variant="outline" size="icon" className="h-8 w-8 bg-transparent" onClick={() => handleEdit(category)}>
+                          <Pencil className="h-3 w-3 sm:h-4 sm:w-4" />
                         </Button>
-                        <Button variant="outline" size="icon" onClick={() => handleDelete(category.id)}>
-                          <Trash2 className="h-4 w-4" />
+                        <Button variant="outline" size="icon" className="h-8 w-8 bg-transparent" onClick={() => handleDelete(category.id)}>
+                          <Trash2 className="h-3 w-3 sm:h-4 sm:w-4" />
                         </Button>
                       </div>
                     </TableCell>
@@ -189,28 +191,30 @@ const CategoryList = () => {
         </div>
 
         {!loading && (
-          <div className="flex items-center justify-between py-4">
-            <div className="text-sm text-muted-foreground">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 py-4 border-t">
+            <div className="text-xs sm:text-sm text-muted-foreground">
               Page {currentPage} of {Math.ceil(categories.length / categoriesPerPage)}
             </div>
-            <div className="flex space-x-2">
+            <div className="flex gap-2 w-full sm:w-auto">
               <Button
                 variant="outline"
                 size="sm"
+                className="flex-1 sm:flex-none text-xs bg-transparent"
                 onClick={() => paginate(currentPage - 1)}
                 disabled={currentPage === 1}
               >
-                <ChevronLeft className="h-4 w-4 mr-2" />
+                <ChevronLeft className="h-4 w-4 mr-1" />
                 Previous
               </Button>
               <Button
                 variant="outline"
                 size="sm"
+                className="flex-1 sm:flex-none text-xs bg-transparent"
                 onClick={() => paginate(currentPage + 1)}
                 disabled={currentPage === Math.ceil(categories.length / categoriesPerPage)}
               >
                 Next
-                <ChevronRight className="h-4 w-4 ml-2" />
+                <ChevronRight className="h-4 w-4 ml-1" />
               </Button>
             </div>
           </div>
@@ -218,42 +222,44 @@ const CategoryList = () => {
       </div>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent>
-          <DialogHeader className="mb-[30px]">
-            <DialogTitle className="text-[#0333ae]">Edit category</DialogTitle>
+        <DialogContent className="w-[95%] max-w-[425px] rounded-lg p-4 sm:p-6">
+          <DialogHeader className="mb-4">
+            <DialogTitle className="text-lg sm:text-xl font-semibold text-[#0333ae]">Edit category</DialogTitle>
           </DialogHeader>
-          <div className="flex flex-col space-y-4">
-            <div className="flex flex-col space-y-4">
-              <Label htmlFor="categoryName">Category name</Label>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="categoryName" className="text-xs sm:text-sm">Category name</Label>
               <Input
                 id="categoryName"
                 value={editCategoryName}
                 onChange={(e) => setEditCategoryName(e.target.value)}
+                className="text-sm"
               />
             </div>
-            <div className="flex flex-col space-y-2">
-              <Label htmlFor="categoryImage">Category image</Label>
+            <div className="space-y-2">
+              <Label htmlFor="categoryImage" className="text-xs sm:text-sm">Category image</Label>
               <Input
                 id="categoryImage"
                 type="file"
                 onChange={(e) => setEditCategoryImage(e.target.files?.[0] || null)}
+                className="text-sm"
               />
             </div>
             {editCategoryImage && (
               <div className="flex justify-center">
                 <img
-                  src={URL.createObjectURL(editCategoryImage)}
+                  src={URL.createObjectURL(editCategoryImage) || "/placeholder.svg"}
                   alt="Selected category"
-                  className="w-24 h-24 object-cover rounded"
+                  className="w-20 h-20 sm:w-24 sm:h-24 object-cover rounded"
                 />
               </div>
             )}
           </div>
-          <DialogFooter className="mt-[30px]">
-            <Button type="button" onClick={handleCloseDialog} variant="outline">
+          <DialogFooter className="gap-2 pt-4 border-t">
+            <Button type="button" onClick={handleCloseDialog} variant="outline" className="text-sm bg-transparent">
               Cancel
             </Button>
-            <Button className="bg-[#0333ae] hover:bg-[#0333ae]" type="button" onClick={handleUpdate}>
+            <Button className="bg-[#0333ae] hover:bg-[#0333ae] text-sm" type="button" onClick={handleUpdate}>
               Save changes
             </Button>
           </DialogFooter>

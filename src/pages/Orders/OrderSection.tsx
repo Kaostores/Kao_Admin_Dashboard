@@ -2,7 +2,7 @@ import Order from "@/components/props/OrderSec";
 
 const Store = () => {
   return (
-    <div className='w-[95%] bg-[#fff] h-[100%] pt-[20px] flex justify-center items-center pb-[30px] mt-[70px]'>
+    <div className='w-[100%] bg-[#fff] h-[100%] pt-[10px] flex justify-center items-center mt-[20px]'>
       <div className='w-[100%] h-[100%] flex items-center flex-col'>
         <div className='w-[100%] h-[100%] flex justify-center items-center flex-col'>
           <Order

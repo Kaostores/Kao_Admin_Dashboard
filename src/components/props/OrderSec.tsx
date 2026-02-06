@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+'use client';
+
 import { useEffect, useState } from 'react'
 import { GetOrders } from '@/utils/ApiCalls'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
@@ -75,87 +78,91 @@ export default function Orders() {
   )
 
   return (
-    <div className="container mx-auto py-10">
-      <h1 className="text-2xl font-bold mb-6">Orders</h1>
+    <div className="w-full min-h-screen bg-white px-3 sm:px-5 sm:pb-2">
+      <div className="w-full flex flex-col gap-4 ">
+        <h1 className="text-xl sm:text-3xl font-bold">Orders</h1>
 
-      <div className="flex items-center mb-4">
-        <Input
-          placeholder="Search orders..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="max-w-sm"
-        />
-        <Button variant="ghost" className="ml-2">
-          <Search className="h-4 w-4" />
-        </Button>
-      </div>
-
-      <div className="rounded-md border">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Store name</TableHead>
-              <TableHead>Customer name</TableHead>
-              <TableHead>Time/Date</TableHead>
-              <TableHead>Amount</TableHead>
-              <TableHead>Payment method</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {loading ? (
-              <>
-                <SkeletonRow />
-                <SkeletonRow />
-                <SkeletonRow />
-                <SkeletonRow />
-                <SkeletonRow />
-              </>
-            ) : (
-              currentOrders.map((order) => (
-                <TableRow
-                  key={order.orderId}
-                  className="cursor-pointer"
-                  onClick={() => handleOrderClick(order.customerId)} // Handle row click
-                >
-                  <TableCell className="font-medium">{order.storeId}</TableCell>
-                  <TableCell>{order.customerId}</TableCell>
-                  <TableCell>{order.timeDate}</TableCell>
-                  <TableCell>{new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN' }).format(order.amount)}</TableCell>
-                  <TableCell>{order.paymentMethod}</TableCell>
-                </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
-      </div>
-
-      {!loading && (
-        <div className="flex items-center justify-between py-4">
-          <div className="text-sm text-muted-foreground">
-            Page {currentPage} of {Math.ceil(filteredOrders.length / ordersPerPage)}
-          </div>
-          <div className="flex space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => paginate(currentPage - 1)}
-            disabled={currentPage === 1}
-          >
-            <ChevronLeft className="h-4 w-4 mr-2" />
-            Previous
+        <div className="flex items-center gap-2">
+          <Input
+            placeholder="Search orders..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="text-sm flex-1 sm:max-w-sm"
+          />
+          <Button variant="ghost" size="icon" className="bg-transparent">
+            <Search className="h-4 w-4" />
           </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => paginate(currentPage + 1)}
-            disabled={currentPage === Math.ceil(filteredOrders.length / ordersPerPage)}
-          >
-            Next
-            <ChevronRight className="h-4 w-4 ml-2" />
-          </Button>
-          </div>
         </div>
-      )}
+
+        <div className="border rounded-lg overflow-x-auto">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="text-xs sm:text-sm">Store name</TableHead>
+                <TableHead className="text-xs sm:text-sm">Customer name</TableHead>
+                <TableHead className="text-xs sm:text-sm hidden md:table-cell">Time/Date</TableHead>
+                <TableHead className="text-xs sm:text-sm">Amount</TableHead>
+                <TableHead className="text-xs sm:text-sm hidden sm:table-cell">Payment method</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {loading ? (
+                <>
+                  <SkeletonRow />
+                  <SkeletonRow />
+                  <SkeletonRow />
+                  <SkeletonRow />
+                  <SkeletonRow />
+                </>
+              ) : (
+                currentOrders.map((order) => (
+                  <TableRow
+                    key={order.orderId}
+                    className="cursor-pointer hover:bg-gray-50"
+                    onClick={() => handleOrderClick(order.customerId)}
+                  >
+                    <TableCell className="text-xs sm:text-sm font-medium">{order.storeId}</TableCell>
+                    <TableCell className="text-xs sm:text-sm">{order.customerId}</TableCell>
+                    <TableCell className="text-xs sm:text-sm hidden md:table-cell">{order.timeDate}</TableCell>
+                    <TableCell className="text-xs sm:text-sm font-medium">{new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN' }).format(order.amount)}</TableCell>
+                    <TableCell className="text-xs sm:text-sm hidden sm:table-cell">{order.paymentMethod}</TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
+        </div>
+
+        {!loading && (
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 py-4 border-t">
+            <div className="text-xs sm:text-sm text-muted-foreground">
+              Page {currentPage} of {Math.ceil(filteredOrders.length / ordersPerPage)}
+            </div>
+            <div className="flex gap-2 w-full sm:w-auto">
+              <Button
+                variant="outline"
+                size="sm"
+                className="flex-1 sm:flex-none text-xs bg-transparent"
+                onClick={() => paginate(currentPage - 1)}
+                disabled={currentPage === 1}
+              >
+                <ChevronLeft className="h-4 w-4 mr-1" />
+                Previous
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                className="flex-1 sm:flex-none text-xs bg-transparent"
+                onClick={() => paginate(currentPage + 1)}
+                disabled={currentPage === Math.ceil(filteredOrders.length / ordersPerPage)}
+              >
+                Next
+                <ChevronRight className="h-4 w-4 ml-1" />
+              </Button>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   )
 }

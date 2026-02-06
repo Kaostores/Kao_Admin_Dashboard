@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 
 import React, { useState, useEffect } from 'react'
@@ -103,72 +104,87 @@ const AgentEdit: React.FC<AgentEditProps> = ({ isOpen, onClose, vendor, onUpdate
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader className="flex flex-row items-center justify-between">
-          <DialogTitle className='text-[#0333AE]'>Edit Vendor</DialogTitle>
-          <Button variant="ghost" size="icon" onClick={onClose} className="h-8 w-8 p-0">
+      <DialogContent className="w-[95%] max-w-[425px] rounded-lg p-4 sm:p-6">
+        <DialogHeader className="flex flex-row items-center justify-between gap-2 mb-4">
+          <DialogTitle className='text-lg sm:text-xl font-semibold text-[#0333AE]'>Edit Vendor</DialogTitle>
+          <Button variant="ghost" size="icon" onClick={onClose} className="h-8 w-8 p-0 flex-shrink-0">
             <X className="h-4 w-4" />
-            <span className="sr-only hover:text-[#0333AE]">Close</span>
+            <span className="sr-only">Close</span>
           </Button>
         </DialogHeader>
         <div className="grid gap-4 py-4">
+          {/* Avatar and ID Section */}
           <div className="flex flex-col items-center space-y-2">
-            <Avatar className="h-24 w-24">
-              <AvatarImage src={vendor.avatarUrl} alt={vendor.firstname} />
+            <Avatar className="h-20 w-20 sm:h-24 sm:w-24">
+              <AvatarImage src={vendor.avatarUrl || "/placeholder.svg"} alt={vendor.firstname} />
               <AvatarFallback>
-                <Camera className="h-12 w-12 text-[#0333AE]" />
+                <Camera className="h-8 w-8 sm:h-12 sm:w-12 text-[#0333AE]" />
               </AvatarFallback>
             </Avatar>
-            <span className="text-sm font-medium text-[#0333AE]">
+            <span className="text-xs sm:text-sm font-medium text-[#0333AE] text-center">
               Employee ID: {vendor.id}
             </span>
           </div>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
+
+          {/* Form Section */}
+          <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
+            {/* Name Fields */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               <div className="space-y-2">
-                <Label htmlFor="firstname">First Name</Label>
+                <Label htmlFor="firstname" className="text-xs sm:text-sm">First Name</Label>
                 <Input
                   id="firstname"
                   name="firstname"
                   value={formData.firstname}
                   onChange={handleChange}
+                  className="text-sm"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="lastname">Last Name</Label>
+                <Label htmlFor="lastname" className="text-xs sm:text-sm">Last Name</Label>
                 <Input
                   id="lastname"
                   name="lastname"
                   value={formData.lastname}
                   onChange={handleChange}
+                  className="text-sm"
                 />
               </div>
+            </div>
+
+            {/* Phone and Country Fields */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               <div className="space-y-2">
-                <Label htmlFor="phone">Phone Number</Label>
+                <Label htmlFor="phone" className="text-xs sm:text-sm">Phone Number</Label>
                 <Input
                   id="phone"
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
+                  className="text-sm"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="country">Country</Label>
+                <Label htmlFor="country" className="text-xs sm:text-sm">Country</Label>
                 <Input
                   id="country"
                   name="country"
                   value={formData.country}
                   onChange={handleChange}
+                  className="text-sm"
                 />
               </div>
-              <div className='space-y-2'>
-              <Label htmlFor='currency'>Currency</Label>
+            </div>
+
+            {/* Currency Field */}
+            <div className="space-y-2">
+              <Label htmlFor='currency' className="text-xs sm:text-sm">Currency</Label>
               <Select
                 value={formData.currency}
                 onValueChange={handleCurrencyChange}
                 disabled={isLoadingCurrencies || !!currenciesError}
               >
-                <SelectTrigger>
+                <SelectTrigger className="text-sm">
                   <SelectValue placeholder="Select currency" />
                 </SelectTrigger>
                 <SelectContent>
@@ -189,8 +205,13 @@ const AgentEdit: React.FC<AgentEditProps> = ({ isOpen, onClose, vendor, onUpdate
                 </SelectContent>
               </Select>
             </div>
-            </div>
-            <Button type="submit" className="w-full bg-[#0333AE] hover:bg-[#0333AE]" disabled={isLoading}>
+
+            {/* Submit Button */}
+            <Button 
+              type="submit" 
+              className="w-full bg-[#0333AE] hover:bg-[#0333AE] text-sm sm:text-base mt-4 sm:mt-6" 
+              disabled={isLoading}
+            >
               {isLoading ? 'Saving...' : 'Save changes'}
             </Button>
           </form>

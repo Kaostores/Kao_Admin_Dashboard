@@ -1,3 +1,6 @@
+'use client';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import ComplianceDetails from "../compliance/ComplianceDetails";
 
@@ -40,37 +43,37 @@ const Card: React.FC<Data> = ({
     };
 
     return (
-        <div className='w-[320px] rounded-[5px] flex justify-center items-center bg-[#ddd] mb-[20px]'>
-            <div className='w-[96%] flex flex-col py-[10px] px-[10px]'>
-                <div className='flex items-center mb-[15px]'>
-                    <div className='text-[13px] font-bold mr-[10px]'>Store id:</div>
-                    <div className='text-[14px] text-[#0333ae]'>{storeId}</div>
+        <div className='w-full sm:w-80 rounded-md flex justify-center items-center bg-[#ddd] mb-4'>
+            <div className='w-[96%] flex flex-col py-2 sm:py-3 px-2 sm:px-3'>
+                {/* <div className='flex flex-col sm:flex-row sm:items-center mb-3 sm:mb-4 gap-1 sm:gap-2'>
+                    <div className='text-xs sm:text-sm font-bold'>Store id:</div>
+                    <div className='text-xs sm:text-sm text-[#0333ae] break-words'>{storeId}</div>
+                </div> */}
+                {/* <div className='flex flex-col sm:flex-row sm:items-center mb-3 sm:mb-4 gap-1 sm:gap-2'>
+                    <div className='text-xs sm:text-sm font-bold'>Agent id:</div>
+                    <div className='text-xs sm:text-sm text-[#0333ae] break-words'>{agentId}</div>
+                </div> */}
+                <div className='flex flex-col sm:flex-row sm:items-center mb-3 sm:mb-4 gap-1 sm:gap-2'>
+                    <div className='text-xs sm:text-sm font-bold'>Complaint category:</div>
+                    <div className='text-xs sm:text-sm text-[#0333ae] break-words'>{category}</div>
                 </div>
-                <div className='flex items-center mb-[15px]'>
-                    <div className='text-[13px] font-bold mr-[10px]'>Agent id:</div>
-                    <div className='text-[14px] text-[#0333ae]'>{agentId}</div>
+                <div className='flex flex-col sm:flex-row sm:items-center mb-3 sm:mb-4 gap-1 sm:gap-2'>
+                    <div className='text-xs sm:text-sm font-bold'>Store name:</div>
+                    <div className='text-xs sm:text-sm text-[#0333ae] break-words'>{name}</div>
                 </div>
-                <div className='flex items-center mb-[15px]'>
-                    <div className='text-[13px] font-bold mr-[10px]'>Complaint category:</div>
-                    <div className='text-[14px] text-[#0333ae]'>{category}</div>
+                <div className='flex flex-col sm:flex-row sm:items-center mb-3 sm:mb-4 gap-1 sm:gap-2'>
+                    <div className='text-xs sm:text-sm font-bold'>Agent name:</div>
+                    <div className='text-xs sm:text-sm text-[#0333ae] break-words'>{agentName}</div>
                 </div>
-                <div className='flex items-center mb-[15px]'>
-                    <div className='text-[13px] font-bold mr-[10px]'>Store name:</div>
-                    <div className='text-[14px] text-[#0333ae]'>{name}</div>
-                </div>
-                <div className='flex items-center mb-[15px]'>
-                    <div className='text-[13px] font-bold mr-[10px]'>Agent name:</div>
-                    <div className='text-[14px] text-[#0333ae]'>{agentName}</div>
-                </div>
-                <div className='flex items-center mb-[15px]'>
-                    <div className='text-[13px] font-bold mr-[10px] text-[#818181]'>Time|Date:</div>
-                    <div className='text-[14px] text-[#818181]'>{timeDate}</div>
+                <div className='flex flex-col sm:flex-row sm:items-center mb-4 sm:mb-5 gap-1 sm:gap-2'>
+                    <div className='text-xs sm:text-sm font-bold text-[#818181]'>Time|Date:</div>
+                    <div className='text-xs sm:text-sm text-[#818181] break-words'>{timeDate}</div>
                 </div>
                 <button
-                    className='w-[130px] z-10 cursor-pointer flex justify-center items-center rounded-[5px] py-[5px] bg-[white] border-solid border-[#0000ff] border-[1px]'
+                    className='w-full sm:w-32 z-10 cursor-pointer flex justify-center items-center rounded-md py-2 px-3 bg-white border border-[#0000ff] hover:bg-gray-50 transition-colors'
                     onClick={toggleBtn}
                 >
-                    <div className='text-[#0333ae] text-[14px]'>View more</div>
+                    <div className='text-[#0333ae] text-xs sm:text-sm font-medium'>View more</div>
                 </button>
                 {show ? (
                     <ComplianceDetails

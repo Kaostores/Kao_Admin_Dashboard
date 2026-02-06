@@ -79,7 +79,7 @@ const SignIn = () => {
             <img src={dp} alt='' className='lg:w-[70%]' />
           </div>
         </div>
-        <div className='width-[100%]  absolute top-0 z-10 sm:top-[20px] lg:top-[0]'>
+        <div className='width-[100%] absolute top-0 z-10  lg:top-[0]'>
           <div className="w-[100px] h-[100px] bg-[red] rounded-[100px] overflow-hidden">
             <img
             src={kao}

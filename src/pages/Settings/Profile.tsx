@@ -1,21 +1,29 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useRef } from 'react'
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle
+} from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { AlertCircle, Camera, User } from 'lucide-react'
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { useProfileImage } from './ProfileImageContext'
-import { useUpdateProfileImageMutation } from '@/services/apiSlice' // Import the mutation
+import { useUpdateProfileImageMutation } from '@/services/apiSlice'
 
 const Profile = () => {
-  const { profileImage, setProfileImage } = useProfileImage();
+  const { profileImage, setProfileImage } = useProfileImage()
   const [image, setImage] = useState<string | null>(null)
   const [isUploading, setIsUploading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  const [updateProfileImage] = useUpdateProfileImageMutation(); // Use the mutation
+  const [updateProfileImage] = useUpdateProfileImageMutation()
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     setError(null)
@@ -40,20 +48,12 @@ const Profile = () => {
       setIsUploading(true)
       try {
         const formData = new FormData()
-        // Append the image file to the form data
         formData.append('image', fileInputRef.current.files[0])
-
-        // Make the API call and wait for the result
         await updateProfileImage(formData).unwrap()
-
-        // Update the profile image locally on success
         setProfileImage(image)
         alert("Profile picture updated successfully!")
       } catch (error: any) {
-        // Log the error in the console for debugging
         console.error('Upload error:', error)
-        
-        // Set a user-friendly error message
         setError(error?.data?.message || "Failed to upload the image. Please try again.")
       } finally {
         setIsUploading(false)
@@ -66,34 +66,49 @@ const Profile = () => {
   }
 
   return (
-    <div className="w-[100%] h-[100%] pt-[30px] pb-[30px]">
-      <Card className="w-[50%] h-[350px] max-w-2xl mx-auto">
+    <div className="w-full py-6 sm:py-10 px-3 sm:px-0 flex justify-center">
+      <Card className="w-full sm:w-[90%] md:w-[70%] lg:w-[50%] max-w-2xl mx-auto">
         <CardHeader>
-          <CardTitle className='text-[17px]'>Change profile picture</CardTitle>
-          <CardDescription>Upload a new profile picture or avatar</CardDescription>
+          <CardTitle className="text-base sm:text-[17px]">
+            Change profile picture
+          </CardTitle>
+          <CardDescription>
+            Upload a new profile picture or avatar
+          </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
+
+        <CardContent className="space-y-4 sm:space-y-6">
           <div className="flex justify-center">
             <div className="relative group">
-              <Avatar className="w-32 h-32">
-                <AvatarImage src={image || profileImage || "/placeholder-user.jpg"} alt="Profile picture" className='object-cover'/>
-                <AvatarFallback><User className="w-16 h-16" /></AvatarFallback>
+              <Avatar className="w-24 h-24 sm:w-32 sm:h-32">
+                <AvatarImage
+                  src={image || profileImage || "/placeholder-user.jpg"}
+                  alt="Profile picture"
+                  className="object-cover"
+                />
+                <AvatarFallback>
+                  <User className="w-12 h-12 sm:w-16 sm:h-16" />
+                </AvatarFallback>
               </Avatar>
-              <div 
+
+              <div
                 className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
                 onClick={triggerFileInput}
                 role="button"
                 aria-label="Change profile picture"
               >
-                <Camera className="w-8 h-8 text-white" />
+                <Camera className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
               </div>
             </div>
           </div>
+
           <div className="space-y-2">
-            <Label htmlFor="picture" className="sr-only">Upload picture</Label>
-            <input 
-              id="picture" 
-              type="file" 
+            <Label htmlFor="picture" className="sr-only">
+              Upload picture
+            </Label>
+            <input
+              id="picture"
+              type="file"
               accept="image/*"
               onChange={handleImageUpload}
               disabled={isUploading}
@@ -101,6 +116,7 @@ const Profile = () => {
               ref={fileInputRef}
             />
           </div>
+
           {error && (
             <Alert variant="destructive">
               <AlertCircle className="h-4 w-4" />
@@ -109,8 +125,13 @@ const Profile = () => {
             </Alert>
           )}
         </CardContent>
+
         <CardFooter>
-          <Button onClick={handleSave} disabled={!image || isUploading} className="w-full bg-[#0333AE] hover:bg-[#0333AE]">
+          <Button
+            onClick={handleSave}
+            disabled={!image || isUploading}
+            className="w-full bg-[#0333AE] hover:bg-[#0333AE]"
+          >
             {isUploading ? "Uploading..." : "Save changes"}
           </Button>
         </CardFooter>

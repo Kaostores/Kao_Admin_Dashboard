@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 
 import { useEffect, useState } from 'react'
@@ -30,7 +31,7 @@ const Complain = () => {
     }, [])
 
     const SkeletonCard = () => (
-        <div className="w-full md:w-[48%] lg:w-[31%] mb-4 p-4 border rounded-lg shadow-sm">
+        <div className="w-full sm:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.33rem)] mb-4 border rounded-lg shadow-sm">
             <Skeleton className="h-6 w-3/4 mb-2" />
             <Skeleton className="h-4 w-1/2 mb-2" />
             <Skeleton className="h-4 w-1/3 mb-2" />
@@ -40,8 +41,8 @@ const Complain = () => {
     )
 
     return (
-        <div className='w-[95%] bg-[#fff] h-[100%] pt-[20px] flex justify-center items-center pb-[30px] mt-[70px]'>
-            <div className='w-[100%] flex gap-8 items-start flex-wrap'>
+        <div className='w-full sm:w-[95%] bg-[#fff] min-h-screen pt-4 flex justify-center items-start pb-8 sm:pb-[30px] sm:mt-[30px] px-2 sm:px-0 mx-auto'>
+            <div className='w-full flex gap-3 sm:gap-8 items-start flex-wrap justify-center sm:justify-start'>
                 {loading ? (
                     <>
                         <SkeletonCard />

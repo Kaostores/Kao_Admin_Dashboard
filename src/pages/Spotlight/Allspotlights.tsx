@@ -134,7 +134,6 @@ export default function AllSpotlights() {
     }
   }
 
-  // Pagination logic
   const indexOfLastPoster = currentPage * postersPerPage
   const indexOfFirstPoster = indexOfLastPoster - postersPerPage
   const currentPosters = posters.slice(indexOfFirstPoster, indexOfLastPoster)
@@ -143,27 +142,27 @@ export default function AllSpotlights() {
 
   const SkeletonRow = () => (
     <TableRow>
-      <TableCell><Skeleton className="h-4 w-[250px]" /></TableCell>
-      <TableCell><Skeleton className="h-4 w-[300px]" /></TableCell>
+      <TableCell><Skeleton className="h-4 w-[150px] sm:w-[250px]" /></TableCell>
+      <TableCell><Skeleton className="h-4 w-[200px] sm:w-[300px]" /></TableCell>
       <TableCell><Skeleton className="h-4 w-[100px]" /></TableCell>
-      <TableCell><Skeleton className="h-20 w-20" /></TableCell>
+      <TableCell><Skeleton className="h-20 w-20 sm:w-20 sm:h-20" /></TableCell>
       <TableCell><Skeleton className="h-10 w-20" /></TableCell>
     </TableRow>
   )
 
   return (
-    <div className="container mx-auto py-10">
-      <h1 className="text-2xl font-bold mb-6">All spotlights</h1>
+    <div className="w-full px-3 sm:px-6 py-10">
+      <h1 className="text-xl sm:text-2xl font-bold mb-6 text-center sm:text-left">All spotlights</h1>
 
-      <div className="rounded-md border">
-        <Table>
+      <div className="overflow-x-auto rounded-md border">
+        <Table className="min-w-[600px] sm:min-w-full">
           <TableHeader>
             <TableRow>
-              <TableHead>Title</TableHead>
-              <TableHead>Description</TableHead>
-              <TableHead>Store</TableHead>
-              <TableHead>Banner</TableHead>
-              <TableHead>Actions</TableHead>
+              <TableHead className="text-xs sm:text-sm">Title</TableHead>
+              <TableHead className="text-xs sm:text-sm">Description</TableHead>
+              <TableHead className="text-xs sm:text-sm">Store</TableHead>
+              <TableHead className="text-xs sm:text-sm">Banner</TableHead>
+              <TableHead className="text-xs sm:text-sm">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -176,14 +175,14 @@ export default function AllSpotlights() {
             ) : (
               currentPosters.map((poster: Poster) => (
                 <TableRow key={poster.id}>
-                  <TableCell className="font-medium">{poster.title}</TableCell>
-                  <TableCell>{poster.description}</TableCell>
-                  <TableCell>{poster.store?.name}</TableCell>
+                  <TableCell className="font-medium text-xs sm:text-sm">{poster.title}</TableCell>
+                  <TableCell className="text-xs sm:text-sm max-w-[150px] sm:max-w-none truncate">{poster.description}</TableCell>
+                  <TableCell className="text-xs sm:text-sm">{poster.store?.name}</TableCell>
                   <TableCell>
-                    <img src={poster.image} alt={poster.title} className="w-20 h-20 object-cover rounded" />
+                    <img src={poster.image} alt={poster.title} className="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded" />
                   </TableCell>
                   <TableCell>
-                    <div className="flex space-x-2">
+                    <div className="flex flex-wrap gap-2">
                       <Button variant="outline" size="icon" onClick={() => openModal(poster)}>
                         <Pencil className="h-4 w-4" />
                       </Button>
@@ -201,84 +200,78 @@ export default function AllSpotlights() {
 
       {/* Pagination */}
       {!loading && (
-        <div className="flex items-center justify-between py-4">
-          <div className="text-sm text-muted-foreground">
+        <div className="flex flex-col sm:flex-row items-center justify-between py-4 gap-2">
+          <div className="text-sm text-muted-foreground text-center sm:text-left">
             Page {currentPage} of {Math.ceil(posters.length / postersPerPage)}
           </div>
-          <div className="flex space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => paginate(currentPage - 1)}
-            disabled={currentPage === 1}
-          >
-            <ChevronLeft className="h-4 w-4" />
-            Previous
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => paginate(currentPage + 1)}
-            disabled={currentPage === Math.ceil(posters.length / postersPerPage)}
-          >
-            Next
-            <ChevronRight className="h-4 w-4" />
-          </Button>
+          <div className="flex flex-wrap gap-2 justify-center sm:justify-end">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => paginate(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="flex items-center gap-1"
+            >
+              <ChevronLeft className="h-4 w-4" />
+              Previous
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => paginate(currentPage + 1)}
+              disabled={currentPage === Math.ceil(posters.length / postersPerPage)}
+              className="flex items-center gap-1"
+            >
+              Next
+              <ChevronRight className="h-4 w-4" />
+            </Button>
           </div>
         </div>
       )}
 
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent>
+        <DialogContent className="max-w-lg w-full">
           <DialogHeader>
             <DialogTitle>Edit Poster</DialogTitle>
           </DialogHeader>
           <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="title" className="text-right">
-                Title
-              </Label>
+            <div className="grid grid-cols-1 sm:grid-cols-4 items-center gap-2 sm:gap-4">
+              <Label htmlFor="title" className="text-sm sm:text-right">Title</Label>
               <Input
                 id="title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="col-span-3"
+                className="sm:col-span-3"
               />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="description" className="text-right">
-                Description
-              </Label>
+            <div className="grid grid-cols-1 sm:grid-cols-4 items-center gap-2 sm:gap-4">
+              <Label htmlFor="description" className="text-sm sm:text-right">Description</Label>
               <Textarea
                 id="description"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className="col-span-3"
+                className="sm:col-span-3"
               />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="banner" className="text-right">
-                Banner
-              </Label>
-              <div className="col-span-3">
+            <div className="grid grid-cols-1 sm:grid-cols-4 items-center gap-2 sm:gap-4">
+              <Label htmlFor="banner" className="text-sm sm:text-right">Banner</Label>
+              <div className="sm:col-span-3 flex flex-col gap-2">
                 <Input
                   id="banner"
                   type="file"
                   onChange={handleFileChange}
                 />
                 {bannerPreview && (
-                  <div className="mt-2">
-                    <img
-                      src={bannerPreview}
-                      alt="Preview"
-                      className="w-40 h-40 object-cover rounded"
-                    />
-                  </div>
+                  <img
+                    src={bannerPreview}
+                    alt="Preview"
+                    className="w-32 h-32 sm:w-40 sm:h-40 object-cover rounded"
+                  />
                 )}
               </div>
             </div>
           </div>
-          <div className="flex justify-end space-x-2">
+          <div className="flex flex-col sm:flex-row justify-end gap-2 mt-4">
             <Button className='bg-[#0333AE] hover:bg-[#0333AE]' onClick={handlePosterUpdate}>Update info</Button>
             <Button className='bg-[#0333AE] hover:bg-[#0333AE]' onClick={handleBannerUpdate}>Update banner</Button>
           </div>

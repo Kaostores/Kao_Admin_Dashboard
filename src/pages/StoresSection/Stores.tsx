@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
 import { useState, useEffect } from "react"
@@ -131,7 +132,7 @@ const Store = () => {
   }
 
   return (
-    <div className="w-[95%] bg-white h-full pt-5 flex justify-center items-center pb-8 mt-[70px]">
+    <div className="w-[95%] bg-white h-full pt-2 flex justify-center items-center pb-8">
       <div className="w-full h-full flex items-center flex-col">
         <div className="w-full h-[100px] flex justify-start items-center">
           <div className="w-full flex justify-between items-center">

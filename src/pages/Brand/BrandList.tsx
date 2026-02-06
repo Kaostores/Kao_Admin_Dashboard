@@ -1,4 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
+
+import React from "react"
 
 import { useEffect, useState } from 'react'
 import { GetBrands, UpdateBrand, DeleteBrand } from '../../utils/ApiCalls'
@@ -133,59 +136,42 @@ export default function BrandList() {
   const currentBrands = brands.slice(indexOfFirstBrand, indexOfLastBrand)
 
   return (
-    <div className="w-[95%] bg-[#fff] h-[100%] pt-[20px] flex justify-center items-center pb-[30px] mt-[70px]">
-      <div className="w-[100%] flex-col h-[100%] flex">
-        <h1 className="text-[20px] font-[600] mb-6">Brand management</h1>
+    <div className="w-full bg-white min-h-screen pt-4 pb-8 md:pb-12 mt-4 px-4 md:px-8">
+      <div className="w-full flex flex-col">
+        <h1 className="text-[25px] md:text-xl lg:text-2xl font-semibold mb-6 md:mb-8">Brand management</h1>
 
-        <div className="mt-[15px] shadow-sm border rounded-lg overflow-x-auto">
+        <div className="mt-3 md:mt-4 shadow-sm border rounded-lg overflow-x-auto">
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Brand name</TableHead>
-                <TableHead>Image</TableHead>
-                <TableHead>Actions</TableHead>
+                <TableHead className="text-xs md:text-sm">Brand name</TableHead>
+                <TableHead className="text-xs md:text-sm">Image</TableHead>
+                <TableHead className="text-xs md:text-sm">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {loading ? (
                 Array.from({ length: brandsPerPage }).map((_, index) => (
                   <TableRow key={index}>
-                    <TableCell><Skeleton className="h-4 w-[200px]" /></TableCell>
-                    <TableCell><Skeleton className="w-[70px] h-[70px] rounded-full" /></TableCell>
-                    <TableCell><Skeleton className="h-8 w-[100px]" /></TableCell>
+                    <TableCell><Skeleton className="h-4 w-32 md:w-48" /></TableCell>
+                    <TableCell><Skeleton className="w-12 h-12 md:w-16 md:h-16 rounded-full" /></TableCell>
+                    <TableCell><Skeleton className="h-8 w-20 md:w-24" /></TableCell>
                   </TableRow>
                 ))
               ) : (
                 currentBrands.map((brand: any) => (
                   <TableRow key={brand.id}>
-                    <TableCell>{brand.name}</TableCell>
+                    <TableCell className="text-xs md:text-sm font-medium">{brand.name}</TableCell>
                     <TableCell>
-                      <img src={brand.image} alt="" className="w-[70px] h-[70px] rounded-full object-cover" />
+                      <img src={brand.image || "/placeholder.svg"} alt={brand.name} className="w-12 h-12 md:w-16 md:h-16 rounded-full object-cover" />
                     </TableCell>
-                    {/* <TableCell>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => openEditModal(brand)}
-                        className="mr-2"
-                      >
-                        Edit
-                      </Button>
-                      <Button
-                        variant="destructive"
-                        size="sm"
-                        onClick={() => handleDelete(brand.id)}
-                      >
-                        Delete
-                      </Button>
-                    </TableCell> */}
                     <TableCell>
-                    <div className="flex space-x-1">
-                      <Button variant="outline" size="icon" onClick={() => openEditModal(brand)}>
-                        <Pencil className="h-4 w-4" />
+                    <div className="flex gap-1">
+                      <Button variant="outline" size="sm" onClick={() => openEditModal(brand)} className="p-2">
+                        <Pencil className="h-3 w-3 md:h-4 md:w-4" />
                       </Button>
-                      <Button variant="outline" size="icon" onClick={() => handleDelete(brand.id)}>
-                        <Trash2 className="h-4 w-4" />
+                      <Button variant="outline" size="sm" onClick={() => handleDelete(brand.id)} className="p-2">
+                        <Trash2 className="h-3 w-3 md:h-4 md:w-4" />
                       </Button>
                     </div>
                   </TableCell>
@@ -197,37 +183,39 @@ export default function BrandList() {
         </div>
 
         {!loading && (
-          <div className="flex items-center justify-between py-4">
-            <div className="text-sm text-muted-foreground">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 py-4 mt-4">
+            <div className="text-xs md:text-sm text-muted-foreground">
               Page {currentPage} of {Math.ceil(brands.length / brandsPerPage)}
             </div>
-            <div className="flex space-x-2">
+            <div className="flex gap-1 md:gap-2">
             <Button
               variant="outline"
               size="sm"
               onClick={() => paginate(currentPage - 1)}
               disabled={currentPage === 1}
+              className="text-xs md:text-sm"
             >
-              <ChevronLeft className="h-4 w-4 mr-2" />
-              Previous
+              <ChevronLeft className="h-3 w-3 md:h-4 md:w-4 mr-1" />
+              <span className="hidden sm:inline">Previous</span>
             </Button>
             <Button
               variant="outline"
               size="sm"
               onClick={() => paginate(currentPage + 1)}
               disabled={currentPage === Math.ceil(brands.length / brandsPerPage)}
+              className="text-xs md:text-sm"
             >
-              Next
-              <ChevronRight className="h-4 w-4 ml-2" />
+              <span className="hidden sm:inline">Next</span>
+              <ChevronRight className="h-3 w-3 md:h-4 md:w-4 ml-1" />
             </Button>
             </div>
           </div>
         )}
 
         <Dialog open={modalIsOpen} onOpenChange={setModalIsOpen}>
-          <DialogContent>
+          <DialogContent className="w-full max-w-sm md:max-w-md">
             <DialogHeader>
-              <DialogTitle>Edit brand</DialogTitle>
+              <DialogTitle className="text-lg md:text-xl">Edit brand</DialogTitle>
             </DialogHeader>
             {editingBrand && (
               <div className="grid gap-4 py-4">
@@ -236,20 +224,22 @@ export default function BrandList() {
                   value={updatedData.name}
                   onChange={(e) => setUpdatedData({ ...updatedData, name: e.target.value })}
                   placeholder="Brand Name"
+                  className="text-sm"
                 />
                 <Input
                   type="file"
                   accept="image/*"
                   onChange={handleImageChange}
+                  className="text-sm"
                 />
                 {imagePreview && (
-                  <img src={imagePreview} alt="Brand preview" className="w-[170px] h-[100px] mb-4" />
+                  <img src={imagePreview || "/placeholder.svg"} alt="Brand preview" className="w-32 h-20 md:w-40 md:h-24 mb-4 object-cover rounded" />
                 )}
-                <div className="flex justify-end space-x-2">
-                  <Button variant="outline" onClick={closeModal}>
+                <div className="flex justify-end gap-2">
+                  <Button variant="outline" onClick={closeModal} className="text-xs md:text-sm bg-transparent">
                     Cancel
                   </Button>
-                  <Button className='bg-[#0333AE] hover:bg-[#0333AE]' onClick={() => handleUpdate(editingBrand.id)}>
+                  <Button className='bg-[#0333AE] hover:bg-[#0333AE] text-xs md:text-sm' onClick={() => handleUpdate(editingBrand.id)}>
                     Save changes
                   </Button>
                 </div>

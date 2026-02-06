@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
 import { useEffect, useState } from 'react'
@@ -149,22 +150,24 @@ export default function CouponList() {
   const currentCoupons = coupons.slice(indexOfFirstCoupon, indexOfLastCoupon)
 
   return (
-    <div className="w-[95%] bg-[#fff] h-[100%] pt-[20px] flex justify-center items-center pb-[30px] mt-[70px]">
-      <div className="w-[100%] flex-col h-[100%] flex">
-        <h1 className="text-[20px] font-[600] mb-6">Coupon management</h1>
+    <div className="w-full bg-white px-3 sm:px-5 pt-4 sm:pt-5 mt-[10px]">
+      <div className="w-full flex flex-col gap-4 sm:gap-6">
+        {/* Header */}
+        <h1 className="text-[15px] sm:text-2xl font-bold">Coupon management</h1>
 
-        <div className="mt-[15px] shadow-sm border rounded-lg overflow-x-auto">
+        {/* Desktop Table */}
+        <div className="hidden md:block w-full overflow-x-auto rounded-lg border">
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Coupon code</TableHead>
-                <TableHead>Discount type</TableHead>
-                <TableHead>Discount amount</TableHead>
-                <TableHead>Minimum purchase amount</TableHead>
-                <TableHead>End date</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Applicable product</TableHead>
-                <TableHead>Actions</TableHead>
+                <TableHead className="text-xs sm:text-sm">Coupon code</TableHead>
+                <TableHead className="text-xs sm:text-sm">Discount type</TableHead>
+                <TableHead className="text-xs sm:text-sm">Discount amount</TableHead>
+                <TableHead className="text-xs sm:text-sm">Minimum purchase amount</TableHead>
+                <TableHead className="text-xs sm:text-sm">End date</TableHead>
+                <TableHead className="text-xs sm:text-sm">Status</TableHead>
+                <TableHead className="text-xs sm:text-sm">Applicable product</TableHead>
+                <TableHead className="text-xs sm:text-sm">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -181,33 +184,33 @@ export default function CouponList() {
               ) : (
                 currentCoupons.map((coupon: any) => (
                   <TableRow key={coupon.id}>
-                    <TableCell>{coupon.couponCode}</TableCell>
-                    <TableCell>{coupon.discountType}</TableCell>
-                    <TableCell>{coupon.discountAmount}</TableCell>
-                    <TableCell>{coupon.minimumPurchaseAmount}</TableCell>
-                    <TableCell>{format(new Date(coupon.endDate), 'MMM dd, yyyy')}</TableCell>
+                    <TableCell className="font-medium text-xs sm:text-sm">{coupon.couponCode}</TableCell>
+                    <TableCell className="text-xs sm:text-sm">{coupon.discountType}</TableCell>
+                    <TableCell className="text-xs sm:text-sm">{coupon.discountAmount}</TableCell>
+                    <TableCell className="text-xs sm:text-sm">{coupon.minimumPurchaseAmount}</TableCell>
+                    <TableCell className="text-xs sm:text-sm">{format(new Date(coupon.endDate), 'MMM dd, yyyy')}</TableCell>
                     <TableCell>
                       <span
-                        className={`py-1 px-3 rounded-full text-sm ${
-                          coupon.status === 'active' ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800'
+                        className={`py-1 px-3 rounded-full text-xs font-medium ${
+                          coupon.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
                         }`}
                       >
                         {coupon.status}
                       </span>
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="text-xs sm:text-sm">
                       {coupon.applicableProduct ? coupon.applicableProduct.name : "No Product"}
                     </TableCell>
                     <TableCell>
-                    <div className="flex space-x-1">
-                      <Button variant="outline" size="icon" onClick={() => openEditModal(coupon)}>
-                        <Pencil className="h-4 w-4" />
-                      </Button>
-                      <Button variant="outline" size="icon" onClick={() => handleDelete(coupon.id)}>
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </TableCell>
+                      <div className="flex gap-1 sm:gap-2">
+                        <Button variant="outline" size="icon" className="h-8 w-8 sm:h-10 sm:w-10 bg-transparent" onClick={() => openEditModal(coupon)}>
+                          <Pencil className="h-3 w-3 sm:h-4 sm:w-4" />
+                        </Button>
+                        <Button variant="outline" size="icon" className="h-8 w-8 sm:h-10 sm:w-10 bg-transparent" onClick={() => handleDelete(coupon.id)}>
+                          <Trash2 className="h-3 w-3 sm:h-4 sm:w-4" />
+                        </Button>
+                      </div>
+                    </TableCell>
                   </TableRow>
                 ))
               )}
@@ -215,87 +218,176 @@ export default function CouponList() {
           </Table>
         </div>
 
+        {/* Mobile Card View */}
+        <div className="md:hidden space-y-3">
+          {loading ? (
+            Array.from({ length: couponsPerPage }).map((_, index) => (
+              <div key={index} className="bg-gray-50 rounded-lg p-4 space-y-3">
+                <Skeleton className="h-4 w-1/2" />
+                <Skeleton className="h-4 w-full" />
+                <Skeleton className="h-4 w-3/4" />
+              </div>
+            ))
+          ) : (
+            currentCoupons.map((coupon: any) => (
+              <div key={coupon.id} className="bg-white border rounded-lg p-4 space-y-3">
+                <div className="flex justify-between items-start gap-2">
+                  <div>
+                    <div className="font-semibold text-sm">{coupon.couponCode}</div>
+                    <div className="text-xs text-gray-600">{coupon.discountType} - {coupon.discountAmount}</div>
+                  </div>
+                  <span
+                    className={`py-1 px-2 rounded-full text-xs font-medium whitespace-nowrap ${
+                      coupon.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                    }`}
+                  >
+                    {coupon.status}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2 text-xs text-gray-600 border-t pt-3">
+                  <div>
+                    <span className="font-semibold text-gray-700">Min. Purchase:</span>
+                    <div>{coupon.minimumPurchaseAmount}</div>
+                  </div>
+                  <div>
+                    <span className="font-semibold text-gray-700">End Date:</span>
+                    <div>{format(new Date(coupon.endDate), 'MMM dd')}</div>
+                  </div>
+                  <div className="col-span-2">
+                    <span className="font-semibold text-gray-700">Product:</span>
+                    <div className="truncate">{coupon.applicableProduct ? coupon.applicableProduct.name : "No Product"}</div>
+                  </div>
+                </div>
+
+                <div className="flex gap-2 pt-2 border-t">
+                  <Button variant="outline" size="sm" className="flex-1 text-xs bg-transparent" onClick={() => openEditModal(coupon)}>
+                    <Pencil className="h-3 w-3 mr-1" />
+                    Edit
+                  </Button>
+                  <Button variant="outline" size="sm" className="flex-1 text-xs bg-transparent" onClick={() => handleDelete(coupon.id)}>
+                    <Trash2 className="h-3 w-3 mr-1" />
+                    Delete
+                  </Button>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+
+        {/* Pagination */}
         {!loading && (
-          <div className="flex items-center justify-between py-4">
-            <div className="text-sm text-muted-foreground">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 py-4 border-t">
+            <div className="text-xs sm:text-sm text-muted-foreground">
               Page {currentPage} of {Math.ceil(coupons.length / couponsPerPage)}
             </div>
-            <div className="flex space-x-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => paginate(currentPage - 1)}
-              disabled={currentPage === 1}
-            >
-              <ChevronLeft className="h-4 w-4 mr-2" />
-              Previous
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => paginate(currentPage + 1)}
-              disabled={currentPage === Math.ceil(coupons.length / couponsPerPage)}
-            >
-              Next
-              <ChevronRight className="h-4 w-4 ml-2" />
-            </Button>
+            <div className="flex gap-2 w-full sm:w-auto">
+              <Button
+                variant="outline"
+                size="sm"
+                className="flex-1 sm:flex-none text-xs bg-transparent"
+                onClick={() => paginate(currentPage - 1)}
+                disabled={currentPage === 1}
+              >
+                <ChevronLeft className="h-4 w-4 mr-1" />
+                Previous
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                className="flex-1 sm:flex-none text-xs bg-transparent"
+                onClick={() => paginate(currentPage + 1)}
+                disabled={currentPage === Math.ceil(coupons.length / couponsPerPage)}
+              >
+                Next
+                <ChevronRight className="h-4 w-4 ml-1" />
+              </Button>
             </div>
           </div>
         )}
 
         <Dialog open={!!editingCoupon} onOpenChange={() => setEditingCoupon(null)}>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Edit coupon</DialogTitle>
+          <DialogContent className="w-[95%] max-w-[425px] rounded-lg p-4 sm:p-6">
+            <DialogHeader className="mb-4">
+              <DialogTitle className="text-lg sm:text-xl font-semibold">Edit coupon</DialogTitle>
             </DialogHeader>
-            <div className="grid gap-4 py-4">
-              <Input
-                value={updatedData.couponCode}
-                onChange={(e) => setUpdatedData({ ...updatedData, couponCode: e.target.value })}
-                placeholder="Coupon Code"
-              />
-              <Select
-                value={updatedData.discountType}
-                onValueChange={(value) => setUpdatedData({ ...updatedData, discountType: value })}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select Discount Type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="fixed">Fixed</SelectItem>
-                  <SelectItem value="percentage">Percentage</SelectItem>
-                </SelectContent>
-              </Select>
-              <Input
-                type="number"
-                value={updatedData.discountAmount}
-                onChange={(e) => setUpdatedData({ ...updatedData, discountAmount: parseFloat(e.target.value) })}
-                placeholder="Discount Amount"
-              />
-              <Input
-                type="number"
-                value={updatedData.minimumPurchaseAmount}
-                onChange={(e) => setUpdatedData({ ...updatedData, minimumPurchaseAmount: parseFloat(e.target.value) })}
-                placeholder="Minimum Purchase Amount"
-              />
-              <Input
-                type="date"
-                value={updatedData.endDate}
-                onChange={(e) => setUpdatedData({ ...updatedData, endDate: e.target.value })}
-                placeholder="End Date"
-              />
-              <Select
-                value={updatedData.status}
-                onValueChange={(value) => setUpdatedData({ ...updatedData, status: value })}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select Status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="active">Active</SelectItem>
-                  <SelectItem value="inactive">Inactive</SelectItem>
-                </SelectContent>
-              </Select>
+            <div className="grid gap-3 sm:gap-4 py-4 max-h-[70vh] overflow-y-auto">
+              {/* Coupon Code and Discount Type */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                <div>
+                  <Input
+                    value={updatedData.couponCode}
+                    onChange={(e) => setUpdatedData({ ...updatedData, couponCode: e.target.value })}
+                    placeholder="Coupon Code"
+                    className="text-sm"
+                  />
+                </div>
+                <div>
+                  <Select
+                    value={updatedData.discountType}
+                    onValueChange={(value) => setUpdatedData({ ...updatedData, discountType: value })}
+                  >
+                    <SelectTrigger className="text-sm">
+                      <SelectValue placeholder="Select Discount Type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="fixed">Fixed</SelectItem>
+                      <SelectItem value="percentage">Percentage</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              {/* Discount Amount and Minimum Purchase */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                <div>
+                  <Input
+                    type="number"
+                    value={updatedData.discountAmount}
+                    onChange={(e) => setUpdatedData({ ...updatedData, discountAmount: parseFloat(e.target.value) })}
+                    placeholder="Discount Amount"
+                    className="text-sm"
+                  />
+                </div>
+                <div>
+                  <Input
+                    type="number"
+                    value={updatedData.minimumPurchaseAmount}
+                    onChange={(e) => setUpdatedData({ ...updatedData, minimumPurchaseAmount: parseFloat(e.target.value) })}
+                    placeholder="Minimum Purchase Amount"
+                    className="text-sm"
+                  />
+                </div>
+              </div>
+
+              {/* End Date and Status */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                <div>
+                  <Input
+                    type="date"
+                    value={updatedData.endDate}
+                    onChange={(e) => setUpdatedData({ ...updatedData, endDate: e.target.value })}
+                    placeholder="End Date"
+                    className="text-sm"
+                  />
+                </div>
+                <div>
+                  <Select
+                    value={updatedData.status}
+                    onValueChange={(value) => setUpdatedData({ ...updatedData, status: value })}
+                  >
+                    <SelectTrigger className="text-sm">
+                      <SelectValue placeholder="Select Status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="active">Active</SelectItem>
+                      <SelectItem value="inactive">Inactive</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              {/* Category Selection */}
               <Select
                 value={updatedData.applicableCategory}
                 onValueChange={(value) => {
@@ -303,7 +395,7 @@ export default function CouponList() {
                   fetchSubCategories(value)
                 }}
               >
-                <SelectTrigger>
+                <SelectTrigger className="text-sm">
                   <SelectValue placeholder="Select category" />
                 </SelectTrigger>
                 <SelectContent>
@@ -314,12 +406,14 @@ export default function CouponList() {
                   ))}
                 </SelectContent>
               </Select>
+
+              {/* Subcategory Selection */}
               <Select
                 value={updatedData.applicableSubCategory}
                 onValueChange={(value) => setUpdatedData({ ...updatedData, applicableSubCategory: value })}
               >
-                <SelectTrigger>
-                  <SelectValue className='text-[#000]' placeholder="Select subcategory" />
+                <SelectTrigger className="text-sm">
+                  <SelectValue placeholder="Select subcategory" />
                 </SelectTrigger>
                 <SelectContent>
                   {subCategories.map((subcategory) => (
@@ -329,11 +423,13 @@ export default function CouponList() {
                   ))}
                 </SelectContent>
               </Select>
+
+              {/* Product Selection */}
               <Select
                 value={updatedData.applicableProduct}
                 onValueChange={(value) => setUpdatedData({ ...updatedData, applicableProduct: value })}
               >
-                <SelectTrigger>
+                <SelectTrigger className="text-sm">
                   <SelectValue placeholder="Select product" />
                 </SelectTrigger>
                 <SelectContent>
@@ -345,16 +441,18 @@ export default function CouponList() {
                 </SelectContent>
               </Select>
             </div>
-            <div className="flex justify-end space-x-2">
-              <Button variant="outline" onClick={() => setEditingCoupon(null)}>
+
+            {/* Action Buttons */}
+            <div className="flex flex-col-reverse sm:flex-row justify-end gap-2 sm:gap-3 pt-4 border-t">
+              <Button variant="outline" className="text-sm bg-transparent" onClick={() => setEditingCoupon(null)}>
                 Cancel
               </Button>
               {updateLoading ? (
-                <Button className='bg-[#0333AE] hover:bg-[#0333AE]' disabled>
+                <Button className='bg-[#0333AE] hover:bg-[#0333AE] text-sm' disabled>
                   <Skeleton className="h-5 w-20" />
                 </Button>
               ) : (
-                <Button className='bg-[#0333AE] hover:bg-[#0333AE]' onClick={() => handleUpdate(editingCoupon.id)}>
+                <Button className='bg-[#0333AE] hover:bg-[#0333AE] text-sm' onClick={() => handleUpdate(editingCoupon.id)}>
                   Save changes
                 </Button>
               )}
