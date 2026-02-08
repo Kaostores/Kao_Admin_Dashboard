@@ -190,7 +190,7 @@ export default function Home() {
     ) : (
       <div className="flex items-center gap-1">
         <ArrowDown className="text-red-500 w-4 h-4" />
-        <div className="text-sm sm:text-base text-red-500 font-semibold">
+        <div className="text-[7px] sm:text-base text-red-500 font-semibold">
           {totalDebitSum !== 0
             ? `${(
                 ((currentWeekRevenue - totalDebitSum) / totalDebitSum) *
@@ -200,7 +200,7 @@ export default function Home() {
         </div>
       </div>
     )}
-    <div className="text-xs sm:text-sm text-gray-600">
+    <div className="text-xs text-right sm:text-sm text-gray-600">
       Since last week
     </div>
   </div>
@@ -229,7 +229,7 @@ export default function Home() {
 
 
         {/* Metrics Cards - Responsive Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+        <div className="flex flex-col flex-wrap sm:flex-row sm:flex-wrap gap-3 sm:gap-4">
           {isLoading ? (
             <>
               <CardSkeleton />
