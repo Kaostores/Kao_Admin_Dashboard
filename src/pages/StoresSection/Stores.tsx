@@ -312,12 +312,12 @@ const Store = () => {
         {show3 && (
           <div className="w-full h-full flex justify-center items-center flex-col">
             <StoreWithdrawal
-              name="Jaji Yusuf"
-              agentName="Zoro Romanus"
-              storeId="23546487"
-              amount="400,000"
-              lastWithdraw="11:29 AM 20-02-2024"
-              approve="Approve all"
+              // name="Jaji Yusuf"
+              // agentName="Zoro Romanus"
+              // storeId="23546487"
+              // amount="400,000"
+              // lastWithdraw="11:29 AM 20-02-2024"
+              // approve="Approve all"
             />
           </div>
         )}
