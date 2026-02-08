@@ -130,7 +130,7 @@ const Wallet = () => {
     <div className='w-full bg-white min-h-screen pt-4 md:pt-5 pb-8 md:pb-12 px-4 md:px-8'>
       <div className='w-full min-h-full flex flex-col lg:flex-row gap-4 md:gap-6 lg:gap-8 lg:justify-between lg:items-start'>
         <div className='w-full lg:w-2/5 flex flex-col'>
-          <div className='w-full bg-white mb-4 md:mb-6 p-4 md:p-6 rounded-lg shadow-lg'>
+          <div className='w-full bg-white mb-4 md:mb-6 p-4 md:p-6 rounded-lg border border-gray-200 hover:border-gray-300 transition-colors'>
             <div className='w-full flex flex-col gap-4 md:gap-5'>
               {loading ? (
                 <>
@@ -180,7 +180,7 @@ const Wallet = () => {
               )}
             </div>
           </div>
-          <div className='w-full bg-white mb-4 md:mb-6 p-4 md:p-6 rounded-lg shadow-lg min-h-20 md:min-h-24 flex items-center'>
+          <div className='w-full bg-white mb-4 md:mb-6 p-4 md:p-6 rounded-lg border border-gray-200 hover:border-gray-300 transition-colors min-h-20 md:min-h-24 flex items-center'>
             <div className='w-full flex justify-start items-center'>
               {loading ? (
                 <Skeleton className="h-6 w-1/3" />
@@ -194,7 +194,7 @@ const Wallet = () => {
               )}
             </div>
           </div>
-          <div className='w-full bg-white mb-4 md:mb-6 p-4 md:p-6 rounded-lg shadow-lg flex flex-col gap-3'>
+          <div className='w-full bg-white mb-4 md:mb-6 p-4 md:p-6 rounded-lg border border-gray-200 hover:border-gray-300 transition-colors flex flex-col gap-3'>
             <div className='w-full flex flex-col gap-2'>
               {loading ? (
                 <>
@@ -224,7 +224,7 @@ const Wallet = () => {
             </div>
           </div>
         </div>
-        <div className='w-full lg:w-3/5 bg-white rounded-lg shadow-lg flex flex-col p-4 md:p-6'>
+        <div className='w-full lg:w-3/5 bg-white rounded-lg border border-gray-200 hover:border-gray-300 transition-colors flex flex-col p-4 md:p-6'>
           <div className='w-full flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 md:gap-4 mb-4 md:mb-6'>
             <div className='text-xs md:text-sm font-medium'>Transaction history</div>
             <div className='flex flex-col sm:flex-row gap-2 md:gap-3 w-full sm:w-auto'>

@@ -108,7 +108,7 @@ const Brand = () => {
     const isButtonDisabled = !selectedCategory || !selectedSubcategory || !brandImage || loading;
 
     return (
-        <div className="w-full bg-white min-h-screen pt-4 md:pt-5 pb-8 md:pb-12 px-4 md:px-8">
+        <div className="w-full bg-white pt-4 md:pt-5 pb-8 md:pb-12 px-4 md:px-8">
             <div className="w-full md:w-3/5 lg:w-1/2 flex flex-col">
                 <h1 className="text-[25px] md:text-xl lg:text-2xl font-semibold mb-6 md:mb-8">Create brand</h1>
 

@@ -113,16 +113,16 @@ const Coupon = () => {
   };
 
   return (
-    <div className="w-full min-h-screen bg-white px-3 sm:px-5 sm:pt-5 pb-8 sm:pb-12 mt-[10px]">
+    <div className="w-full bg-white px-3 sm:px-5 sm:pt-5  mt-[10px]">
       <div className="w-full mx-auto flex flex-col">
-        <div className="w-full bg-white sm:p-6 md:p-8 rounded-lg border">
+        <div className="w-full bg-white sm:p-6 rounded-lg border">
           <h1 className="text-xl sm:text-2xl font-semibold mb-6">Create a new coupon</h1>
 
           <form onSubmit={handleCreateCoupon}>
             <div className="space-y-3 sm:space-y-4">
 
               {/* Coupon Code and Discount Type */}
-              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+              <div className="flex flex-col flex-wrap gap-3 sm:gap-4">
                 <div className="space-y-2 sm:flex-1">
                   <Label htmlFor="couponCode" className="text-xs sm:text-sm">Coupon code</Label>
                   <Input
@@ -149,7 +149,7 @@ const Coupon = () => {
               </div>
 
               {/* Discount Amount and Minimum Purchase */}
-              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+              <div className="flex flex-col flex-wrap gap-3 sm:gap-4">
                 <div className="space-y-2 sm:flex-1">
                   <Label htmlFor="discountAmount" className="text-xs sm:text-sm">Discount amount</Label>
                   <Input
@@ -176,7 +176,7 @@ const Coupon = () => {
               </div>
 
               {/* End Date and Status */}
-              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+              <div className="flex flex-col flex-wrap gap-3 sm:gap-4">
                 <div className="space-y-2 sm:flex-1">
                   <Label htmlFor="endDate" className="text-xs sm:text-sm">End date</Label>
                   <Input

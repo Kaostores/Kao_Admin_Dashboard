@@ -83,7 +83,7 @@ const AgentDetails: React.FC<Iprops> = ({ togleBtn, onAgentAdded }) => {
 
   return (
     <div className='fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm p-4'>
-      <div className='w-full max-w-[100%] lg:max-w-[40%] bg-white rounded-lg shadow-xl p-4 sm:p-6 max-h-[90vh] overflow-y-auto'>
+      <div className='w-full max-w-[100%] lg:max-w-[40%] bg-white rounded-lg border border-gray-200 hover:border-gray-300 transition-colors p-4 sm:p-6 max-h-[90vh] overflow-y-auto'>
         <div className='flex justify-between items-center mb-4 sm:mb-6'>
           <h2 className='text-lg sm:text-xl font-bold text-[#0333ae]'>Add Agent</h2>
           <button onClick={togleBtn} className='text-gray-500 hover:text-[#0333ae] flex-shrink-0'>

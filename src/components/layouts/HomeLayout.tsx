@@ -3,7 +3,8 @@
 import React, { useState, useEffect } from "react";
 import Header from "@/components/blocks/Header";
 import { Outlet } from "react-router-dom";
-import Sidebar from "@/components/blocks/SIdebar";
+// import Sidebar from "@/components/blocks/Sidebar";
+import Sidebar from "../blocks/SIdebar";
 
 const HomeLayout: React.FC = () => {
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -40,9 +41,9 @@ const HomeLayout: React.FC = () => {
 			{/* Mobile Sidebar Drawer */}
 			<div
 				className={`fixed left-0 top-0 h-full w-64 bg-white z-50 lg:hidden transform transition-transform duration-300 ease-in-out ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
-					} shadow-lg`}
+					} border border-gray-200 hover:border-gray-300 transition-colors`}
 			>
-				<Sidebar />
+				<Sidebar onNavigate={closeSidebar} />
 			</div>
 
 			{/* Desktop Sidebar - Always Visible */}

@@ -136,7 +136,7 @@ const Create = () => {
   return (
     <div className="w-full bg-white px-3 sm:px-5 sm:pt-6 pb-8 sm:pb-12 mt-[10px]">
       <div className="w-full flex flex-col lg:flex-row gap-4 sm:gap-6">
-        <div className="w-full lg:w-[30%] bg-white p-4 sm:p-6 shadow-lg rounded-lg flex flex-col">
+        <div className="w-full lg:w-[30%] bg-white p-4 sm:p-6 border border-gray-200 hover:border-gray-300 transition-colors rounded-lg flex flex-col">
           <div className="w-full h-40 sm:h-48 border border-gray-200 rounded-lg overflow-hidden">
             {image && (
               <img
@@ -174,7 +174,7 @@ const Create = () => {
 
         <div className="w-full lg:w-[70%] flex flex-col gap-4 sm:gap-6">
           {/* Upload Photo Section */}
-          <div className="w-full bg-white shadow-md rounded-lg flex flex-col">
+          <div className="w-full bg-white border border-gray-200 hover:border-gray-300 transition-colors rounded-lg flex flex-col">
             <div className="w-full px-4 sm:px-6 h-14 flex items-center border-b border-gray-200">
               <h4 className="font-semibold text-sm sm:text-base">Add thumbnail photo</h4>
             </div>
@@ -207,7 +207,7 @@ const Create = () => {
           </div>
 
           {/* Create Category Section */}
-          <div className="w-full bg-white shadow-md rounded-lg flex flex-col">
+          <div className="w-full bg-white border border-gray-200 hover:border-gray-300 transition-colors rounded-lg flex flex-col">
             <div className="w-full px-4 sm:px-6 h-14 flex items-center border-b border-gray-200">
               <h4 className="font-semibold text-sm sm:text-base">Create category</h4>
             </div>
@@ -237,7 +237,7 @@ const Create = () => {
           </div>
 
           {/* Create Sub-category Section */}
-          <div className="w-full bg-white shadow-md rounded-lg flex flex-col">
+          <div className="w-full bg-white border border-gray-200 hover:border-gray-300 transition-colors rounded-lg flex flex-col">
             <div className="w-full px-4 sm:px-6 h-14 flex items-center border-b border-gray-200">
               <h4 className="font-semibold text-sm sm:text-base">Create sub-category</h4>
             </div>
@@ -245,33 +245,38 @@ const Create = () => {
             <div className="w-full px-4 sm:px-6 py-6">
               <div className="space-y-4">
                 {/* Category and Subcategory Title */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                  <div className="flex flex-col">
-                    <p className="text-xs sm:text-sm font-medium text-gray-700">Select a category</p>
-                    <select
-                      value={selectedCategory}
-                      onChange={(e) => setSelectedCategory(e.target.value)}
-                      className="w-full h-10 sm:h-11 rounded-lg px-3 mt-2 outline-none border border-gray-300 text-sm"
-                    >
-                      <option value="">Select</option>
-                      {categories.map((category) => (
-                        <option key={category.id} value={category.id}>
-                          {category.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+                <div className="flex flex-wrap flex-col sm:flex-row gap-3 sm:gap-4">
+  <div className="flex flex-col w-full">
+    <p className="text-xs sm:text-sm font-medium text-gray-700">
+      Select a category
+    </p>
+    <select
+      value={selectedCategory}
+      onChange={(e) => setSelectedCategory(e.target.value)}
+      className="w-full h-10 sm:h-11 rounded-lg px-3 mt-2 outline-none border border-gray-300 text-sm"
+    >
+      <option value="">Select</option>
+      {categories.map((category) => (
+        <option key={category.id} value={category.id}>
+          {category.name}
+        </option>
+      ))}
+    </select>
+  </div>
 
-                  <div className="flex flex-col">
-                    <p className="text-xs sm:text-sm font-medium text-gray-700">Sub-category title</p>
-                    <input
-                      type="text"
-                      value={subcategoryTitle}
-                      onChange={(e) => setSubcategoryTitle(e.target.value)}
-                      className="w-full h-10 sm:h-11 rounded-lg px-3 mt-2 outline-none border border-gray-300 text-sm"
-                    />
-                  </div>
-                </div>
+  <div className="flex flex-col w-full">
+    <p className="text-xs sm:text-sm font-medium text-gray-700">
+      Sub-category title
+    </p>
+    <input
+      type="text"
+      value={subcategoryTitle}
+      onChange={(e) => setSubcategoryTitle(e.target.value)}
+      className="w-full h-10 sm:h-11 rounded-lg px-3 mt-2 outline-none border border-gray-300 text-sm"
+    />
+  </div>
+</div>
+
 
                 {/* Tags Input */}
                 <div className="flex flex-col">

@@ -110,94 +110,123 @@ export default function Home() {
     <div className="w-full bg-white px-3 sm:px-5 pt-3 sm:pt-5 pb-8 mt-[10px]">
       <div className="w-full flex flex-col gap-5">
         {/* Sales Chart Section */}
-        <div className="w-full bg-white shadow-lg rounded-lg p-3 sm:p-4">
-          {/* Header and Controls */}
-          <div className="w-full flex flex-col gap-3 sm:gap-4 mb-4">
-            <h2 className="text-lg sm:text-xl font-semibold">Total sales</h2>
-            
-            {/* Radio Controls - Responsive Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-              {/* Current Week */}
-              <div className="flex flex-col sm:flex-row sm:items-center gap-2">
-                <div className="flex items-center">
-                  <input 
-                    type="radio" 
-                    id="current-week" 
-                    name="week" 
-                    value="current" 
-                    checked={selectedWeek === 'current'} 
-                    onChange={() => {
-                      setSelectedWeek('current');
-                      console.log("Fetching current week's data...");
-                    }} 
-                    className="mr-2" 
-                  />
-                  <label htmlFor="current-week" className="text-sm sm:text-base text-gray-600">Current week</label>
-                </div>
-                <div className="font-semibold text-sm sm:text-base">
-                  {isLoading ? <Skeleton className="h-5 w-24" /> : `NGN ${totalCreditSum}`}
-                </div>
-              </div>
+        <div className="w-full bg-white border border-gray-200 hover:border-gray-300 transition-colors rounded-lg p-3 sm:p-4">
+  {/* Header and Controls */}
+  <div className="w-full flex flex-col gap-3 sm:gap-4 mb-4">
+    <h2 className="text-lg sm:text-xl font-semibold">Total sales</h2>
 
-              {/* Previous Week */}
-              <div className="flex flex-col sm:flex-row sm:items-center gap-2">
-                <div className="flex items-center">
-                  <input 
-                    type="radio" 
-                    id="previous-week" 
-                    name="week" 
-                    value="previous" 
-                    checked={selectedWeek === 'previous'} 
-                    onChange={() => {
-                      setSelectedWeek('previous');
-                      console.log("Fetching previous week's data...");
-                    }} 
-                    className="mr-2" 
-                  />
-                  <label htmlFor="previous-week" className="text-sm sm:text-base text-gray-600">Previous week</label>
-                </div>
-                <div className="font-semibold text-sm sm:text-base">
-                  {isLoading ? <Skeleton className="h-5 w-24" /> : `NGN ${totalDebitSum}`}
-                </div>
-              </div>
+    {/* Radio Controls - Responsive Grid */}
+    <div className="flex flex-col md:flex-row md:flex-wrap gap-3 sm:gap-4">
+  
+  {/* Current Week */}
+  <div className="w-full md:w-[48%] lg:w-[23%] flex flex-col sm:flex-row sm:items-center gap-2">
+    <div className="flex items-center">
+      <input
+        type="radio"
+        id="current-week"
+        name="week"
+        value="current"
+        checked={selectedWeek === 'current'}
+        onChange={() => {
+          setSelectedWeek('current');
+          console.log("Fetching current week's data...");
+        }}
+        className="mr-2"
+      />
+      <label
+        htmlFor="current-week"
+        className="text-sm sm:text-base text-gray-600"
+      >
+        Current week
+      </label>
+    </div>
+    <div className="font-semibold text-sm sm:text-base">
+      {isLoading ? (
+        <Skeleton className="h-5 w-24" />
+      ) : (
+        `NGN ${totalCreditSum}`
+      )}
+    </div>
+  </div>
 
-              {/* Change Percentage */}
-              <div className="flex items-center gap-2 col-span-1 sm:col-span-2 lg:col-span-1">
-                {isLoading ? (
-                  <div className="flex items-center gap-1">
-                    <Skeleton className="h-4 w-4 rounded-full" />
-                    <Skeleton className="h-4 w-16" />
-                  </div>
-                ) : (
-                  <div className="flex items-center gap-1">
-                    <ArrowDown className="text-red-500 w-4 h-4" />
-                    <div className="text-sm sm:text-base text-red-500 font-semibold">
-                      {totalDebitSum !== 0 ? 
-                        `${((currentWeekRevenue - totalDebitSum) / totalDebitSum * 100).toFixed(2)}%` : 
-                        '0.00%'
-                      }
-                    </div>
-                  </div>
-                )}
-                <div className="text-xs sm:text-sm text-gray-600">Since last week</div>
-              </div>
-            </div>
-          </div>
+  {/* Previous Week */}
+  <div className="w-full md:w-[48%] lg:w-[23%] flex flex-col sm:flex-row sm:items-center gap-2">
+    <div className="flex items-center">
+      <input
+        type="radio"
+        id="previous-week"
+        name="week"
+        value="previous"
+        checked={selectedWeek === 'previous'}
+        onChange={() => {
+          setSelectedWeek('previous');
+          console.log("Fetching previous week's data...");
+        }}
+        className="mr-2"
+      />
+      <label
+        htmlFor="previous-week"
+        className="text-sm sm:text-base text-gray-600"
+      >
+        Previous week
+      </label>
+    </div>
+    <div className="font-semibold text-sm sm:text-base">
+      {isLoading ? (
+        <Skeleton className="h-5 w-24" />
+      ) : (
+        `NGN ${totalDebitSum}`
+      )}
+    </div>
+  </div>
 
-          {/* Chart */}
-          <div className="text-xs sm:text-sm mb-3 text-gray-500">Sales over time</div>
-          <div className="w-full overflow-x-auto">
-            {graphLoading || isLoading ? (
-              <ChartSkeleton />
-            ) : isGraphDataEmpty ? (
-              <div className="text-center text-sm sm:text-base text-gray-500 py-8">
-                No data available for {selectedWeek === 'current' ? "current week" : "previous week"}.
-              </div>
-            ) : (
-              <LineChartOverView data={graphData.data} />
-            )}
-          </div>
+  {/* Change Percentage */}
+  <div className="w-full md:w-full lg:w-[23%] flex items-center gap-2">
+    {isLoading ? (
+      <div className="flex items-center gap-1">
+        <Skeleton className="h-4 w-4 rounded-full" />
+        <Skeleton className="h-4 w-16" />
+      </div>
+    ) : (
+      <div className="flex items-center gap-1">
+        <ArrowDown className="text-red-500 w-4 h-4" />
+        <div className="text-sm sm:text-base text-red-500 font-semibold">
+          {totalDebitSum !== 0
+            ? `${(
+                ((currentWeekRevenue - totalDebitSum) / totalDebitSum) *
+                100
+              ).toFixed(2)}%`
+            : '0.00%'}
         </div>
+      </div>
+    )}
+    <div className="text-xs sm:text-sm text-gray-600">
+      Since last week
+    </div>
+  </div>
+
+</div>
+
+  </div>
+
+  {/* Chart */}
+  <div className="text-xs sm:text-sm mb-3 text-gray-500">
+    Sales over time
+  </div>
+  <div className="w-full overflow-x-auto">
+    {graphLoading || isLoading ? (
+      <ChartSkeleton />
+    ) : isGraphDataEmpty ? (
+      <div className="text-center text-sm sm:text-base text-gray-500 py-8">
+        No data available for{' '}
+        {selectedWeek === 'current' ? 'current week' : 'previous week'}.
+      </div>
+    ) : (
+      <LineChartOverView data={graphData.data} />
+    )}
+  </div>
+</div>
+
 
         {/* Metrics Cards - Responsive Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
@@ -245,7 +274,7 @@ export default function Home() {
         {/* Bottom Sections - Responsive Stack */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
           {/* Payment Methods */}
-          <div className="rounded-lg bg-white shadow-lg p-3 sm:p-4">
+          <div className="rounded-lg bg-white border border-gray-200 hover:border-gray-300 transition-colors p-3 sm:p-4">
             <h3 className="font-bold mb-3 sm:mb-4 text-base sm:text-lg">Payment methods</h3>
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
               <div className="w-full sm:w-1/2">
@@ -274,7 +303,7 @@ export default function Home() {
           </div>
 
           {/* Recent Transactions */}
-          <div className="rounded-lg bg-white shadow-lg p-3 sm:p-4">
+          <div className="rounded-lg bg-white border border-gray-200 hover:border-gray-300 transition-colors p-3 sm:p-4">
             <h3 className="font-bold mb-3 sm:mb-4 text-base sm:text-lg">Recent transactions</h3>
             <div className="overflow-x-auto">
               {isLoading ? <ChartSkeleton /> : <TableComp />}

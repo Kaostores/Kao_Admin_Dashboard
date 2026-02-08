@@ -187,7 +187,7 @@ const CategoriesandSubs = () => {
               <TableHeader>
                 <TableRow>
                   <TableHead className="text-xs sm:text-sm">Category name</TableHead>
-                  <TableHead className="text-xs sm:text-sm hidden sm:table-cell">Image</TableHead>
+                  <TableHead className="text-xs sm:text-sm">Image</TableHead>
                   <TableHead className="text-xs sm:text-sm">Sub-categories</TableHead>
                 </TableRow>
               </TableHeader>
@@ -196,8 +196,12 @@ const CategoriesandSubs = () => {
                   <Fragment key={category.id}>
                     <TableRow>
                       <TableCell className="text-xs sm:text-sm font-medium">{category.name}</TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        <img src={category.image || "/placeholder.svg"} alt={category.name} className="w-12 h-12 sm:w-16 sm:h-16 object-cover rounded" />
+                      <TableCell>
+                        <img
+                          src={category.image || "/placeholder.svg"}
+                          alt={category.name}
+                          className="w-40 h-24 sm:w-24 sm:h-20 object-cover rounded"
+                        />
                       </TableCell>
                       <TableCell>
                         <Button

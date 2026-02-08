@@ -1,6 +1,8 @@
 
 "use client"
 
+import React from "react"
+
 import { useState } from "react"
 import pc from "../../assets/sello.png"
 import { useNavigate, useLocation } from "react-router-dom"
@@ -97,7 +99,11 @@ const navItems: NavItem[] = [
   },
 ]
 
-export default function Sidebar() {
+interface SidebarProps {
+  onNavigate?: () => void;
+}
+
+export default function Sidebar({ onNavigate }: SidebarProps) {
   const navigate = useNavigate()
   const location = useLocation()
   // const dispatch = useDispatch()
@@ -162,7 +168,10 @@ export default function Sidebar() {
                     "w-full justify-start text-white hover:bg-white/10 hover:text-[#fff] px-3",
                     location.pathname === item.href && "bg-white hover:bg-white hover:text-[#0333ae] text-[#0333ae]"
                   )}
-                  onClick={() => navigate(item.href)}
+                  onClick={() => {
+                    navigate(item.href);
+                    onNavigate?.();
+                  }}
                 >
                   {item.icon}
                   <span className="ml-3 text-sm font-medium">{item.title}</span>
@@ -179,7 +188,10 @@ export default function Sidebar() {
                           "w-full justify-start text-white hover:bg-white/10 hover:text-white",
                           location.pathname === subItem.href && "bg-white text-[#0333ae] hover:bg-white hover:text-[#0333ae]"
                         )}
-                        onClick={() => navigate(subItem.href)}
+                        onClick={() => {
+                          navigate(subItem.href);
+                          onNavigate?.();
+                        }}
                       >
                         <span className="text-xs">{subItem.title}</span>
                       </Button>

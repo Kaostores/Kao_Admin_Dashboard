@@ -77,97 +77,126 @@ const CustomerDetails = () => {
   )
 
   return (
-    <div className="container mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-6">Customer details</h1>
+    <div className="container mx-auto px-4 py-4 sm:p-6">
+      <h1 className="text-[25px] sm:text-2xl font-bold mb-4 sm:mb-6">Customer details</h1>
       
-      <Card className="mb-6 w-[50%]">
-        <CardHeader>
-          <CardTitle>Customer information</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {loading ? (
-            <CustomerInfoSkeleton />
-          ) : customer ? (
-            <div className="flex flex-col md:flex-row md:items-center md:space-x-4">
-              <Avatar className="h-24 w-24 mb-4 md:mb-0">
-                <AvatarImage src={customer.avatarUrl} alt={customer.name} />
-                <AvatarFallback>{customer.name.charAt(0)}</AvatarFallback>
-              </Avatar>
-              <div className="space-y-2">
-                <p className="text-2xl font-semibold">{customer.name}</p>
-                <p className="flex items-center text-sm text-gray-500">
-                  <Mail className="mr-2 h-4 w-4" />
-                  {customer.email}
-                </p>
-                <p className="flex items-center text-sm text-gray-500">
-                  <Phone className="mr-2 h-4 w-4" />
-                  {customer.phone}
-                </p>
-                <p className="flex items-center text-sm text-gray-500">
-                  <MapPin className="mr-2 h-4 w-4" />
-                  {customer.address}
-                </p>
-              </div>
-            </div>
-          ) : (
-            <p>No customer data available.</p>
-          )}
-        </CardContent>
+      <Card className="mb-4 sm:mb-6 w-full">
+  <CardHeader className="pb-3 sm:pb-6">
+    <CardTitle className="text-lg sm:text-xl">
+      Customer information
+    </CardTitle>
+  </CardHeader>
+
+  <CardContent>
+    {loading ? (
+      <CustomerInfoSkeleton />
+    ) : customer ? (
+      <div className="flex flex-wrap flex-col items-center sm:flex-row sm:items-center gap-4 sm:gap-6">
+
+        {/* Avatar */}
+        <Avatar className="h-20 w-20 sm:h-24 sm:w-24 flex-shrink-0">
+          <AvatarImage
+            src={customer.avatarUrl || "/placeholder.svg"}
+            alt={customer.name}
+          />
+          <AvatarFallback>
+            {customer.name.charAt(0)}
+          </AvatarFallback>
+        </Avatar>
+
+        {/* Details */}
+        <div className="space-y-2 w-full min-w-0 text-center sm:text-left">
+          <p className="text-xl sm:text-2xl font-semibold break-words">
+            {customer.name}
+          </p>
+
+          <a 
+            href={`mailto:${customer.email}`}
+            className="flex justify-center sm:justify-start items-start sm:items-center text-xs sm:text-sm text-gray-500 gap-2 hover:text-blue-600 hover:underline cursor-pointer transition-colors duration-200"
+          >
+            <Mail className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0 mt-0.5 sm:mt-0" />
+            <span className="break-all">{customer.email}</span>
+          </a>
+
+          <a 
+            href={`tel:${customer.phone.replace(/\s+/g, '')}`}
+            className="flex justify-center sm:justify-start items-start sm:items-center text-xs sm:text-sm text-gray-500 gap-2 hover:text-blue-600 hover:underline cursor-pointer transition-colors duration-200"
+          >
+            <Phone className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0 mt-0.5 sm:mt-0" />
+            <span className="break-all">{customer.phone}</span>
+          </a>
+
+          <p className="flex justify-center sm:justify-start items-start text-xs sm:text-sm text-gray-500 gap-2">
+            <MapPin className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0 mt-0.5" />
+            <span className="break-words">{customer.address}</span>
+          </p>
+        </div>
+      </div>
+    ) : (
+      <p className="text-sm text-center sm:text-left">
+        No customer data available.
+      </p>
+    )}
+  </CardContent>
       </Card>
 
+
       <Card>
-        <CardHeader>
-          <CardTitle>Order history</CardTitle>
+        <CardHeader className="pb-3 sm:pb-6">
+          <CardTitle className="text-lg sm:text-xl">Order history</CardTitle>
         </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Order id</TableHead>
-                <TableHead>Date</TableHead>
-                <TableHead>Total</TableHead>
-                <TableHead>Status</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {loading ? (
-                <>
-                  <OrderSkeleton />
-                  <OrderSkeleton />
-                  <OrderSkeleton />
-                </>
-              ) : orders.length > 0 ? (
-                orders.map((order) => (
-                  <TableRow key={order.id}>
-                    <TableCell>{order.id}</TableCell>
-                    <TableCell>{order.date}</TableCell>
-                    <TableCell>{new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN' }).format(order.total)}</TableCell>
-                    <TableCell>
-                    <Badge
-                        style={{
-                        backgroundColor: order.status === 'completed' ? '#0333AE' : '',
-                        color: order.status === 'completed' ? '#ffffff' : ''
-                        }}
-                        variant={
-                        order.status === 'completed'
-                            ? 'default'
-                            : order.status === 'processing'
-                            ? 'secondary'
-                            : 'destructive'
-                        }
-                    >
-                        {order.status}
-                    </Badge>
-                    </TableCell>
-                  </TableRow>
-                ))
-              ) : (
+        <CardContent className="px-0 sm:px-6">
+          <div className="overflow-x-auto -mx-6 sm:mx-0">
+            <Table>
+              <TableHeader>
                 <TableRow>
-                  <TableCell colSpan={4} className="text-center">No orders found.</TableCell>
+                  <TableHead className="px-4 sm:px-2 text-xs sm:text-sm whitespace-nowrap">Order id</TableHead>
+                  <TableHead className="px-4 sm:px-2 text-xs sm:text-sm whitespace-nowrap">Date</TableHead>
+                  <TableHead className="px-4 sm:px-2 text-xs sm:text-sm whitespace-nowrap">Total</TableHead>
+                  <TableHead className="px-4 sm:px-2 text-xs sm:text-sm whitespace-nowrap">Status</TableHead>
                 </TableRow>
-              )}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {loading ? (
+                  <>
+                    <OrderSkeleton />
+                    <OrderSkeleton />
+                    <OrderSkeleton />
+                  </>
+                ) : orders.length > 0 ? (
+                  orders.map((order) => (
+                    <TableRow key={order.id}>
+                      <TableCell className="px-4 sm:px-2 text-xs sm:text-sm whitespace-nowrap font-medium">{order.id}</TableCell>
+                      <TableCell className="px-4 sm:px-2 text-xs sm:text-sm whitespace-nowrap">{order.date}</TableCell>
+                      <TableCell className="px-4 sm:px-2 text-xs sm:text-sm whitespace-nowrap">{new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN' }).format(order.total)}</TableCell>
+                      <TableCell className="px-4 sm:px-2">
+                        <Badge
+                          style={{
+                            backgroundColor: order.status === 'completed' ? '#0333AE' : '',
+                            color: order.status === 'completed' ? '#ffffff' : ''
+                          }}
+                          variant={
+                            order.status === 'completed'
+                              ? 'default'
+                              : order.status === 'processing'
+                              ? 'secondary'
+                              : 'destructive'
+                          }
+                          className="text-xs whitespace-nowrap"
+                        >
+                          {order.status}
+                        </Badge>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={4} className="text-center text-xs sm:text-sm py-4">No orders found.</TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
         </CardContent>
       </Card>
     </div>

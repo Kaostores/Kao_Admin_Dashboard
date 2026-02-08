@@ -136,7 +136,7 @@ export default function BrandList() {
   const currentBrands = brands.slice(indexOfFirstBrand, indexOfLastBrand)
 
   return (
-    <div className="w-full bg-white min-h-screen pt-4 pb-8 md:pb-12 mt-4 px-4 md:px-8">
+    <div className="w-full bg-white pt-4 pb-8 md:pb-12 mt-4 px-4 md:px-8">
       <div className="w-full flex flex-col">
         <h1 className="text-[25px] md:text-xl lg:text-2xl font-semibold mb-6 md:mb-8">Brand management</h1>
 

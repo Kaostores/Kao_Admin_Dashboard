@@ -28,7 +28,7 @@ const AgentSec: React.FC<AgentProps> = ({
 
   return (
     <div className="overflow-hidden w-[100%] h-[100%]">
-      <div className="overflow-x-auto shadow-md sm:rounded-lg">
+      <div className="overflow-x-auto border border-gray-200 hover:border-gray-300 transition-colors sm:rounded-lg">
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
