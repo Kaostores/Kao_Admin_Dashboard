@@ -12,7 +12,7 @@ interface Props {
 
 const Card: React.FC<Props> = ({ tit, fig, increment }) => {
 	return (
-		<div className="flex-1 h-[150px] w-[100%] flex-wrap  rounded-[6px] bg-white flex justify-center items-center px-[10px]
+		<div className=" h-[150px] w-[100%] flex-wrap  rounded-[6px] flex justify-center items-center px-[20px]
                 border border-gray-200 hover:border-gray-300 transition-colors">
   <div className="w-[100%] h-[100%] flex flex-col justify-around">
     <div className="text-[13px] text-gray-500">{tit}</div>

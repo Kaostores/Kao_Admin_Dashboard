@@ -272,44 +272,67 @@ export default function Home() {
         </div>
 
         {/* Bottom Sections - Responsive Stack */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
-          {/* Payment Methods */}
-          <div className="rounded-lg bg-white border border-gray-200 hover:border-gray-300 transition-colors p-3 sm:p-4">
-            <h3 className="font-bold mb-3 sm:mb-4 text-base sm:text-lg">Payment methods</h3>
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-              <div className="w-full sm:w-1/2">
-                {isLoading ? <ChartSkeleton /> : <StackedChartComps />}
-              </div>
-              <div className="w-full sm:w-1/2">
-                {isLoading ? (
-                  <>
-                    <PaymentMethodSkeleton />
-                    <PaymentMethodSkeleton />
-                    <PaymentMethodSkeleton />
-                  </>
-                ) : (
-                  paymentMetrics.map((method, index) => (
-                    <div key={method._id} className="flex justify-between border-b pb-2 mb-2">
-                      <div className="flex items-center gap-2">
-                        <div className={`h-2 w-2 rounded-full flex-shrink-0 ${index % 2 === 0 ? 'bg-yellow-300' : 'bg-blue-600'}`}></div>
-                        <div className="text-xs sm:text-sm text-gray-600 truncate">{method.paymentMethod}</div>
-                      </div>
-                      <div className="font-bold text-xs sm:text-sm flex-shrink-0">{method.totalOrders}%</div>
-                    </div>
-                  ))
-                )}
-              </div>
-            </div>
-          </div>
+        <div className="flex flex-col md:flex-row gap-3 sm:gap-4">
+  {/* Payment Methods */}
+  <div className="w-full md:w-1/2 rounded-lg bg-white border border-gray-200 hover:border-gray-300 transition-colors p-3 sm:p-4">
+    <h3 className="font-bold mb-3 sm:mb-4 text-base sm:text-lg">
+      Payment methods
+    </h3>
 
-          {/* Recent Transactions */}
-          <div className="rounded-lg bg-white border border-gray-200 hover:border-gray-300 transition-colors p-3 sm:p-4">
-            <h3 className="font-bold mb-3 sm:mb-4 text-base sm:text-lg">Recent transactions</h3>
-            <div className="overflow-x-auto">
-              {isLoading ? <ChartSkeleton /> : <TableComp />}
+    {/* Inner content */}
+    <div className="flex flex-col lg:flex-row gap-3 sm:gap-4">
+      {/* Chart */}
+      <div className="w-full lg:w-1/2">
+        {isLoading ? <ChartSkeleton /> : <StackedChartComps />}
+      </div>
+
+      {/* List */}
+      <div className="w-full lg:w-1/2 space-y-2">
+        {isLoading ? (
+          <>
+            <PaymentMethodSkeleton />
+            <PaymentMethodSkeleton />
+            <PaymentMethodSkeleton />
+          </>
+        ) : (
+          paymentMetrics.map((method, index) => (
+            <div
+              key={method._id}
+              className="flex items-center justify-between border-b pb-2"
+            >
+              <div className="flex items-center gap-2 min-w-0">
+                <span
+                  className={`h-2 w-2 rounded-full flex-shrink-0 ${
+                    index % 2 === 0 ? "bg-yellow-300" : "bg-blue-600"
+                  }`}
+                />
+                <p className="text-xs sm:text-sm text-gray-600 truncate">
+                  {method.paymentMethod}
+                </p>
+              </div>
+
+              <span className="font-bold text-xs sm:text-sm flex-shrink-0">
+                {method.totalOrders}%
+              </span>
             </div>
-          </div>
-        </div>
+          ))
+        )}
+      </div>
+    </div>
+  </div>
+
+  {/* Recent Transactions */}
+  <div className="w-full md:w-1/2 rounded-lg bg-white border border-gray-200 hover:border-gray-300 transition-colors p-3 sm:p-4">
+    <h3 className="font-bold mb-3 sm:mb-4 text-base sm:text-lg">
+      Recent transactions
+    </h3>
+
+    <div className="w-full overflow-x-auto">
+      {isLoading ? <ChartSkeleton /> : <TableComp />}
+    </div>
+  </div>
+</div>
+
       </div>
     </div>
   );
