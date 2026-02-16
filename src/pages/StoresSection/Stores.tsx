@@ -3,9 +3,9 @@
 
 import { useState, useEffect } from "react"
 import StoreWithdrawal from "@/components/props/StoreWithdrawal"
-import { useViewAllStoresQuery, useApproveStoreMutation, useSuspendStoreMutation } from "@/services/apiSlice"
+import { useViewAllStoresQuery, useApproveStoreMutation, useSuspendStoreMutation, useGetStoreByIdQuery } from "@/services/apiSlice"
 import { Button } from "@/components/ui/button"
-import { ChevronLeft, ChevronRight, Pencil, ChevronDown } from "lucide-react"
+import { ChevronLeft, ChevronRight, Pencil, ChevronDown, FileText } from "lucide-react"
 import {
   Table,
   TableHeader,
@@ -51,11 +51,23 @@ const Store = () => {
   const [storeToSuspend, setStoreToSuspend] = useState<string | null>(null)
   const [suspensionNote, setSuspensionNote] = useState("")
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+  const [isDocsModalOpen, setIsDocsModalOpen] = useState(false)
+  const [selectedStoreForDocs, setSelectedStoreForDocs] = useState<string | null>(null)
 
   const { data: stores, isLoading, isError, error } = useViewAllStoresQuery({})
   console.log("this is stores", stores)
   const [approveStore] = useApproveStoreMutation()
   const [suspendingStore] = useSuspendStoreMutation()
+
+  const { data: singleStoreData, isLoading: isDocsLoading } = useGetStoreByIdQuery(
+    selectedStoreForDocs as string,
+    {
+      skip: !selectedStoreForDocs || !isDocsModalOpen,
+    }
+  )
+
+  const cleanUrl = (value?: string | null) =>
+    value ? value.replace(/`/g, "").trim() : ""
 
   useEffect(() => {
     if (stores && stores.data) {
@@ -120,6 +132,11 @@ const Store = () => {
     setIsEditModalOpen(true)
   }
 
+  const handleViewDocsClick = (storeUuid: string) => {
+    setSelectedStoreForDocs(storeUuid)
+    setIsDocsModalOpen(true)
+  }
+
   const indexOfLastStore = currentPage * storesPerPage
   const indexOfFirstStore = indexOfLastStore - storesPerPage
   const currentStores = storeList.slice(indexOfFirstStore, indexOfLastStore)
@@ -170,6 +187,7 @@ const Store = () => {
                       <TableHead>Category</TableHead>
                       <TableHead>Status</TableHead>
                       <TableHead>Agent name</TableHead>
+                      <TableHead>Docs</TableHead>
                       <TableHead>Actions</TableHead>
                     </TableRow>
                   </TableHeader>
@@ -227,6 +245,16 @@ const Store = () => {
                           </TableCell>
                           <TableCell>{store.verifiedBy ? `${store.verifiedBy.firstname} ${store.verifiedBy.lastname}` 
     : 'N/A'}</TableCell>
+                          <TableCell>
+                            <Button
+                              variant="outline"
+                              size="icon"
+                              onClick={() => handleViewDocsClick(store.id)}
+                              title="View documents"
+                            >
+                              <FileText className="h-4 w-4" />
+                            </Button>
+                          </TableCell>
                           <TableCell>
                             <Button variant="outline" size="icon" onClick={() => handleEditClick(store.id)}>
                               <Pencil className="h-4 w-4" />
@@ -288,6 +316,106 @@ const Store = () => {
                       Suspend
                     </Button>
                   </DialogFooter>
+                </DialogContent>
+              </Dialog>
+
+              <Dialog open={isDocsModalOpen} onOpenChange={(open) => {
+                setIsDocsModalOpen(open)
+                if (!open) {
+                  setSelectedStoreForDocs(null)
+                }
+              }}>
+                <DialogContent className="max-w-3xl">
+                  <DialogHeader>
+                    <DialogTitle className="mb-[10px]">
+                      Store documents
+                    </DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-4 max-h-[70vh] overflow-y-auto">
+                    {isDocsLoading && (
+                      <div className="space-y-3">
+                        <Skeleton className="h-4 w-40" />
+                        <Skeleton className="h-4 w-64" />
+                        <Skeleton className="h-64 w-full" />
+                      </div>
+                    )}
+                    {!isDocsLoading && singleStoreData?.data && (
+                      <div className="space-y-6">
+                        <p className="text-sm text-gray-700">
+                          <span className="font-semibold">Store:</span>{" "}
+                          {singleStoreData.data.name}
+                        </p>
+                        {[
+                          {
+                            label: "CAC document",
+                            key: "cac_document",
+                          },
+                          {
+                            label: "KYC document",
+                            key: "kyc_document",
+                          },
+                          {
+                            label: "Business document",
+                            key: "business_document",
+                          },
+                          {
+                            label: "Utility bill",
+                            key: "utility_bill",
+                          },
+                        ].map((doc) => {
+                          const rawUrl = (singleStoreData.data as any)[doc.key] as string | null | undefined
+                          const url = cleanUrl(rawUrl)
+
+                          if (!url) return null
+
+                          const isPdf = url.toLowerCase().endsWith(".pdf")
+
+                          return (
+                            <div key={doc.key} className="space-y-2">
+                              <div className="flex items-center justify-between">
+                                <span className="font-medium text-sm text-gray-800">
+                                  {doc.label}
+                                </span>
+                                <a
+                                  href={url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="text-xs text-[#0333ae] underline"
+                                >
+                                  Open in new tab
+                                </a>
+                              </div>
+                              <div className="border rounded-md overflow-hidden bg-gray-50">
+                                {isPdf ? (
+                                  <iframe
+                                    src={url}
+                                    className="w-full h-72"
+                                    title={doc.label}
+                                  />
+                                ) : (
+                                  <img
+                                    src={url}
+                                    alt={doc.label}
+                                    className="w-full max-h-72 object-contain bg-white"
+                                  />
+                                )}
+                              </div>
+                            </div>
+                          )
+                        })}
+                        {!isDocsLoading &&
+                          singleStoreData?.data &&
+                          !cleanUrl((singleStoreData.data as any).cac_document) &&
+                          !cleanUrl((singleStoreData.data as any).kyc_document) &&
+                          !cleanUrl((singleStoreData.data as any).business_document) &&
+                          !cleanUrl((singleStoreData.data as any).utility_bill) && (
+                            <p className="text-sm text-gray-500">
+                              No documents uploaded for this store.
+                            </p>
+                          )}
+                  </div>
+                    )}
+                  </div>
                 </DialogContent>
               </Dialog>
 

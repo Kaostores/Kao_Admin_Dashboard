@@ -3,27 +3,21 @@
 import React, { useState } from 'react'
 import { VscChromeClose } from 'react-icons/vsc'
 import { BiCamera } from 'react-icons/bi'
-import { useCreateVendorAccountMutation, useGetCurrenciesQuery } from '@/services/apiSlice'
+import { Eye, EyeOff } from 'lucide-react'
+import { useCreateVendorAccountMutation } from '@/services/apiSlice'
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import "react-phone-number-input/style.css"
+import PhoneInput from "react-phone-number-input"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+import CurrencySelector from "@/components/ui/CurrencySelector"
+import CountrySelector from "@/components/ui/CountrySelector"
 
 type Iprops = {
   togleBtn: () => void
   onAgentAdded: () => void
-}
-
-interface CurrencyData {
-  currency: string
 }
 
 const AgentDetails: React.FC<Iprops> = ({ togleBtn, onAgentAdded }) => {
@@ -32,29 +26,20 @@ const AgentDetails: React.FC<Iprops> = ({ togleBtn, onAgentAdded }) => {
     lastname: '',
     phone: '',
     email: '',
-    password: 'password', 
-    role: 'agent', 
-    country: 'Nigerian',
-    currency: 'NGN',
+    password: '',
+    role: 'agent',
+    country: '',
+    currency: '',
   })
   const [createVendorAccount] = useCreateVendorAccountMutation()
-  const { data: currenciesResponse, isLoading: isLoadingCurrencies, error: currenciesError } = useGetCurrenciesQuery({})
   const [loading, setLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAgentData({
       ...agentData,
       [e.target.name]: e.target.value,
     })
-  }
-
-  const handleCurrencyChange = (value: string) => {
-    const selectedCurrency = currenciesResponse?.data.find((c: CurrencyData) => c.currency === value)
-    setAgentData((prevData) => ({
-      ...prevData,
-      currency: value,
-      country: selectedCurrency?.country || prevData.country,
-    }))
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -78,8 +63,6 @@ const AgentDetails: React.FC<Iprops> = ({ togleBtn, onAgentAdded }) => {
       setLoading(false)
     }
   }
-
-  const currencies = currenciesResponse?.data.map((item: CurrencyData) => item.currency).filter(Boolean) || []
 
   return (
     <div className='fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm p-4'>
@@ -120,12 +103,18 @@ const AgentDetails: React.FC<Iprops> = ({ togleBtn, onAgentAdded }) => {
             </div>
             <div className='space-y-2'>
               <Label htmlFor='phone' className='text-sm'>Phone Number</Label>
-              <Input
+              <PhoneInput
                 id='phone'
-                name='phone'
+                defaultCountry='NG'
                 value={agentData.phone}
-                onChange={handleInputChange}
-                className='text-sm'
+                onChange={(value) =>
+                  setAgentData((prev) => ({
+                    ...prev,
+                    phone: value || '',
+                  }))
+                }
+                className='flex h-10 w-full rounded-md border outline-none border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50'
+                placeholder='Enter phone number'
               />
             </div>
             <div className='space-y-2'>
@@ -141,52 +130,53 @@ const AgentDetails: React.FC<Iprops> = ({ togleBtn, onAgentAdded }) => {
             </div>
             <div className='space-y-2'>
               <Label htmlFor='password' className='text-sm'>Password</Label>
-              <Input
-                id='password'
-                name='password'
-                type='password'
-                value={agentData.password}
-                onChange={handleInputChange}
-                className='text-sm'
-              />
+              <div className='relative'>
+                <Input
+                  id='password'
+                  name='password'
+                  type={showPassword ? 'text' : 'password'}
+                  value={agentData.password}
+                  onChange={handleInputChange}
+                  className='text-sm pr-10'
+                />
+                <button
+                  type='button'
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  className='absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500'
+                >
+                  {showPassword ? <EyeOff className='h-4 w-4' /> : <Eye className='h-4 w-4' />}
+                </button>
+              </div>
             </div>
             <div className='space-y-2'>
               <Label htmlFor='country' className='text-sm'>Country</Label>
-              <Input
-                id='country'
-                name='country'
-                value={agentData.country}
-                onChange={handleInputChange}
-                className='text-sm'
+              <CountrySelector
+                selectedCountry={agentData.country}
+                setSelectedCountry={(country) =>
+                  setAgentData((prev) => ({
+                    ...prev,
+                    country,
+                  }))
+                }
               />
             </div>
             <div className='space-y-2 sm:col-span-2'>
               <Label htmlFor='currency' className='text-sm'>Currency</Label>
-              <Select
-                value={agentData.currency}
-                onValueChange={handleCurrencyChange}
-                disabled={isLoadingCurrencies || !!currenciesError}
-              >
-                <SelectTrigger className='text-sm'>
-                  <SelectValue placeholder="Select currency" />
-                </SelectTrigger>
-                <SelectContent>
-                  {isLoadingCurrencies && (
-                    <SelectItem value="loading">Loading currencies...</SelectItem>
-                  )}
-                  {currenciesError && (
-                    <SelectItem value="error">Error loading currencies</SelectItem>
-                  )}
-                  {currencies.length > 0 && currencies.map((currency: string) => (
-                    <SelectItem key={currency} value={currency}>
-                      {currency}
-                    </SelectItem>
-                  ))}
-                  {!isLoadingCurrencies && !currenciesError && currencies.length === 0 && (
-                    <SelectItem value="no-currencies">No currencies available</SelectItem>
-                  )}
-                </SelectContent>
-              </Select>
+              <CurrencySelector
+                selectedCurrency={agentData.currency}
+                setSelectedCurrency={(currency: string) =>
+                  setAgentData((prev) => ({
+                    ...prev,
+                    currency,
+                  }))
+                }
+                setSelectedCountry={(country: string) =>
+                  setAgentData((prev) => ({
+                    ...prev,
+                    country,
+                  }))
+                }
+              />
             </div>
           </div>
           <Button type="submit" className='w-full bg-[#0333ae] hover:bg-[#0333ae] text-sm sm:text-base' disabled={loading}>

@@ -34,6 +34,7 @@ export default function Agents() {
   const [currentPage, setCurrentPage] = useState(1)
   const agentsPerPage = 5
   const [deleteVendorById] = useDeleteVendorByIdMutation()
+  const [agentToDelete, setAgentToDelete] = useState<string | null>(null)
   
   const formatDate = (dateString: string) => {
     try {
@@ -102,6 +103,20 @@ export default function Agents() {
     }
   }
 
+  const confirmDeleteAgent = (id: string) => {
+    setAgentToDelete(id)
+  }
+
+  const handleCancelDelete = () => {
+    setAgentToDelete(null)
+  }
+
+  const handleConfirmDelete = async () => {
+    if (!agentToDelete) return
+    await handleDeleteAgent(agentToDelete)
+    setAgentToDelete(null)
+  }
+
   const handleAgentUpdate = async () => {
     await fetchAgents()
   }
@@ -142,7 +157,7 @@ export default function Agents() {
               <TableHeader>
                 <TableRow>
                   <TableHead className="text-xs sm:text-sm">Name</TableHead>
-                  <TableHead className="text-xs sm:text-sm">Address</TableHead>
+                  <TableHead className="text-xs sm:text-sm">Email</TableHead>
                   <TableHead className="text-xs sm:text-sm">Phone no</TableHead>
                   <TableHead className="text-xs sm:text-sm">Country</TableHead>
                   <TableHead className="text-xs sm:text-sm">Currency</TableHead>
@@ -166,10 +181,10 @@ export default function Agents() {
                   currentAgents.map((agent: any) => (
                     <TableRow key={agent.id}>
                       <TableCell className="font-medium text-xs sm:text-sm">{`${agent.firstname} ${agent.lastname}`}</TableCell>
-                      <TableCell className="text-xs sm:text-sm">{agent.address || "Unknown Address"}</TableCell>
-                      <TableCell className="text-xs sm:text-sm">{agent.phone}</TableCell>
-                      <TableCell className="text-xs sm:text-sm">{agent.country}</TableCell>
-                      <TableCell className="text-xs sm:text-sm">{agent.currency}</TableCell>
+                      <TableCell className="text-xs sm:text-sm">{agent.email || "-"}</TableCell>
+                      <TableCell className="text-xs sm:text-sm">{agent.phone || "-"}</TableCell>
+                      <TableCell className="text-xs sm:text-sm">{agent.country || "-"}</TableCell>
+                      <TableCell className="text-xs sm:text-sm">{agent.currency || "-"}</TableCell>
                       <TableCell className="text-xs sm:text-sm">
                         {agent.last_login ? formatDate(agent.last_login) : "No recent login"}
                       </TableCell>
@@ -208,7 +223,7 @@ export default function Agents() {
                           <Button variant="outline" size="icon" className="h-8 w-8 sm:h-10 sm:w-10 bg-transparent" onClick={() => handleEditAgent(agent)}>
                             <Pencil className="h-3 w-3 sm:h-4 sm:w-4" />
                           </Button>
-                          <Button variant="outline" size="icon" className="h-8 w-8 sm:h-10 sm:w-10 bg-transparent" onClick={() => handleDeleteAgent(agent.id)}>
+                          <Button variant="outline" size="icon" className="h-8 w-8 sm:h-10 sm:w-10 bg-transparent" onClick={() => confirmDeleteAgent(agent.id)}>
                             <Trash2 className="h-3 w-3 sm:h-4 sm:w-4" />
                           </Button>
                         </div>
@@ -294,7 +309,7 @@ export default function Agents() {
                       <Pencil className="h-3 w-3 mr-1" />
                       Edit
                     </Button>
-                    <Button variant="outline" size="sm" className="flex-1 text-xs bg-transparent" onClick={() => handleDeleteAgent(agent.id)}>
+                    <Button variant="outline" size="sm" className="flex-1 text-xs bg-transparent" onClick={() => confirmDeleteAgent(agent.id)}>
                       <Trash2 className="h-3 w-3 mr-1" />
                       Delete
                     </Button>
@@ -346,6 +361,35 @@ export default function Agents() {
           agent={selectedAgent} 
           onUpdate={handleAgentUpdate} 
         />
+      )}
+
+      {agentToDelete && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm px-4">
+          <div className="w-full max-w-sm bg-white rounded-lg p-5 shadow-lg">
+            <h2 className="text-lg font-semibold mb-2 text-gray-900">
+              Are you sure you want to delete this agent?
+            </h2>
+            <p className="text-sm text-gray-600 mb-5">
+              This action cannot be undone. The agent account will be permanently removed from the system.
+            </p>
+            <div className="flex justify-end gap-3">
+              <button
+                type="button"
+                onClick={handleCancelDelete}
+                className="px-4 py-2 text-sm rounded-md border border-gray-300 text-gray-700 hover:bg-gray-50"
+              >
+                No, keep agent
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmDelete}
+                className="px-4 py-2 text-sm rounded-md bg-red-600 text-white hover:bg-red-700"
+              >
+                Yes, delete
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   )

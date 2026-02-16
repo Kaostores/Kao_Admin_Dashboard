@@ -4,25 +4,17 @@
 import React, { useState, useEffect } from 'react'
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import { useUpdateAgentMutation, useGetCurrenciesQuery } from '@/services/apiSlice'
+import "react-phone-number-input/style.css"
+import PhoneInput from "react-phone-number-input"
+import { useUpdateAgentMutation } from '@/services/apiSlice'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Camera, X } from "lucide-react"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-
-interface CurrencyData {
-  currency: string
-  country: string
-}
+import CurrencySelector from "@/components/ui/CurrencySelector"
+import CountrySelector from "@/components/ui/CountrySelector"
 
 interface AgentEditProps {
   isOpen: boolean
@@ -41,7 +33,6 @@ const AgentEdit: React.FC<AgentEditProps> = ({ isOpen, onClose, vendor, onUpdate
   })
 
   const [updateAgent, { isLoading }] = useUpdateAgentMutation()
-  const { data: currenciesResponse, isLoading: isLoadingCurrencies, error: currenciesError } = useGetCurrenciesQuery({})
 
   useEffect(() => {
     if (vendor) {
@@ -58,17 +49,6 @@ const AgentEdit: React.FC<AgentEditProps> = ({ isOpen, onClose, vendor, onUpdate
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
-
-  const handleCurrencyChange = (value: string) => {
-    const selectedCurrency = currenciesResponse?.data.find((c: CurrencyData) => c.currency === value)
-    setFormData((prevData) => ({
-      ...prevData,
-      currency: value,
-      country: selectedCurrency?.country || prevData.country,
-    }))
-  }
-
-  const currencies = currenciesResponse?.data.map((item: CurrencyData) => item.currency).filter(Boolean) || []
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -156,22 +136,30 @@ const AgentEdit: React.FC<AgentEditProps> = ({ isOpen, onClose, vendor, onUpdate
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               <div className="space-y-2">
                 <Label htmlFor="phone" className="text-xs sm:text-sm">Phone Number</Label>
-                <Input
+                <PhoneInput
                   id="phone"
-                  name="phone"
+                  defaultCountry="NG"
                   value={formData.phone}
-                  onChange={handleChange}
-                  className="text-sm"
+                  onChange={(value) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      phone: value || '',
+                    }))
+                  }
+                  className="flex h-10 w-full rounded-md border outline-none border-input bg-background px-3 py-2 text-xs sm:text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+                  placeholder="Enter phone number"
                 />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="country" className="text-xs sm:text-sm">Country</Label>
-                <Input
-                  id="country"
-                  name="country"
-                  value={formData.country}
-                  onChange={handleChange}
-                  className="text-sm"
+                <CountrySelector
+                  selectedCountry={formData.country}
+                  setSelectedCountry={(country) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      country,
+                    }))
+                  }
                 />
               </div>
             </div>
@@ -179,31 +167,21 @@ const AgentEdit: React.FC<AgentEditProps> = ({ isOpen, onClose, vendor, onUpdate
             {/* Currency Field */}
             <div className="space-y-2">
               <Label htmlFor='currency' className="text-xs sm:text-sm">Currency</Label>
-              <Select
-                value={formData.currency}
-                onValueChange={handleCurrencyChange}
-                disabled={isLoadingCurrencies || !!currenciesError}
-              >
-                <SelectTrigger className="text-sm">
-                  <SelectValue placeholder="Select currency" />
-                </SelectTrigger>
-                <SelectContent>
-                  {isLoadingCurrencies && (
-                    <SelectItem value="loading">Loading currencies...</SelectItem>
-                  )}
-                  {currenciesError && (
-                    <SelectItem value="error">Error loading currencies</SelectItem>
-                  )}
-                  {currencies.length > 0 && currencies.map((currency: string) => (
-                    <SelectItem key={currency} value={currency}>
-                      {currency}
-                    </SelectItem>
-                  ))}
-                  {!isLoadingCurrencies && !currenciesError && currencies.length === 0 && (
-                    <SelectItem value="no-currencies">No currencies available</SelectItem>
-                  )}
-                </SelectContent>
-              </Select>
+              <CurrencySelector
+                selectedCurrency={formData.currency}
+                setSelectedCurrency={(currency: string) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    currency,
+                  }))
+                }
+                setSelectedCountry={(country: string) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    country,
+                  }))
+                }
+              />
             </div>
 
             {/* Submit Button */}

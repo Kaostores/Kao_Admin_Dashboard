@@ -33,6 +33,7 @@ export default function VendorsEmployee() {
   const [currentPage, setCurrentPage] = useState(1)
   const vendorsPerPage = 5
   const [deleteVendorById] = useDeleteVendorByIdMutation()
+  const [vendorToDelete, setVendorToDelete] = useState<string | null>(null)
   
   const handleDeleteVendor = async (id: string) => {
     try {
@@ -43,6 +44,20 @@ export default function VendorsEmployee() {
       console.error("Error deleting vendor:", error)
       toast.error("Failed to delete vendor")
     }
+  }
+
+  const confirmDeleteVendor = (id: string) => {
+    setVendorToDelete(id)
+  }
+
+  const handleCancelDelete = () => {
+    setVendorToDelete(null)
+  }
+
+  const handleConfirmDelete = async () => {
+    if (!vendorToDelete) return
+    await handleDeleteVendor(vendorToDelete)
+    setVendorToDelete(null)
   }
 
   const formatDate = (dateString: string) => {
@@ -126,7 +141,7 @@ export default function VendorsEmployee() {
               <TableHeader>
                 <TableRow>
                   <TableHead className="text-xs sm:text-sm">Name</TableHead>
-                  <TableHead className="text-xs sm:text-sm">Address</TableHead>
+                  <TableHead className="text-xs sm:text-sm">Email</TableHead>
                   <TableHead className="text-xs sm:text-sm">Phone no</TableHead>
                   <TableHead className="text-xs sm:text-sm">Country</TableHead>
                   <TableHead className="text-xs sm:text-sm">Currency</TableHead>
@@ -150,10 +165,10 @@ export default function VendorsEmployee() {
                   currentVendors.map((vendor: any) => (
                     <TableRow key={vendor.id}>
                       <TableCell className="font-medium text-xs sm:text-sm">{`${vendor.firstname} ${vendor.lastname}`}</TableCell>
-                      <TableCell className="text-xs sm:text-sm">{vendor.address || "Unknown Address"}</TableCell>
-                      <TableCell className="text-xs sm:text-sm">{vendor.phone}</TableCell>
-                      <TableCell className="text-xs sm:text-sm">{vendor.country}</TableCell>
-                      <TableCell className="text-xs sm:text-sm">{vendor.currency}</TableCell>
+                      <TableCell className="text-xs sm:text-sm">{vendor.email || "-"}</TableCell>
+                      <TableCell className="text-xs sm:text-sm">{vendor.phone || "-"}</TableCell>
+                      <TableCell className="text-xs sm:text-sm">{vendor.country || "-"}</TableCell>
+                      <TableCell className="text-xs sm:text-sm">{vendor.currency || "-"}</TableCell>
                       <TableCell className="text-xs sm:text-sm">
                         {vendor.last_login ? formatDate(vendor.last_login) : "No recent login"}
                       </TableCell>
@@ -192,7 +207,7 @@ export default function VendorsEmployee() {
                           <Button variant="outline" size="icon" className="h-8 w-8 sm:h-10 sm:w-10 bg-transparent" onClick={() => handleEditVendor(vendor)}>
                             <Pencil className="h-3 w-3 sm:h-4 sm:w-4" />
                           </Button>
-                          <Button variant="outline" size="icon" className="h-8 w-8 sm:h-10 sm:w-10 bg-transparent" onClick={() => handleDeleteVendor(vendor.id)}>
+                          <Button variant="outline" size="icon" className="h-8 w-8 sm:h-10 sm:w-10 bg-transparent" onClick={() => confirmDeleteVendor(vendor.id)}>
                             <Trash2 className="h-3 w-3 sm:h-4 sm:w-4" />
                           </Button>
                         </div>
@@ -278,7 +293,7 @@ export default function VendorsEmployee() {
                       <Pencil className="h-3 w-3 mr-1" />
                       Edit
                     </Button>
-                    <Button variant="outline" size="sm" className="flex-1 text-xs bg-transparent" onClick={() => handleDeleteVendor(vendor.id)}>
+                    <Button variant="outline" size="sm" className="flex-1 text-xs bg-transparent" onClick={() => confirmDeleteVendor(vendor.id)}>
                       <Trash2 className="h-3 w-3 mr-1" />
                       Delete
                     </Button>
@@ -330,6 +345,35 @@ export default function VendorsEmployee() {
           vendor={selectedVendor} 
           onUpdate={fetchVendors} 
         />
+      )}
+
+      {vendorToDelete && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm px-4">
+          <div className="w-full max-w-sm bg-white rounded-lg p-5 shadow-lg">
+            <h2 className="text-lg font-semibold mb-2 text-gray-900">
+              Are you sure you want to delete this vendor?
+            </h2>
+            <p className="text-sm text-gray-600 mb-5">
+              This action cannot be undone. The vendor account will be permanently removed from the system.
+            </p>
+            <div className="flex justify-end gap-3">
+              <button
+                type="button"
+                onClick={handleCancelDelete}
+                className="px-4 py-2 text-sm rounded-md border border-gray-300 text-gray-700 hover:bg-gray-50"
+              >
+                No, keep vendor
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmDelete}
+                className="px-4 py-2 text-sm rounded-md bg-red-600 text-white hover:bg-red-700"
+              >
+                Yes, delete
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   )

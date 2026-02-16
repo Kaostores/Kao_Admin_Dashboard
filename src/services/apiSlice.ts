@@ -118,8 +118,8 @@ export const api = createApi({
       }),
       invalidatesTags: ["vendors"],
     }),
-     getStoreById: builder.query<any, string>({
-      query: (storeUuid) => `/stores/update//${storeUuid}`, 
+     getStoreById: builder.query({
+      query: (store_uuid) => `/stores/details/${store_uuid}`, 
     }),
 
     

@@ -32,6 +32,7 @@ export default function CustomerSec() {
   const [deleteVendorById] = useDeleteVendorByIdMutation()
   const [currentPage, setCurrentPage] = useState(1)
   const customersPerPage = 5
+  const [customerToDelete, setCustomerToDelete] = useState<string | null>(null)
 
   const formatDate = (dateString: string) => {
     try {
@@ -108,6 +109,20 @@ export default function CustomerSec() {
     }
   }
 
+  const confirmDeleteCustomer = (id: string) => {
+    setCustomerToDelete(id)
+  }
+
+  const handleCancelDelete = () => {
+    setCustomerToDelete(null)
+  }
+
+  const handleConfirmDelete = async () => {
+    if (!customerToDelete) return
+    await handleDeleteVendor(customerToDelete)
+    setCustomerToDelete(null)
+  }
+
   const paginate = (pageNumber: number) => {
     setCurrentPage(pageNumber)
   }
@@ -140,7 +155,7 @@ export default function CustomerSec() {
               <TableHeader>
                 <TableRow>
                   <TableHead className="text-xs sm:text-sm">Name</TableHead>
-                  <TableHead className="text-xs sm:text-sm">Address</TableHead>
+                  <TableHead className="text-xs sm:text-sm">Email</TableHead>
                   <TableHead className="text-xs sm:text-sm">Phone no</TableHead>
                   <TableHead className="text-xs sm:text-sm">Country</TableHead>
                   <TableHead className="text-xs sm:text-sm">Currency</TableHead>
@@ -164,10 +179,10 @@ export default function CustomerSec() {
                   currentCustomers.map((customer: any) => (
                     <TableRow key={customer.id}>
                       <TableCell className="font-medium text-xs sm:text-sm">{`${customer.firstname} ${customer.lastname}`}</TableCell>
-                      <TableCell className="text-xs sm:text-sm">{customer.address || "Unknown Address"}</TableCell>
-                      <TableCell className="text-xs sm:text-sm">{customer.phone}</TableCell>
-                      <TableCell className="text-xs sm:text-sm">{customer.country}</TableCell>
-                      <TableCell className="text-xs sm:text-sm">{customer.currency}</TableCell>
+                      <TableCell className="text-xs sm:text-sm">{customer.email || "-"}</TableCell>
+                      <TableCell className="text-xs sm:text-sm">{customer.phone || "-"}</TableCell>
+                      <TableCell className="text-xs sm:text-sm">{customer.country || "-"}</TableCell>
+                      <TableCell className="text-xs sm:text-sm">{customer.currency || "-"}</TableCell>
                       <TableCell className="text-xs sm:text-sm">
                         {customer.last_login ? formatDate(customer.last_login) : "No recent login"}
                       </TableCell>
@@ -189,7 +204,7 @@ export default function CustomerSec() {
                           <Button variant="outline" size="icon" className="h-8 w-8 sm:h-10 sm:w-10 bg-transparent" onClick={() => handleEditCustomer(customer)}>
                             <Pencil className="h-3 w-3 sm:h-4 sm:w-4" />
                           </Button>
-                          <Button variant="outline" size="icon" className="h-8 w-8 sm:h-10 sm:w-10 bg-transparent" onClick={() => handleDeleteVendor(customer.id)}>
+                          <Button variant="outline" size="icon" className="h-8 w-8 sm:h-10 sm:w-10 bg-transparent" onClick={() => confirmDeleteCustomer(customer.id)}>
                             <Trash2 className="h-3 w-3 sm:h-4 sm:w-4" />
                           </Button>
                         </div>
@@ -258,7 +273,7 @@ export default function CustomerSec() {
                       <Pencil className="h-3 w-3 mr-1" />
                       Edit
                     </Button>
-                    <Button variant="outline" size="sm" className="flex-1 text-xs bg-transparent" onClick={() => handleDeleteVendor(customer.id)}>
+                    <Button variant="outline" size="sm" className="flex-1 text-xs bg-transparent" onClick={() => confirmDeleteCustomer(customer.id)}>
                       <Trash2 className="h-3 w-3 mr-1" />
                       Delete
                     </Button>
@@ -314,6 +329,35 @@ export default function CustomerSec() {
           customer={selectedCustomer} 
           onUpdate={handleCustomerUpdate} 
         />
+      )}
+
+      {customerToDelete && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm px-4">
+          <div className="w-full max-w-sm bg-white rounded-lg p-5 shadow-lg">
+            <h2 className="text-lg font-semibold mb-2 text-gray-900">
+              Are you sure you want to delete this customer?
+            </h2>
+            <p className="text-sm text-gray-600 mb-5">
+              This action cannot be undone. The customer account will be permanently removed from the system.
+            </p>
+            <div className="flex justify-end gap-3">
+              <button
+                type="button"
+                onClick={handleCancelDelete}
+                className="px-4 py-2 text-sm rounded-md border border-gray-300 text-gray-700 hover:bg-gray-50"
+              >
+                No, keep customer
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmDelete}
+                className="px-4 py-2 text-sm rounded-md bg-red-600 text-white hover:bg-red-700"
+              >
+                Yes, delete
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   )

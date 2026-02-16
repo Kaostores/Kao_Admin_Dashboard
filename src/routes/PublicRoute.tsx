@@ -6,6 +6,7 @@ import Wallet from "@/pages/AdminWallet/Wallet";
 import Complain from "@/pages/ComplainPage/Complain";
 import Store from "@/pages/StoresSection/Stores";
 import Order from "@/pages/Orders/OrderSection";
+import OrderDetails from "@/pages/Orders/OrderDetails";
 import Customers from "@/pages/Customer/Customers";
 import Create from "@/pages/Categories/Create";
 import CategoryList from "@/pages/Categories/CategoryList";
@@ -58,6 +59,10 @@ const PublicRoute = () => {
 				{
 					path: "orders",
 					element: <Order />,
+				},
+				{
+					path: "orders/:id",
+					element: <OrderDetails />,
 				},
 				{
 					path: "customers",

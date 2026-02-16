@@ -26,7 +26,7 @@ export default function Orders() {
   const [ordersPerPage] = useState<number>(5)
   const [searchTerm, setSearchTerm] = useState<string>('')
 
-  const navigate = useNavigate() // Initialize navigate hook
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -52,8 +52,8 @@ export default function Orders() {
   }, [])
 
   const handleOrderClick = (orderId: string) => {
-    navigate(`/app/admin/customer/${encodeURIComponent(orderId)}`);
-  };
+    navigate(`/app/admin/orders/${encodeURIComponent(orderId)}`)
+  }
 
   const filteredOrders = orders.filter(order =>
     order.storeId.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -119,7 +119,7 @@ export default function Orders() {
                   <TableRow
                     key={order.orderId}
                     className="cursor-pointer hover:bg-gray-50"
-                    onClick={() => handleOrderClick(order.customerId)}
+                    onClick={() => handleOrderClick(order.orderId)}
                   >
                     <TableCell className="text-xs sm:text-sm font-medium">{order.storeId}</TableCell>
                     <TableCell className="text-xs sm:text-sm">{order.customerId}</TableCell>

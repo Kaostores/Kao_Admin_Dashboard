@@ -43,14 +43,8 @@ const Upload: React.FC<Iprops> = ({ isOpen, onClose, onFileChange, onSubmit, sto
     setIsButtonDisabled(!(cacDocument || kycDocument || businessDocument || utilityBill))
   }, [cacDocument, kycDocument, businessDocument, utilityBill])
 
-  useEffect(() => {
-    if (storeDetails) {
-      if (storeDetails.cacDocument) setCacDocument(storeDetails.cacDocument as unknown as File)
-      if (storeDetails.kycDocument) setKycDocument(storeDetails.kycDocument as unknown as File)
-      if (storeDetails.businessDocument) setBusinessDocument(storeDetails.businessDocument as unknown as File)
-      if (storeDetails.utilityBill) setUtilityBill(storeDetails.utilityBill as unknown as File)
-    }
-  }, [storeDetails])
+  const cleanUrl = (value?: string) =>
+    (value || "").replace(/`/g, "").trim()
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, docType: string) => {
     const file = e.target.files?.[0]
@@ -83,7 +77,7 @@ const Upload: React.FC<Iprops> = ({ isOpen, onClose, onFileChange, onSubmit, sto
             <VscChromeClose className="h-4 w-4" />
           </button>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
+        <div className="grid gap-4 w-[100%] py-4">
           <div className="grid gap-2">
             <Label htmlFor="cacDocument">CAC document</Label>
             <div className="flex">
@@ -109,7 +103,11 @@ const Upload: React.FC<Iprops> = ({ isOpen, onClose, onFileChange, onSubmit, sto
               className="hidden"
               onChange={(e) => handleFileChange(e, "cacDocument")}
             />
-            {storeDetails.cacDocument && <p className="text-sm text-muted-foreground">Current file: {storeDetails.cacDocument}</p>}
+            {/* {storeDetails.cacDocument && (
+              <p className="text-sm text-muted-foreground w-[100px]">
+                Current file: {cleanUrl(storeDetails.cacDocument)}
+              </p>
+            )} */}
           </div>
           <div className="grid gap-2">
             <Label htmlFor="kycDocument">KYC document</Label>
@@ -136,7 +134,11 @@ const Upload: React.FC<Iprops> = ({ isOpen, onClose, onFileChange, onSubmit, sto
               className="hidden"
               onChange={(e) => handleFileChange(e, "kycDocument")}
             />
-            {storeDetails.kycDocument && <p className="text-sm text-muted-foreground">Current file: {storeDetails.kycDocument}</p>}
+            {storeDetails.kycDocument && (
+              <p className="text-sm text-muted-foreground">
+                Current file: {cleanUrl(storeDetails.kycDocument)}
+              </p>
+            )}
           </div>
           <div className="grid gap-2">
             <Label htmlFor="businessDocument">Business Document</Label>
@@ -163,7 +165,11 @@ const Upload: React.FC<Iprops> = ({ isOpen, onClose, onFileChange, onSubmit, sto
               className="hidden"
               onChange={(e) => handleFileChange(e, "businessDocument")}
             />
-            {storeDetails.businessDocument && <p className="text-sm text-muted-foreground">Current file: {storeDetails.businessDocument}</p>}
+            {storeDetails.businessDocument && (
+              <p className="text-sm text-muted-foreground">
+                Current file: {cleanUrl(storeDetails.businessDocument)}
+              </p>
+            )}
           </div>
           <div className="grid gap-2">
             <Label htmlFor="utilityBill">Utility bill</Label>
@@ -190,7 +196,11 @@ const Upload: React.FC<Iprops> = ({ isOpen, onClose, onFileChange, onSubmit, sto
               className="hidden"
               onChange={(e) => handleFileChange(e, "utilityBill")}
             />
-            {storeDetails.utilityBill && <p className="text-sm text-muted-foreground">Current file: {storeDetails.utilityBill}</p>}
+            {storeDetails.utilityBill && (
+              <p className="text-sm text-muted-foreground">
+                Current file: {cleanUrl(storeDetails.utilityBill)}
+              </p>
+            )}
           </div>
         </div>
         <DialogFooter>

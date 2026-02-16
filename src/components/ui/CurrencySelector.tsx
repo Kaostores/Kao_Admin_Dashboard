@@ -1,21 +1,48 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, type ChangeEvent } from "react";
 
-const CurrencySelector = ({setSelectedCurrency,selectedCurrency,setSelectedCountry,}: any) => {
-	const [currencies, setCurrencies] = useState<any>([]);
+interface CurrencySelectorProps {
+	setSelectedCurrency: (currency: string) => void;
+	selectedCurrency: string;
+	setSelectedCountry: (country: string) => void;
+}
+
+interface RestCountryCurrencyInfo {
+	name?: {
+		common?: string;
+	};
+	currencies?: Record<string, unknown>;
+}
+
+const CurrencySelector: React.FC<CurrencySelectorProps> = ({
+	setSelectedCurrency,
+	selectedCurrency,
+	setSelectedCountry,
+}) => {
+	const [currencies, setCurrencies] = useState<string[]>([]);
 
 	useEffect(() => {
 		const fetchCurrencies = async () => {
 			try {
-				const response = await fetch("https://restcountries.com/v3.1/all");
-				const data = await response.json();
-				const currencyMap: any = {};
+				const response = await fetch(
+					"https://restcountries.com/v3.1/all?fields=name,currencies",
+				);
+				const data: RestCountryCurrencyInfo[] = await response.json();
 
-				// Create a map of currency to country
-				data.forEach((country: any) => {
+				if (!Array.isArray(data)) {
+					console.error("Unexpected currencies response shape:", data);
+					return;
+				}
+
+				const currencyMap: Record<string, string> = {};
+
+				data.forEach((country) => {
 					if (country.currencies) {
-						for (let currencyCode in country.currencies) {
+						for (const currencyCode of Object.keys(country.currencies)) {
 							if (!currencyMap[currencyCode]) {
-								currencyMap[currencyCode] = country.name.common; // Map currency code to country name
+								const countryName = country.name?.common ?? "";
+								if (countryName) {
+									currencyMap[currencyCode] = countryName;
+								}
 							}
 						}
 					}
@@ -31,9 +58,11 @@ const CurrencySelector = ({setSelectedCurrency,selectedCurrency,setSelectedCount
 		fetchCurrencies();
 	}, []);
 
-	const [currencyToCountryMap, setCurrencyToCountryMap] = useState<any>({});
+	const [currencyToCountryMap, setCurrencyToCountryMap] = useState<
+		Record<string, string>
+	>({});
 
-	const handleCurrencyChange = (event: any) => {
+	const handleCurrencyChange = (event: ChangeEvent<HTMLSelectElement>) => {
 		const currencyCode = event.target.value;
 		setSelectedCurrency(currencyCode);
 		setSelectedCountry(currencyToCountryMap[currencyCode]); // Automatically get the country from the map

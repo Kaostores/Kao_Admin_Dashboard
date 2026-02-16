@@ -4,7 +4,7 @@
 
 import React, { useState, useEffect } from "react"
 import { BiCamera } from "react-icons/bi"
-import { useUpdateStoreMutation } from "@/services/apiSlice"
+import { useGetStoreByIdQuery, useUpdateStoreMutation } from "@/services/apiSlice"
 import Upload from "./UploadDoc"
 import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
@@ -21,10 +21,10 @@ interface FormData {
   address: string
   category: string
   cac_number: string
-  cac_document: File | null
-  kyc_document: File | null
-  business_document: File | null
-  utility_bill: File | null
+  cac_document: string | File | null
+  kyc_document: string | File | null
+  business_document: string | File | null
+  utility_bill: string | File | null
 }
 
 interface StoreEditProps {
@@ -54,22 +54,43 @@ const StoreEdit: React.FC<StoreEditProps> = ({
   storeDetails = {},
 }) => {
   const [showUploadModal, setShowUploadModal] = useState(false)
+  const { data: storeData } = useGetStoreByIdQuery(storeUuid)
+
+  console.log("single store data", storeData?.data)
   const [formData, setFormData] = useState<FormData>({
-    name: storeDetails.name || "",
-    email: storeDetails.email || "",
-    phone: storeDetails.phone || "",
-    address: storeDetails.address || "",
-    category: storeDetails.category || "",
-    cac_number: storeDetails.cac_number || "",
-    cac_document: null,
-    kyc_document: null,
-    business_document: null,
-    utility_bill: null,
+    name: storeData?.data?.name || "",
+    email: storeData?.data?.email || "",
+    phone: storeData?.data?.phone || "",
+    address: storeData?.data?.address || "",
+    category: storeData?.data?.category || "",
+    cac_number: storeData?.data?.cac_number || "",
+    cac_document: storeData?.data?.cac_document || null,
+    kyc_document: storeData?.data?.kyc_document || null,
+    business_document: storeData?.data?.business_document || null,
+    utility_bill: storeData?.data?.utility_bill || null,
   })
   const [loading, setLoading] = useState(false)
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(true)
 
   const [updateStore] = useUpdateStoreMutation()
+
+  useEffect(() => {
+    if (storeData?.data) {
+      const data = storeData.data as any
+      setFormData({
+        name: data.name || "",
+        email: data.email || "",
+        phone: data.phone || "",
+        address: data.address || "",
+        category: data.category || "",
+        cac_number: data.cac_number || "",
+        cac_document: data.cac_document || null,
+        kyc_document: data.kyc_document || null,
+        business_document: data.business_document || null,
+        utility_bill: data.utility_bill || null,
+      })
+    }
+  }, [storeData])
 
   useEffect(() => {
     const isValid = Object.keys(formData).every((key) => {
@@ -199,10 +220,22 @@ const StoreEdit: React.FC<StoreEditProps> = ({
             }}
             onSubmit={() => handleSubmit(null)}
             storeDetails={{
-              cacDocument: formData.cac_document?.name || "",
-              kycDocument: formData.kyc_document?.name || "",
-              businessDocument: formData.business_document?.name || "",
-              utilityBill: formData.utility_bill?.name || "",
+              cacDocument:
+                typeof formData.cac_document === "string"
+                  ? formData.cac_document.replace(/`/g, "").trim()
+                  : formData.cac_document?.name || "",
+              kycDocument:
+                typeof formData.kyc_document === "string"
+                  ? formData.kyc_document.replace(/`/g, "").trim()
+                  : formData.kyc_document?.name || "",
+              businessDocument:
+                typeof formData.business_document === "string"
+                  ? formData.business_document.replace(/`/g, "").trim()
+                  : formData.business_document?.name || "",
+              utilityBill:
+                typeof formData.utility_bill === "string"
+                  ? formData.utility_bill.replace(/`/g, "").trim()
+                  : formData.utility_bill?.name || "",
             }}
           />
         )}

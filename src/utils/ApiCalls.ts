@@ -362,6 +362,17 @@ export const GetOrders = async () => {
     }
 };
 
+export const GetOrderDetails = async (orderId: string) => {
+  try {
+    const response = await Instance.get(`/orders/details/${orderId}`);
+    console.log("Fetched order details response:", response);
+    return response.data;
+  } catch (err: any) {
+    console.error("Error fetching order details:", err.response?.data || err.message || err);
+    throw err;
+  }
+};
+
 export const GetUserAddress = async (address_uuid: string) => {
   try {
     const response = await Instance.get(`/user/address/${address_uuid}`);
