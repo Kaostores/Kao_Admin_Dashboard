@@ -51,7 +51,6 @@ const StoreEdit: React.FC<StoreEditProps> = ({
   onClose,
   storeUuid,
   updateStoreInList,
-  storeDetails = {},
 }) => {
   const [showUploadModal, setShowUploadModal] = useState(false)
   const { data: storeData } = useGetStoreByIdQuery(storeUuid)
