@@ -14,6 +14,7 @@ import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { Skeleton } from "@/components/ui/skeleton"
 import { Button } from "@/components/ui/button"
+import { useSelector } from "react-redux"
 import {
   Table,
   TableBody,
@@ -22,6 +23,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import AgentStoresModal from "@/components/agents/AgentStoresModal"
 
 export default function Agents() {
   const [show, setShow] = useState(false)
@@ -35,6 +37,16 @@ export default function Agents() {
   const agentsPerPage = 5
   const [deleteVendorById] = useDeleteVendorByIdMutation()
   const [agentToDelete, setAgentToDelete] = useState<string | null>(null)
+  const [showStoresModal, setShowStoresModal] = useState(false)
+  const [storesAgentId, setStoresAgentId] = useState<string | null>(null)
+  const globalSearch = useSelector(
+    (state:{persistedReducer:{globalFilters:{globalSearch:string}}}) =>
+      state.persistedReducer.globalFilters.globalSearch
+  )
+  const globalDate = useSelector(
+    (state:{persistedReducer:{globalFilters:{globalDate:string}}}) =>
+      state.persistedReducer.globalFilters.globalDate
+  )
   
   const formatDate = (dateString: string) => {
     try {
@@ -129,10 +141,43 @@ export default function Agents() {
     setCurrentPage(pageNumber)
   }
 
-  // Calculate pagination values
+  const headerSearch = globalSearch.trim().toLowerCase()
+
+  const filteredAgents = agents.filter((agent:any)=> {
+    const name = `${agent.firstname || ""} ${agent.lastname || ""}`.toLowerCase()
+    const email = (agent.email || "").toLowerCase()
+    const phone = (agent.phone || "").toLowerCase()
+    const country = (agent.country || "").toLowerCase()
+    const currency = (agent.currency || "").toLowerCase()
+
+    const matchesSearch =
+      !headerSearch ||
+      name.includes(headerSearch) ||
+      email.includes(headerSearch) ||
+      phone.includes(headerSearch) ||
+      country.includes(headerSearch) ||
+      currency.includes(headerSearch)
+
+    if (!globalDate) {
+      return matchesSearch
+    }
+
+    if (!agent.last_login) {
+      return false
+    }
+    try {
+      const parsed = parseISO(agent.last_login as string)
+      const dateStr = parsed.toISOString().split("T")[0]
+      const matchesDate = dateStr === globalDate
+      return matchesSearch && matchesDate
+    } catch {
+      return false
+    }
+  })
+
   const indexOfLastAgent = currentPage * agentsPerPage
   const indexOfFirstAgent = indexOfLastAgent - agentsPerPage
-  const currentAgents = agents.slice(indexOfFirstAgent, indexOfLastAgent)
+  const currentAgents = filteredAgents.slice(indexOfFirstAgent, indexOfLastAgent)
 
   return (
     <div className="w-full bg-white px-3 sm:px-5 pt-4 sm:pt-5 pb-8 sm:pb-12 mt-[10px]">
@@ -163,6 +208,7 @@ export default function Agents() {
                   <TableHead className="text-xs sm:text-sm">Currency</TableHead>
                   <TableHead className="text-xs sm:text-sm">Last login</TableHead>
                   <TableHead className="text-xs sm:text-sm">Status</TableHead>
+                  <TableHead className="text-xs sm:text-sm">Stores</TableHead>
                   <TableHead className="text-xs sm:text-sm">Action</TableHead>
                 </TableRow>
               </TableHeader>
@@ -187,6 +233,19 @@ export default function Agents() {
                       <TableCell className="text-xs sm:text-sm">{agent.currency || "-"}</TableCell>
                       <TableCell className="text-xs sm:text-sm">
                         {agent.last_login ? formatDate(agent.last_login) : "No recent login"}
+                      </TableCell>
+                      <TableCell>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="text-xs bg-transparent"
+                          onClick={() => {
+                            setStoresAgentId(agent.id)
+                            setShowStoresModal(true)
+                          }}
+                        >
+                          View stores
+                        </Button>
                       </TableCell>
                       <TableCell>
                         <div
@@ -391,6 +450,12 @@ export default function Agents() {
           </div>
         </div>
       )}
+
+      <AgentStoresModal
+        isOpen={showStoresModal}
+        onClose={() => setShowStoresModal(false)}
+        agentId={storesAgentId}
+      />
     </div>
   )
 }

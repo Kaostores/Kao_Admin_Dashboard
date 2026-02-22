@@ -288,6 +288,18 @@ export const GetStoresByStatus = async (status: any) => {
     }
 };
 
+export const GetStoresReferredByAgent = async (agentId: string) => {
+    try {
+        const response = await Instance.get(`/user/vendors/by/agent/${agentId}`, {
+            params: { agentId },
+        });
+        return response.data;
+    } catch (err: any) {
+        console.error("Error fetching referred stores:", err.response?.data || err.message || err);
+        throw err;
+    }
+};
+
 export const GetAllPosters = async () => {
     try {
         const response = await Instance.get('/posters');

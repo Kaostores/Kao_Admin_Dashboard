@@ -24,6 +24,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { useSelector } from "react-redux"
 
 interface Store {
   id: string
@@ -55,7 +56,13 @@ const Store = () => {
   const [selectedStoreForDocs, setSelectedStoreForDocs] = useState<string | null>(null)
 
   const { data: stores, isLoading, isError, error } = useViewAllStoresQuery({})
-  console.log("this is stores", stores)
+
+  const globalSearch = useSelector(
+    (state:{persistedReducer:{globalFilters:{globalSearch:string}}})=>state.persistedReducer.globalFilters.globalSearch
+  );
+  const globalDate = useSelector(
+    (state:{persistedReducer:{globalFilters:{globalDate:string}}})=>state.persistedReducer.globalFilters.globalDate
+  );
   const [approveStore] = useApproveStoreMutation()
   const [suspendingStore] = useSuspendStoreMutation()
 
@@ -137,9 +144,39 @@ const Store = () => {
     setIsDocsModalOpen(true)
   }
 
+  const lowerSearch = globalSearch.trim().toLowerCase()
+
+  const filteredStores = storeList.filter((store)=> {
+    const matchesSearch =
+      !lowerSearch ||
+      (store.name || "").toLowerCase().includes(lowerSearch) ||
+      (store.email || "").toLowerCase().includes(lowerSearch) ||
+      (store.address || "").toLowerCase().includes(lowerSearch) ||
+      (store.phone || "").toLowerCase().includes(lowerSearch) ||
+      (store.category || "").toLowerCase().includes(lowerSearch) ||
+      (store.status || "").toLowerCase().includes(lowerSearch);
+
+    if (!globalDate) {
+      return matchesSearch;
+    }
+
+    const dateValue = store.LastWithdrawal;
+    if (!dateValue) {
+      return false;
+    }
+    const parsed = new Date(dateValue);
+    if (isNaN(parsed.getTime())) {
+      return false;
+    }
+    const dateStr = parsed.toISOString().split("T")[0];
+    const matchesDate = dateStr === globalDate;
+
+    return matchesSearch && matchesDate;
+  });
+
   const indexOfLastStore = currentPage * storesPerPage
   const indexOfFirstStore = indexOfLastStore - storesPerPage
-  const currentStores = storeList.slice(indexOfFirstStore, indexOfLastStore)
+  const currentStores = filteredStores.slice(indexOfFirstStore, indexOfLastStore)
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber)
 

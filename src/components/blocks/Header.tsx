@@ -13,10 +13,10 @@ import Last7DaysDropdown from "./DropDown";
 import 'react-toastify/dist/ReactToastify.css';
 import { useProfileImage } from '@/pages/Settings/ProfileImageContext';
 import { Button } from "@/components/ui/button"
-import { useNavigate, useLocation } from "react-router-dom"
-import { logoutUser } from "@/services/reducers"
+import { useNavigate } from "react-router-dom"
+import { logoutUser, setGlobalSearch } from "@/services/reducers"
 import { toast } from "react-toastify"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { LogOut, Bell, Settings } from "lucide-react"
 import { useGetUserDataQuery } from "@/services/apiSlice";
 import { Skeleton } from "@/components/ui/skeleton"
@@ -34,11 +34,11 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ onMenuClick}) => {
 	const { profileImage } = useProfileImage();
 	// const [show3, setShow3] = useState(true);
-	const location = useLocation();
 	const navigate = useNavigate()
 	const dispatch = useDispatch()
-	const active = location?.pathname;
-	console.log("active", active);
+	const globalSearch = useSelector(
+		(state:{persistedReducer:{globalFilters:{globalSearch:string}}})=>state.persistedReducer.globalFilters.globalSearch
+	);
 
 	const { data: userData, isLoading: isUserDataLoading } = useGetUserDataQuery(undefined);
 	const { data: notificationsData = { data: [] } } = useGetNotificationsQuery({});
@@ -128,11 +128,24 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick}) => {
 						</div>
 					</div>
 
-					{/* Middle Section - Print & Download (Hidden on Mobile) */}
-					<div className='hidden md:flex gap-0 flex-shrink-0'>
-						<div className='w-10 h-10 bg-blue-600 flex justify-center items-center text-white text-lg rounded-l-md border border-solid border-gray-300'>
-							<BiPrinter />
+					{/* Middle Section - Search, Print & Download (Hidden on Mobile) */}
+					<div className='hidden md:flex items-center gap-3 flex-shrink-0'>
+						<div className='flex items-center flex-1 max-w-xs h-10 bg-white border border-gray-300 rounded-md px-3'>
+							<input
+								type='text'
+								placeholder='Search'
+								value={globalSearch}
+								onChange={(e)=>dispatch(setGlobalSearch(e.target.value))}
+								className='flex-1 outline-none bg-transparent text-sm'
+							/>
 						</div>
+						<button
+							type='button'
+							onClick={()=>window.print()}
+							className='w-10 h-10 bg-blue-600 flex justify-center items-center text-white text-lg rounded-md border border-solid border-gray-300'
+						>
+							<BiPrinter />
+						</button>
 						<div className='w-10 h-10 hidden lg:hidden bg-white justify-center items-center text-blue-600 text-lg rounded-r-md border border-solid border-gray-300 border-l-0'>
 							<HiOutlineFolderDownload />
 						</div>

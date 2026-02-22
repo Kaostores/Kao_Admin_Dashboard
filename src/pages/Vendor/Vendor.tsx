@@ -4,6 +4,7 @@ import { GetUsersByType, UpdateUser } from '../../utils/ApiCalls';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ReactPaginate from 'react-paginate';
+import { useSelector } from 'react-redux';
 
 interface User {
     id: string;
@@ -34,6 +35,15 @@ const Vendor = () => {
     const [currentPage, setCurrentPage] = useState(0);
     const itemsPerPage = 5;
 
+    const globalSearch = useSelector(
+        (state:{persistedReducer:{globalFilters:{globalSearch:string}}}) =>
+            state.persistedReducer.globalFilters.globalSearch
+    );
+    const globalDate = useSelector(
+        (state:{persistedReducer:{globalFilters:{globalDate:string}}}) =>
+            state.persistedReducer.globalFilters.globalDate
+    );
+
     useEffect(() => {
         const fetchUsers = async () => {
             setLoading(true);
@@ -52,16 +62,52 @@ const Vendor = () => {
     }, [searchType]);
 
     useEffect(() => {
-        const results = users.filter(user =>
-            user.firstname.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            user.lastname.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            user.phone.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            user.country.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            user.currency.toLowerCase().includes(searchTerm.toLowerCase())
-        );
+        const localSearch = searchTerm.trim().toLowerCase();
+        const headerSearch = globalSearch.trim().toLowerCase();
+
+        const results = users.filter(user => {
+            const name = `${user.firstname} ${user.lastname}`.toLowerCase();
+            const email = user.email.toLowerCase();
+            const phone = user.phone.toLowerCase();
+            const country = user.country.toLowerCase();
+            const currency = user.currency.toLowerCase();
+
+            const matchesLocal =
+                !localSearch ||
+                name.includes(localSearch) ||
+                email.includes(localSearch) ||
+                phone.includes(localSearch) ||
+                country.includes(localSearch) ||
+                currency.includes(localSearch);
+
+            const matchesGlobal =
+                !headerSearch ||
+                name.includes(headerSearch) ||
+                email.includes(headerSearch) ||
+                phone.includes(headerSearch) ||
+                country.includes(headerSearch) ||
+                currency.includes(headerSearch);
+
+            if (!globalDate) {
+                return matchesLocal && matchesGlobal;
+            }
+
+            const anyUser = user as unknown as { createdAt?: string };
+            if (!anyUser.createdAt) {
+                return matchesLocal && matchesGlobal;
+            }
+            const parsed = new Date(anyUser.createdAt);
+            if (isNaN(parsed.getTime())) {
+                return false;
+            }
+            const dateStr = parsed.toISOString().split("T")[0];
+            const matchesDate = dateStr === globalDate;
+
+            return matchesLocal && matchesGlobal && matchesDate;
+        });
         setFilteredUsers(results);
-    }, [searchTerm, users]);
+        setCurrentPage(0);
+    }, [searchTerm, users, globalSearch, globalDate]);
 
     const openModal = (user: User) => {
         setSelectedUser(user);

@@ -13,6 +13,7 @@ import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { Skeleton } from "@/components/ui/skeleton"
 import { Button } from "@/components/ui/button"
+import { useSelector } from "react-redux"
 import {
   Table,
   TableBody,
@@ -33,6 +34,15 @@ export default function CustomerSec() {
   const [currentPage, setCurrentPage] = useState(1)
   const customersPerPage = 5
   const [customerToDelete, setCustomerToDelete] = useState<string | null>(null)
+
+  const globalSearch = useSelector(
+    (state:{persistedReducer:{globalFilters:{globalSearch:string}}}) =>
+      state.persistedReducer.globalFilters.globalSearch
+  )
+  const globalDate = useSelector(
+    (state:{persistedReducer:{globalFilters:{globalDate:string}}}) =>
+      state.persistedReducer.globalFilters.globalDate
+  )
 
   const formatDate = (dateString: string) => {
     try {
@@ -127,10 +137,43 @@ export default function CustomerSec() {
     setCurrentPage(pageNumber)
   }
 
-  // Calculate pagination values
+  const headerSearch = globalSearch.trim().toLowerCase()
+
+  const filteredCustomers = customers.filter((customer:any)=> {
+    const name = `${customer.firstname || ""} ${customer.lastname || ""}`.toLowerCase()
+    const email = (customer.email || "").toLowerCase()
+    const phone = (customer.phone || "").toLowerCase()
+    const country = (customer.country || "").toLowerCase()
+    const currency = (customer.currency || "").toLowerCase()
+
+    const matchesSearch =
+      !headerSearch ||
+      name.includes(headerSearch) ||
+      email.includes(headerSearch) ||
+      phone.includes(headerSearch) ||
+      country.includes(headerSearch) ||
+      currency.includes(headerSearch)
+
+    if (!globalDate) {
+      return matchesSearch
+    }
+
+    if (!customer.last_login) {
+      return false
+    }
+    try {
+      const parsed = parseISO(customer.last_login as string)
+      const dateStr = parsed.toISOString().split("T")[0]
+      const matchesDate = dateStr === globalDate
+      return matchesSearch && matchesDate
+    } catch {
+      return false
+    }
+  })
+
   const indexOfLastCustomer = currentPage * customersPerPage
   const indexOfFirstCustomer = indexOfLastCustomer - customersPerPage
-  const currentCustomers = customers.slice(indexOfFirstCustomer, indexOfLastCustomer)
+  const currentCustomers = filteredCustomers.slice(indexOfFirstCustomer, indexOfLastCustomer)
 
   return (
     <div className="w-full bg-white px-3 sm:px-5 pt-4 sm:pt-5 pb-8 sm:pb-12 mt-[10px]">

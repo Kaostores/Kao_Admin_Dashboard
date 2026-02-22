@@ -2,7 +2,6 @@
 
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState, useEffect } from 'react';
 import { BsWallet } from "react-icons/bs";
 import { GoChevronDown } from "react-icons/go";
@@ -30,6 +29,7 @@ import {
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
+import { useSelector } from "react-redux";
 
 interface Transaction {
   id: string;
@@ -66,6 +66,13 @@ const Wallet = () => {
   // }
   
 
+  const globalSearch = useSelector(
+    (state:{persistedReducer:{globalFilters:{globalSearch:string}}})=>state.persistedReducer.globalFilters.globalSearch
+  );
+  const globalDate = useSelector(
+    (state:{persistedReducer:{globalFilters:{globalDate:string}}})=>state.persistedReducer.globalFilters.globalDate
+  );
+
   useEffect(() => {
     const fetchTransactions = async () => {
       try {
@@ -95,7 +102,7 @@ const Wallet = () => {
 
   useEffect(() => {
     filterTransactions();
-  }, [transactionType, timeFrame, transactions]);
+  }, [transactionType, timeFrame, transactions, globalSearch, globalDate]);
 
   const filterTransactions = () => {
     let filtered = [...transactions];
@@ -112,6 +119,31 @@ const Wallet = () => {
       case "last_year":
         filtered = filtered.filter(t => new Date(t.date).getFullYear() === currentYear - 1);
         break;
+    }
+
+    const search = globalSearch.trim().toLowerCase();
+    if (search) {
+      filtered = filtered.filter((t)=>{
+        const fullName = `${t.user.firstname} ${t.user.lastname}`.toLowerCase();
+        const amountStr = String(t.amount);
+        return (
+          t.id.toLowerCase().includes(search) ||
+          fullName.includes(search) ||
+          t.type.toLowerCase().includes(search) ||
+          amountStr.toLowerCase().includes(search)
+        );
+      });
+    }
+
+    if (globalDate) {
+      filtered = filtered.filter((t)=>{
+        const d = new Date(t.date);
+        if (isNaN(d.getTime())) {
+          return false;
+        }
+        const ds = d.toISOString().split("T")[0];
+        return ds === globalDate;
+      });
     }
 
     setFilteredTransactions(filtered);
